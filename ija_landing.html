@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IJA Mathematics Competition</title>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Baloo+2:wght@700;800;900&family=Nunito:wght@700;800;900&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+
+:root{
+  --red:#CC0022;
+  --red-dark:#8B0016;
+  --red-deep:#5C000E;
+  --yellow:#FFD600;
+  --yellow-dark:#A87C00;
+  --white:#FFFFFF;
+  --offwhite:#FFF5F6;
+  --blue:#006FFF;
+  --green:#00C853;
+  --orange:#FF6A00;
+  --purple:#8B00E6;
+  --teal:#00B8D4;
+}
+
+html,body{
+  width:100%;min-height:100vh;
+  font-family:'Nunito',sans-serif;
+  background:var(--red-deep);
+  overflow-x:hidden;
+}
+
+/* ── ANIMATED BACKGROUND ───────────────────────────────── */
+.bg{
+  position:fixed;inset:0;z-index:0;
+  background:radial-gradient(ellipse 80% 60% at 20% 10%, rgba(204,0,34,.55) 0%, transparent 60%),
+             radial-gradient(ellipse 60% 80% at 85% 90%, rgba(139,0,22,.7) 0%, transparent 60%),
+             linear-gradient(160deg, #1a0006 0%, #3d0010 40%, #1a0006 100%);
+}
+.bg-grid{
+  position:fixed;inset:0;z-index:0;
+  background-image:
+    linear-gradient(rgba(204,0,34,.12) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(204,0,34,.12) 1px, transparent 1px);
+  background-size:48px 48px;
+  mask-image:radial-gradient(ellipse 90% 80% at 50% 50%, black 40%, transparent 100%);
+}
+
+/* ── FLOATING MATH SYMBOLS ─────────────────────────────── */
+.floaters{position:fixed;inset:0;z-index:1;pointer-events:none;overflow:hidden}
+.fsym{
+  position:absolute;
+  font-family:'Fredoka One',cursive;
+  color:rgba(255,214,0,.12);
+  animation:fsym-float var(--t,14s) ease-in-out infinite alternate;
+  animation-delay:var(--d,0s);
+  user-select:none;
+}
+@keyframes fsym-float{
+  0%{transform:translateY(0) rotate(var(--r0,0deg)) scale(1)}
+  100%{transform:translateY(var(--dy,-40px)) rotate(var(--r1,15deg)) scale(1.08)}
+}
+
+/* ── ORBS / GLOW ───────────────────────────────────────── */
+.orbs{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+.orb{
+  position:absolute;border-radius:50%;filter:blur(80px);
+  animation:orb-drift var(--ot,20s) ease-in-out infinite alternate;
+  opacity:var(--oo,.18);
+}
+@keyframes orb-drift{
+  0%{transform:translate(0,0) scale(1)}
+  100%{transform:translate(var(--ox,40px),var(--oy,-60px)) scale(1.15)}
+}
+
+/* ── SPARKS ────────────────────────────────────────────── */
+.sparks{position:fixed;inset:0;z-index:1;pointer-events:none;overflow:hidden}
+.spark{
+  position:absolute;border-radius:50%;
+  animation:spark-twinkle var(--st,2.5s) ease-in-out infinite;
+  animation-delay:var(--sd,0s);
+}
+@keyframes spark-twinkle{
+  0%,100%{transform:scale(0);opacity:0}
+  50%{transform:scale(1);opacity:1}
+}
+
+/* ── MAIN LAYOUT ───────────────────────────────────────── */
+.page{
+  position:relative;z-index:10;
+  min-height:100vh;
+  display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  padding:40px 20px 60px;
+  gap:0;
+}
+
+/* ── TROPHY BADGE ──────────────────────────────────────── */
+.trophy-wrap{
+  position:relative;
+  display:flex;align-items:center;justify-content:center;
+  margin-bottom:8px;
+  animation:hero-in .8s cubic-bezier(.34,1.56,.64,1) both;
+}
+.trophy-ring{
+  width:clamp(100px,14vw,160px);
+  height:clamp(100px,14vw,160px);
+  border-radius:50%;
+  background:linear-gradient(135deg, var(--red) 0%, var(--red-dark) 100%);
+  border:4px solid rgba(255,214,0,.45);
+  display:flex;align-items:center;justify-content:center;
+  font-size:clamp(44px,7vw,80px);
+  box-shadow:
+    0 0 0 10px rgba(255,214,0,.08),
+    0 0 0 24px rgba(255,214,0,.04),
+    0 20px 60px rgba(204,0,34,.6);
+  animation:ring-pulse 2.8s ease-in-out infinite;
+}
+@keyframes ring-pulse{
+  0%,100%{box-shadow:0 0 0 10px rgba(255,214,0,.08),0 0 0 24px rgba(255,214,0,.04),0 20px 60px rgba(204,0,34,.5)}
+  50%{box-shadow:0 0 0 18px rgba(255,214,0,.12),0 0 0 40px rgba(255,214,0,.03),0 20px 80px rgba(204,0,34,.75)}
+}
+/* Orbiting dots around trophy */
+.orb-ring{
+  position:absolute;
+  inset:calc(-1 * var(--gap, 14px));
+  animation:orbit var(--os,5s) linear infinite;
+  animation-direction:var(--od,normal);
+}
+.orb-dot{
+  position:absolute;width:12px;height:12px;
+  border-radius:50%;box-shadow:0 2px 8px rgba(0,0,0,.3);
+}
+@keyframes orbit{from{transform:rotate(0)}to{transform:rotate(360deg)}}
+
+/* ── HERO TEXT ─────────────────────────────────────────── */
+.hero-label{
+  font-family:'Nunito',sans-serif;
+  font-size:clamp(10px,1.2vw,14px);
+  font-weight:900;letter-spacing:5px;text-transform:uppercase;
+  color:var(--yellow);
+  opacity:.85;
+  margin-top:22px;
+  margin-bottom:6px;
+  animation:hero-in .7s .1s cubic-bezier(.34,1.56,.64,1) both;
+}
+.hero-school{
+  font-family:'Baloo 2',cursive;
+  font-size:clamp(18px,3.2vw,42px);
+  font-weight:900;color:white;
+  text-align:center;line-height:1.1;
+  text-shadow:0 4px 20px rgba(0,0,0,.4);
+  animation:hero-in .7s .18s cubic-bezier(.34,1.56,.64,1) both;
+}
+.hero-title{
+  font-family:'Fredoka One',cursive;
+  font-size:clamp(36px,7.5vw,96px);
+  color:var(--yellow);
+  text-align:center;line-height:1;
+  text-shadow:0 6px 30px rgba(255,214,0,.35), 4px 4px 0 rgba(0,0,0,.25);
+  letter-spacing:-1px;
+  margin:4px 0 0;
+  animation:hero-in .7s .26s cubic-bezier(.34,1.56,.64,1) both;
+}
+.hero-sub{
+  font-size:clamp(13px,1.8vw,20px);font-weight:700;
+  color:rgba(255,255,255,.6);text-align:center;
+  margin-top:10px;
+  animation:hero-in .7s .34s cubic-bezier(.34,1.56,.64,1) both;
+}
+
+@keyframes hero-in{
+  from{opacity:0;transform:translateY(28px) scale(.94)}
+  to{opacity:1;transform:translateY(0) scale(1)}
+}
+
+/* ── DIVIDER ───────────────────────────────────────────── */
+.divider{
+  width:clamp(180px,30vw,320px);
+  height:3px;
+  background:linear-gradient(90deg, transparent, var(--yellow), transparent);
+  border-radius:100px;
+  margin:28px auto 34px;
+  opacity:.5;
+  animation:hero-in .7s .4s both;
+}
+
+/* ── PORTAL CARDS ──────────────────────────────────────── */
+.portals{
+  display:flex;
+  flex-wrap:wrap;
+  gap:20px;
+  justify-content:center;
+  align-items:stretch;
+  width:100%;max-width:920px;
+}
+
+.card{
+  position:relative;
+  display:flex;flex-direction:column;
+  align-items:center;
+  text-decoration:none;
+  border-radius:26px;
+  padding:34px 28px 28px;
+  flex:1 1 240px;max-width:280px;
+  overflow:hidden;
+  cursor:pointer;
+  transition:transform .25s cubic-bezier(.34,1.56,.64,1), box-shadow .25s;
+  animation:card-in .7s var(--ca,.5s) cubic-bezier(.34,1.56,.64,1) both;
+}
+@keyframes card-in{
+  from{opacity:0;transform:translateY(50px) scale(.88)}
+  to{opacity:1;transform:translateY(0) scale(1)}
+}
+.card:hover{transform:translateY(-8px) scale(1.03);}
+.card:active{transform:scale(.97);}
+
+/* Shimmer layer */
+.card::before{
+  content:'';
+  position:absolute;inset:0;
+  background:linear-gradient(135deg, rgba(255,255,255,.12) 0%, transparent 50%);
+  pointer-events:none;z-index:1;
+}
+/* Top shine bar */
+.card::after{
+  content:'';
+  position:absolute;top:0;left:0;right:0;height:3px;
+  background:var(--card-shine);
+  border-radius:26px 26px 0 0;
+  z-index:2;
+}
+
+/* ADMIN */
+.card-admin{
+  background:linear-gradient(145deg, #1a0a2e 0%, #2d0d4a 100%);
+  box-shadow:0 10px 0 #0d0520, 0 18px 50px rgba(139,0,230,.35);
+  --card-shine:linear-gradient(90deg, var(--purple), #c17aff);
+  border:2px solid rgba(139,0,230,.3);
+}
+.card-admin:hover{
+  box-shadow:0 14px 0 #0d0520, 0 24px 70px rgba(139,0,230,.55);
+  border-color:rgba(139,0,230,.6);
+}
+
+/* PARTICIPANT */
+.card-participant{
+  background:linear-gradient(145deg, #0a1a2e 0%, #0d2b4a 100%);
+  box-shadow:0 10px 0 #050e1a, 0 18px 50px rgba(0,111,255,.35);
+  --card-shine:linear-gradient(90deg, var(--blue), #66aaff);
+  border:2px solid rgba(0,111,255,.3);
+}
+.card-participant:hover{
+  box-shadow:0 14px 0 #050e1a, 0 24px 70px rgba(0,111,255,.55);
+  border-color:rgba(0,111,255,.6);
+}
+
+/* DISPLAY */
+.card-display{
+  background:linear-gradient(145deg, #0a2010 0%, #0d3318 100%);
+  box-shadow:0 10px 0 #051008, 0 18px 50px rgba(0,200,83,.3);
+  --card-shine:linear-gradient(90deg, var(--green), #66ff9f);
+  border:2px solid rgba(0,200,83,.3);
+}
+.card-display:hover{
+  box-shadow:0 14px 0 #051008, 0 24px 70px rgba(0,200,83,.5);
+  border-color:rgba(0,200,83,.6);
+}
+
+/* Card icon */
+.card-icon{
+  width:clamp(64px,9vw,88px);
+  height:clamp(64px,9vw,88px);
+  border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-size:clamp(28px,4vw,40px);
+  margin-bottom:18px;
+  position:relative;z-index:3;
+  animation:icon-bob 2.2s ease-in-out infinite;
+  animation-delay:var(--ib,0s);
+}
+@keyframes icon-bob{
+  0%,100%{transform:translateY(0) scale(1)}
+  50%{transform:translateY(-7px) scale(1.06)}
+}
+.card-admin .card-icon{
+  background:linear-gradient(135deg,#5800A0,#8B00E6);
+  box-shadow:0 8px 0 #2d0060, 0 0 30px rgba(139,0,230,.5);
+}
+.card-participant .card-icon{
+  background:linear-gradient(135deg,#004ABB,#006FFF);
+  box-shadow:0 8px 0 #002470, 0 0 30px rgba(0,111,255,.5);
+}
+.card-display .card-icon{
+  background:linear-gradient(135deg,#007A30,#00C853);
+  box-shadow:0 8px 0 #003d18, 0 0 30px rgba(0,200,83,.45);
+}
+
+/* Card text */
+.card-role{
+  font-family:'Nunito',sans-serif;
+  font-size:clamp(9px,1vw,11px);
+  font-weight:900;letter-spacing:4px;text-transform:uppercase;
+  opacity:.55;margin-bottom:5px;position:relative;z-index:3;
+}
+.card-admin .card-role{color:#c17aff}
+.card-participant .card-role{color:#66aaff}
+.card-display .card-role{color:#66ff9f}
+
+.card-title{
+  font-family:'Fredoka One',cursive;
+  font-size:clamp(22px,3.2vw,30px);
+  color:white;
+  text-align:center;line-height:1.15;
+  position:relative;z-index:3;
+  margin-bottom:10px;
+}
+.card-desc{
+  font-size:clamp(11px,1.2vw,13px);
+  font-weight:700;color:rgba(255,255,255,.45);
+  text-align:center;line-height:1.55;
+  position:relative;z-index:3;
+  flex:1;
+}
+
+/* Card CTA button */
+.card-btn{
+  margin-top:20px;
+  padding:10px 26px;
+  border-radius:100px;
+  font-family:'Fredoka One',cursive;
+  font-size:clamp(13px,1.5vw,16px);
+  letter-spacing:.5px;
+  color:white;
+  position:relative;z-index:3;
+  transition:transform .2s, box-shadow .2s;
+  white-space:nowrap;
+}
+.card-admin   .card-btn{background:var(--purple);box-shadow:0 5px 0 #5800A0}
+.card-participant .card-btn{background:var(--blue);box-shadow:0 5px 0 #004ABB}
+.card-display .card-btn{background:var(--green);box-shadow:0 5px 0 #007A30}
+.card:hover .card-btn{transform:translateY(-2px);box-shadow:0 8px 0 #00000044}
+.card:active .card-btn{transform:translateY(1px)}
+
+/* Arrow on button */
+.btn-arrow{
+  display:inline-block;margin-left:6px;
+  transition:transform .2s;
+}
+.card:hover .btn-arrow{transform:translateX(4px)}
+
+/* ── FOOTER ────────────────────────────────────────────── */
+.footer{
+  margin-top:52px;
+  text-align:center;
+  animation:hero-in .7s .85s both;
+}
+.footer-logo{
+  font-family:'Fredoka One',cursive;
+  font-size:clamp(18px,2.5vw,26px);
+  color:rgba(255,255,255,.2);
+  letter-spacing:2px;
+}
+.footer-sub{
+  font-size:11px;font-weight:800;
+  color:rgba(255,255,255,.12);
+  letter-spacing:3px;text-transform:uppercase;
+  margin-top:4px;
+}
+
+/* ── RESPONSIVE ────────────────────────────────────────── */
+@media(max-width:640px){
+  .card{max-width:100%;flex:1 1 100%}
+  .portals{gap:14px}
+}
+</style>
+</head>
+<body>
+
+<!-- Backgrounds -->
+<div class="bg"></div>
+<div class="bg-grid"></div>
+
+<!-- Glowing orbs -->
+<div class="orbs">
+  <div class="orb" style="width:500px;height:500px;background:rgba(204,0,34,.4);top:-120px;left:-120px;--ox:60px;--oy:80px;--ot:22s"></div>
+  <div class="orb" style="width:400px;height:400px;background:rgba(139,0,230,.25);bottom:-80px;right:-60px;--ox:-50px;--oy:-70px;--ot:18s"></div>
+  <div class="orb" style="width:300px;height:300px;background:rgba(255,214,0,.1);top:40%;left:55%;--ox:-40px;--oy:50px;--ot:25s;--oo:.12"></div>
+</div>
+
+<!-- Floating math symbols -->
+<div class="floaters" id="floaters"></div>
+
+<!-- Sparks -->
+<div class="sparks" id="sparks"></div>
+
+<!-- Main content -->
+<div class="page">
+
+  <!-- Trophy -->
+  <div class="trophy-wrap">
+    <div class="trophy-ring">🏆</div>
+    <div class="orb-ring" style="--gap:16px;--os:4.5s">
+      <div class="orb-dot" style="background:var(--yellow);top:5px;left:50%;transform:translateX(-50%)"></div>
+    </div>
+    <div class="orb-ring" style="--gap:26px;--os:6s;--od:reverse">
+      <div class="orb-dot" style="background:var(--blue);top:50%;left:5px;transform:translateY(-50%)"></div>
+    </div>
+    <div class="orb-ring" style="--gap:8px;--os:5.2s">
+      <div class="orb-dot" style="background:#FF3D8A;bottom:6px;top:auto;left:50%;transform:translateX(-50%)"></div>
+    </div>
+  </div>
+
+  <!-- Hero text -->
+  <div class="hero-label">★ Official Portal ★</div>
+  <div class="hero-school">Infant Jesus Academy</div>
+  <div class="hero-title">Maths Challenge</div>
+  <div class="hero-sub">Select your role to enter the competition</div>
+
+  <div class="divider"></div>
+
+  <!-- Portal cards -->
+  <div class="portals">
+
+    <!-- ADMIN / CONTROLLER -->
+    <a class="card card-admin" href="https://game-controller-iota.vercel.app/" target="_blank" style="--ca:.50s">
+      <div class="card-icon" style="--ib:0s">🎮</div>
+      <div class="card-role">Host Access</div>
+      <div class="card-title">Admin<br>Controller</div>
+      <div class="card-desc">Manage questions, reveal answers, control the timer and session flow</div>
+      <div class="card-btn">Enter Panel <span class="btn-arrow">→</span></div>
+    </a>
+
+    <!-- PARTICIPANT -->
+    <a class="card card-participant" href="https://game-display-ebon.vercel.app/" target="_blank" style="--ca:.65s">
+      <div class="card-icon" style="--ib:.3s">📱</div>
+      <div class="card-role">Student Access</div>
+      <div class="card-title">Participant<br>Portal</div>
+      <div class="card-desc">Join the competition, answer questions and track your live score</div>
+      <div class="card-btn">Join Now <span class="btn-arrow">→</span></div>
+    </a>
+
+    <!-- DISPLAY -->
+    <a class="card card-display" href="https://game-participant.vercel.app" target="_blank" style="--ca:.80s">
+      <div class="card-icon" style="--ib:.6s">📺</div>
+      <div class="card-role">Projector / Screen</div>
+      <div class="card-title">Live<br>Display</div>
+      <div class="card-desc">Big-screen view showing questions, vote bars and the leaderboard</div>
+      <div class="card-btn">Open Display <span class="btn-arrow">→</span></div>
+    </a>
+
+  </div>
+
+  <!-- Footer -->
+  <div class="footer">
+    <div class="footer-logo">IJA ✦ MATHS CHALLENGE</div>
+    <div class="footer-sub">Powered by Google Sheets & Apps Script</div>
+  </div>
+
+</div>
+
+<script>
+// ── Floating math symbols ─────────────────────────────────
+(function(){
+  const syms = ['π','√','∑','∞','∫','Δ','θ','±','÷','×','²','³','≠','≥','α','β','φ','λ'];
+  const fl = document.getElementById('floaters');
+  for(let i = 0; i < 28; i++){
+    const d = document.createElement('div');
+    d.className = 'fsym';
+    d.textContent = syms[i % syms.length];
+    const size = 16 + Math.random() * 52;
+    d.style.cssText = `
+      left:${Math.random()*100}%;
+      top:${Math.random()*100}%;
+      font-size:${size}px;
+      --t:${10+Math.random()*12}s;
+      --d:${Math.random()*8}s;
+      --dy:${-20-Math.random()*60}px;
+      --r0:${(Math.random()-.5)*20}deg;
+      --r1:${(Math.random()-.5)*30}deg;
+    `;
+    fl.appendChild(d);
+  }
+
+  // Sparks
+  const spCols = ['#FFD600','#CC0022','#8B00E6','#006FFF','#00C853','#FF3D8A','#FF6A00'];
+  const sp = document.getElementById('sparks');
+  for(let i = 0; i < 40; i++){
+    const d = document.createElement('div');
+    d.className = 'spark';
+    const sz = 2 + Math.random() * 7;
+    d.style.cssText = `
+      width:${sz}px;height:${sz}px;
+      left:${Math.random()*100}%;
+      top:${Math.random()*100}%;
+      background:${spCols[i % spCols.length]};
+      --st:${1.2+Math.random()*3}s;
+      --sd:${Math.random()*4}s;
+    `;
+    sp.appendChild(d);
+  }
+})();
+</script>
+</body>
+</html>
