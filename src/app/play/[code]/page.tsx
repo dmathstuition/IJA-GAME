@@ -20,7 +20,7 @@ export default async function PlayPage({ params }: { params: Promise<{ code: str
 
   return (
     <div style={{ ...(themeToCssVars(theme) as React.CSSProperties), minHeight: '100vh', background: 'linear-gradient(160deg,var(--bg-from),var(--bg-to))' }}>
-      <PlayClient sessionId={session.id} orgId={session.org_id} schoolName={org?.name ?? 'Quiz'} />
+      <PlayClient sessionId={session.id} orgId={session.org_id} schoolName={org?.name ?? 'Quiz'} animation={theme.animation} />
     </div>
   );
 }
