@@ -51,10 +51,13 @@ export default async function Dashboard() {
       </div>
 
       <nav style={{ display: 'grid', gap: 8, marginTop: 32 }}>
+        <a href="/dashboard/billing" style={{ border: '1px solid #2a2f3e', borderRadius: 12, padding: '14px 16px', textDecoration: 'none', color: 'inherit' }}>
+          <strong>Billing</strong>
+          <div style={{ color: '#8a93a0', fontSize: 13 }}>Plan, trial status & payment</div>
+        </a>
         {[
           ['Questions', '/dashboard/questions', 'Import JSON, build banks — next phase'],
           ['Branding', '/dashboard/branding', 'Palette & animated background — next phase'],
-          ['Billing', '/dashboard/billing', 'Plan & payment — next phase'],
         ].map(([label, href, desc]) => (
           <div key={href} style={{ border: '1px dashed #2a2f3e', borderRadius: 12, padding: '14px 16px', opacity: 0.7 }}>
             <strong>{label}</strong>
