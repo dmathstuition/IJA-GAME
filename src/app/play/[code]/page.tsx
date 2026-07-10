@@ -4,6 +4,7 @@ import { resolveTheme, themeToCssVars } from '@/lib/themes';
 import { PlayClient } from './PlayClient';
 import { TeamPlayClient } from './TeamPlayClient';
 import { SpeedPlayClient } from './SpeedPlayClient';
+import { OralPlayClient } from './OralPlayClient';
 
 export default async function PlayPage({ params }: { params: Promise<{ code: string }> }) {
   const { code } = await params;
@@ -26,6 +27,8 @@ export default async function PlayPage({ params }: { params: Promise<{ code: str
         <TeamPlayClient sessionId={session.id} orgId={session.org_id} schoolName={org?.name ?? 'Quiz'} animation={theme.animation} />
       ) : session.mode === 'speed' ? (
         <SpeedPlayClient sessionId={session.id} orgId={session.org_id} schoolName={org?.name ?? 'Quiz'} animation={theme.animation} />
+      ) : session.mode === 'oral' ? (
+        <OralPlayClient sessionId={session.id} orgId={session.org_id} schoolName={org?.name ?? 'Quiz'} animation={theme.animation} />
       ) : (
         <PlayClient sessionId={session.id} orgId={session.org_id} schoolName={org?.name ?? 'Quiz'} animation={theme.animation} />
       )}

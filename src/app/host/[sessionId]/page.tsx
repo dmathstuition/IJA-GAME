@@ -5,6 +5,7 @@ import type { Section, Question } from '@/lib/types';
 import { HostClient } from './HostClient';
 import { TeamHostClient } from './TeamHostClient';
 import { SpeedHostClient } from './SpeedHostClient';
+import { OralHostClient } from './OralHostClient';
 
 export default async function HostPage({ params }: { params: Promise<{ sessionId: string }> }) {
   const { sessionId } = await params;
@@ -33,6 +34,8 @@ export default async function HostPage({ params }: { params: Promise<{ sessionId
         <TeamHostClient sessionId={session.id} joinCode={session.join_code} questions={questions} />
       ) : session.mode === 'speed' ? (
         <SpeedHostClient sessionId={session.id} joinCode={session.join_code} questions={questions} />
+      ) : session.mode === 'oral' ? (
+        <OralHostClient sessionId={session.id} joinCode={session.join_code} questions={questions} />
       ) : (
         <HostClient sessionId={session.id} joinCode={session.join_code} questions={questions} />
       )}

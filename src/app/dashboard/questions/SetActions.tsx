@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { createSession } from '@/lib/game/actions';
 import { createTeamSession } from '@/lib/game/team';
 import { createSpeedSession } from '@/lib/game/speed';
+import { createOralSession } from '@/lib/game/oral';
 import { deleteQuestionSet } from '@/lib/questions/actions';
 
 export function SetActions({ setId, canStart }: { setId: string; canStart: boolean }) {
@@ -55,6 +56,20 @@ export function SetActions({ setId, canStart }: { setId: string; canStart: boole
         style={{ padding: '6px 12px', borderRadius: 7, border: 'none', background: canStart ? '#f97316' : '#1c2330', color: '#fff', fontWeight: 700, fontSize: 12.5, cursor: canStart ? 'pointer' : 'not-allowed' }}
       >
         ⚡ Speed
+      </button>
+      <button
+        disabled={pending || !canStart}
+        title={canStart ? 'Start an Oral round with this set' : 'Add questions first'}
+        onClick={() =>
+          start(async () => {
+            const r = await createOralSession(setId);
+            if ('id' in r) router.push(`/host/${r.id}`);
+            else alert(r.error);
+          })
+        }
+        style={{ padding: '6px 12px', borderRadius: 7, border: 'none', background: canStart ? '#8b5cf6' : '#1c2330', color: '#fff', fontWeight: 700, fontSize: 12.5, cursor: canStart ? 'pointer' : 'not-allowed' }}
+      >
+        🎤 Oral
       </button>
       <button
         disabled={pending}
