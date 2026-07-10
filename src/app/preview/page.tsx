@@ -122,6 +122,31 @@ export default function Preview() {
           </Frame>
         </div>
 
+        {/* TEAM BATTLE */}
+        <Frame label="Projector · Team Battle (bonus round)">
+          <div style={{ padding: '18px 28px 26px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 12 }}>
+              <span style={{ fontWeight: 800, fontFamily: 'ui-monospace,monospace', background: 'rgba(0,0,0,.3)', padding: '6px 14px', borderRadius: 999 }}>Q3 · Blue Lions</span>
+              <span style={{ fontWeight: 900, color: '#f97316', background: 'rgba(249,115,22,.15)', border: '1px solid #f97316', padding: '6px 16px', borderRadius: 999 }}>⚡ BONUS · +5</span>
+              <TimerRing remaining={11} total={20} size={72} />
+            </div>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14, marginBottom: 14 }}>
+              {[['Red Eagles', 30, '#e21b3c', false], ['Blue Lions', 20, '#1368ce', true]].map(([n, s, col, act]) => (
+                <div key={n as string} style={{ borderRadius: 16, padding: 16, border: `3px solid ${col as string}`, background: `${col as string}22`, boxShadow: act ? `0 0 30px ${col as string}88` : 'none', transform: act ? 'scale(1.03)' : 'none' }}>
+                  <div style={{ fontWeight: 800, fontSize: 18 }}>{n as string}</div>
+                  <div style={{ fontFamily: 'ui-monospace,monospace', fontWeight: 900, fontSize: 40, color: 'var(--accent)' }}>{s as number}</div>
+                </div>
+              ))}
+            </div>
+            <div className="qcard" style={{ textAlign: 'center', marginBottom: 14 }}><div style={{ fontSize: 'clamp(22px,3.4vw,36px)', fontWeight: 900 }}>Which is a prime number?</div></div>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
+              {(['A', 'B', 'C', 'D'] as Choice[]).map((c) => (
+                <AnswerTile key={c} choice={c} label={{ A: '21', B: '27', C: '29', D: '33' }[c]} />
+              ))}
+            </div>
+          </div>
+        </Frame>
+
         {/* PODIUM */}
         <Frame label="Projector · Champions">
           <Confetti inline continuous />
