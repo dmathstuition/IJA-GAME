@@ -46,18 +46,14 @@ single, cheap-to-operate Postgres. See `supabase/migrations/0001_init.sql`.
 A project is already provisioned (free tier) and the migrations in
 `supabase/migrations/` are applied to it:
 
-- **Project ref:** `hwxoszwnpqrtxbzakzdi` · region `eu-west-1`
-- **URL:** `https://hwxoszwnpqrtxbzakzdi.supabase.co`
-- Anon/publishable key is in `.env.local` (git-ignored). The **service-role**
-  key (for the Stripe webhook) must be pasted from the dashboard — the MCP
-  doesn't expose it.
+ 
 
 ### Two settings before a full live run
 
 1. **Auth → enable "Anonymous sign-ins."** Players join anonymously; the RLS
    write policies key off `auth.uid()`.
 2. **Network egress.** If you run inside a restricted environment, add
-   `hwxoszwnpqrtxbzakzdi.supabase.co` to the allowlist — otherwise every query
+   to the allowlist — otherwise every query
    fails with _"Host not in allowlist"_ and pages 404. Running on your own
    machine or Vercel has no such restriction.
 
