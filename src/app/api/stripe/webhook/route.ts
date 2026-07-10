@@ -1,6 +1,8 @@
 import { NextResponse, type NextRequest } from 'next/server';
-import { stripe } from '@/lib/stripe';
+import { getStripe } from '@/lib/stripe';
 import { createClient } from '@supabase/supabase-js';
+
+export const dynamic = 'force-dynamic';
 
 // Stripe webhook → keep each school's subscription status current.
 // Uses the service-role key (bypasses RLS) because there's no user session here.
@@ -17,7 +19,7 @@ export async function POST(req: NextRequest) {
 
   let event;
   try {
-    event = stripe.webhooks.constructEvent(body, sig!, process.env.STRIPE_WEBHOOK_SECRET!);
+    event = getStripe().webhooks.constructEvent(body, sig!, process.env.STRIPE_WEBHOOK_SECRET!);
   } catch (err) {
     return NextResponse.json(
       { error: `Webhook signature verification failed: ${(err as Error).message}` },
@@ -32,9 +34,8 @@ export async function POST(req: NextRequest) {
     case 'customer.subscription.created':
     case 'customer.subscription.updated':
     case 'customer.subscription.deleted': {
-      const sub = event.data.object as { customer: string; status: string; id: string };
-      const customerId =
-        typeof sub.customer === 'string' ? sub.customer : (sub as { customer: { id: string } }).customer.id;
+      const sub = event.data.object as unknown as { customer: string | { id: string }; status: string; id: string };
+      const customerId = typeof sub.customer === 'string' ? sub.customer : sub.customer.id;
 
       await db
         .from('organizations')
