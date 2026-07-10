@@ -3,6 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "description": "Multi-school quiz/competition SaaS — Next.js + Supabase + Stripe. Migration of the IJA STEAM game.",
+  "engines": {
+    "node": "22.x"
+  },
   "scripts": {
     "dev": "next dev",
     "build": "next build",

@@ -84,13 +84,38 @@ Flow: `/signup` → `/onboarding` (creates your school) → `/dashboard`
 | Phase | Scope                                                    | State       |
 | ----- | -------------------------------------------------------- | ----------- |
 | P0    | Foundation: schema + RLS, theming, tenant middleware     | ✅ done      |
-| P1    | Auth, onboarding, subscription gate, dashboard            | ✅ done (billing UI pending) |
-| P2    | Question banks (JSON import, sections, export)            | —           |
+| P1    | Auth, onboarding, subscription gate, dashboard            | ✅ done      |
+| P1b   | Stripe billing: pricing, checkout, portal, webhook, gate  | ✅ done (needs keys) |
+| P2    | Question banks (JSON import, sections, export)            | ✅ done      |
 | P3    | Standard mode live on Supabase Realtime                  | ✅ host · play · display |
 | P4    | Team · Speed · Oral modes                                | —           |
 | P5    | Branding UI, exports, champion screen, polish            | —           |
 
-Billing (Stripe Checkout + portal) and the P2/P4/P5 items are next.
+### Billing (Stripe) setup
+
+Code is complete; it needs a Stripe account wired up:
+
+1. Create two recurring **prices** (Starter, School) in Stripe → set
+   `STRIPE_PRICE_STARTER` / `STRIPE_PRICE_SCHOOL`.
+2. Set `STRIPE_SECRET_KEY` and `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY`.
+3. Add a webhook endpoint → `/api/stripe/webhook` (events:
+   `checkout.session.completed`, `customer.subscription.*`) → set
+   `STRIPE_WEBHOOK_SECRET`. The webhook writes with the **service-role** key,
+   so set `SUPABASE_SERVICE_ROLE_KEY` too.
+
+Flow: `/pricing` → Checkout → webhook flips `subscription_status` to `active`
+→ middleware unlocks `/host`. The Customer Portal (`/dashboard/billing` →
+Manage) handles upgrades, cards and cancellations.
+
+P4 (Team · Speed · Oral modes) and P5 (branding UI, exports, champion) are next.
+
+### Question banks (P2)
+
+`/dashboard/questions` — create reusable sets, each with named sections.
+Add questions one at a time or import JSON (file or paste) in the original
+game's format; export any set back to JSON. **Start game** on a set launches a
+live Standard session bound to it, and the host launches its questions instead
+of the built-in samples (samples remain the fallback when no set is chosen).
 
 ## Credits
 

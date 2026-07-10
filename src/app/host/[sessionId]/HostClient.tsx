@@ -4,13 +4,14 @@ import { useTransition } from 'react';
 import { useRealtimeSession } from '@/lib/game/useRealtimeSession';
 import { launchQuestion, revealCurrent, setState } from '@/lib/game/actions';
 import { SAMPLE_QUESTIONS } from '@/lib/game/sample';
-import type { Choice } from '@/lib/types';
+import type { Choice, Question } from '@/lib/types';
 
 const CHOICES: Choice[] = ['A', 'B', 'C', 'D'];
 
-export function HostClient({ sessionId, joinCode }: { sessionId: string; joinCode: string }) {
+export function HostClient({ sessionId, joinCode, questions }: { sessionId: string; joinCode: string; questions?: Question[] }) {
   const { session, players, answers } = useRealtimeSession(sessionId);
   const [pending, start] = useTransition();
+  const bank = questions && questions.length ? questions : SAMPLE_QUESTIONS;
 
   const qIndex = session?.current_q_index ?? -1;
   const cq = session?.current_question as any;
@@ -71,9 +72,11 @@ export function HostClient({ sessionId, joinCode }: { sessionId: string; joinCod
 
           {/* Question bank */}
           <div style={{ border: '1px solid rgba(255,255,255,.12)', borderRadius: 14, padding: 16, background: 'rgba(0,0,0,.25)' }}>
-            <div style={{ fontSize: 12, color: 'var(--text-dim)', marginBottom: 8 }}>SAMPLE QUESTION BANK</div>
+            <div style={{ fontSize: 12, color: 'var(--text-dim)', marginBottom: 8 }}>
+              {questions && questions.length ? `QUESTION BANK · ${bank.length}` : 'SAMPLE QUESTION BANK (no set selected)'}
+            </div>
             <div style={{ display: 'grid', gap: 6 }}>
-              {SAMPLE_QUESTIONS.map((q, i) => (
+              {bank.map((q, i) => (
                 <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 10, justifyContent: 'space-between' }}>
                   <span style={{ fontSize: 13, opacity: qIndex === i ? 1 : 0.8 }}>{i + 1}. {q.text}</span>
                   <button style={btn('var(--correct)')} disabled={pending} onClick={() => start(() => { launchQuestion(sessionId, q, i); })}>

@@ -34,16 +34,21 @@ export async function POST(req: NextRequest) {
     case 'customer.subscription.created':
     case 'customer.subscription.updated':
     case 'customer.subscription.deleted': {
-      const sub = event.data.object as unknown as { customer: string | { id: string }; status: string; id: string };
+      const sub = event.data.object as unknown as {
+        customer: string | { id: string };
+        status: string;
+        id: string;
+        metadata?: { plan?: string };
+      };
       const customerId = typeof sub.customer === 'string' ? sub.customer : sub.customer.id;
 
-      await db
-        .from('organizations')
-        .update({
-          subscription_status: mapStatus(sub.status),
-          stripe_subscription_id: sub.id,
-        })
-        .eq('stripe_customer_id', customerId);
+      const patch: Record<string, unknown> = {
+        subscription_status: mapStatus(sub.status),
+        stripe_subscription_id: sub.id,
+      };
+      if (sub.metadata?.plan) patch.plan = sub.metadata.plan;
+
+      await db.from('organizations').update(patch).eq('stripe_customer_id', customerId);
       break;
     }
     default:

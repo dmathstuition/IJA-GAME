@@ -1,5 +1,6 @@
 import { createServerClient } from '@supabase/ssr';
 import { NextResponse, type NextRequest } from 'next/server';
+import { canHostLive } from '@/lib/billing';
 
 // Two jobs on every request:
 //  1. Resolve the tenant (school) from the subdomain → `x-tenant-slug`.
@@ -43,6 +44,17 @@ export async function middleware(req: NextRequest) {
     url.pathname = '/login';
     url.searchParams.set('next', path);
     return NextResponse.redirect(url);
+  }
+
+  // Hosting a live game requires a trial or paid plan (question editing stays open).
+  // Fail-open if the status can't be read, so a transient error never locks a host out.
+  if (path.startsWith('/host') && user) {
+    const { data: org } = await supabase.from('organizations').select('subscription_status').maybeSingle();
+    if (org && !canHostLive(org.subscription_status)) {
+      const url = req.nextUrl.clone();
+      url.pathname = '/dashboard/billing';
+      return NextResponse.redirect(url);
+    }
   }
 
   return res;
