@@ -19,11 +19,14 @@ export interface PlayerRow {
   answered: boolean;
   last_answer: string | null;
   last_correct: boolean | null;
+  team?: number;
+  sp_state?: string;
 }
 export interface AnswerRow {
   player_id: string;
   q_index: number;
   choice: string;
+  answered_at?: string;
 }
 
 /**
@@ -43,8 +46,8 @@ export function useRealtimeSession(sessionId: string) {
     async function seed() {
       const [{ data: s }, { data: p }, { data: a }] = await Promise.all([
         supabase.from('game_sessions').select('*').eq('id', sessionId).maybeSingle(),
-        supabase.from('players').select('id,name,score,answered,last_answer,last_correct').eq('session_id', sessionId),
-        supabase.from('round_answers').select('player_id,q_index,choice').eq('session_id', sessionId),
+        supabase.from('players').select('id,name,score,answered,last_answer,last_correct,team,sp_state').eq('session_id', sessionId),
+        supabase.from('round_answers').select('player_id,q_index,choice,answered_at').eq('session_id', sessionId),
       ]);
       if (!active) return;
       setSession((s as SessionRow) ?? null);
