@@ -27,9 +27,11 @@ function LoginForm() {
     setErr('');
     const supabase = createClient();
     const { error } = await supabase.auth.signInWithPassword({ email, password });
+    if (error) { setBusy(false); return setErr(error.message); }
+    // Send users who haven't created a school yet to onboarding.
+    const { data: profile } = await supabase.from('profiles').select('org_id').maybeSingle();
     setBusy(false);
-    if (error) return setErr(error.message);
-    router.push(next);
+    router.push(profile ? next : '/onboarding');
     router.refresh();
   }
 

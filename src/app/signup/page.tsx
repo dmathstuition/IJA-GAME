@@ -11,18 +11,35 @@ export default function SignupPage() {
   const [password, setPassword] = useState('');
   const [err, setErr] = useState('');
   const [busy, setBusy] = useState(false);
+  const [checkEmail, setCheckEmail] = useState(false);
 
   async function submit(e: React.FormEvent) {
     e.preventDefault();
     setBusy(true);
     setErr('');
     const supabase = createClient();
-    const { error } = await supabase.auth.signUp({ email, password });
+    const { data, error } = await supabase.auth.signUp({ email, password });
     setBusy(false);
     if (error) return setErr(error.message);
-    // Email confirmation may be required depending on project settings.
-    router.push('/onboarding');
-    router.refresh();
+    if (data.session) {
+      // Signed in immediately (email confirmation disabled) → set up the school.
+      router.push('/onboarding');
+      router.refresh();
+    } else {
+      // Email confirmation required → account exists but no session yet.
+      setCheckEmail(true);
+    }
+  }
+
+  if (checkEmail) {
+    return (
+      <AuthShell title="Check your email" sub="Confirm your address, then sign in to name your school.">
+        <p style={{ color: 'var(--text-dim)', fontSize: 14, lineHeight: 1.6 }}>
+          We sent a confirmation link to <b style={{ color: 'var(--text)' }}>{email}</b>. Click it, then sign in to finish setting up your school.
+        </p>
+        <a href="/login" style={{ ...primaryBtn, display: 'block', textAlign: 'center', textDecoration: 'none', marginTop: 16 }}>Go to sign in</a>
+      </AuthShell>
+    );
   }
 
   return (
