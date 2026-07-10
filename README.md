@@ -41,35 +41,56 @@ can only ever read or write its own rows — in the database, not in app code.
 This is what "each school has their own data" means here: strong isolation on a
 single, cheap-to-operate Postgres. See `supabase/migrations/0001_init.sql`.
 
+## Live Supabase project
+
+A project is already provisioned (free tier) and the migrations in
+`supabase/migrations/` are applied to it:
+
+- **Project ref:** `hwxoszwnpqrtxbzakzdi` · region `eu-west-1`
+- **URL:** `https://hwxoszwnpqrtxbzakzdi.supabase.co`
+- Anon/publishable key is in `.env.local` (git-ignored). The **service-role**
+  key (for the Stripe webhook) must be pasted from the dashboard — the MCP
+  doesn't expose it.
+
+### Two settings before a full live run
+
+1. **Auth → enable "Anonymous sign-ins."** Players join anonymously; the RLS
+   write policies key off `auth.uid()`.
+2. **Network egress.** If you run inside a restricted environment, add
+   `hwxoszwnpqrtxbzakzdi.supabase.co` to the allowlist — otherwise every query
+   fails with _"Host not in allowlist"_ and pages 404. Running on your own
+   machine or Vercel has no such restriction.
+
 ## Running locally
 
 ```bash
-npm install
-cp .env.example .env.local          # fill in Supabase + Stripe keys
+npm install                          # done in this branch
+# .env.local already points at the live project
 
-# Supabase (needs the Supabase CLI + Docker):
-supabase start
-supabase db reset                   # applies migrations + seed
-
-npm run dev                         # http://localhost:3000
-# Tenant view: http://ija.localhost:3000
+npm run dev                          # http://localhost:3000
 ```
 
-> This branch is **Phase 0 (Foundation)** — structure, schema, auth-ready
-> clients, tenant middleware and the theme system. It is a scaffold: run
-> `npm install` before `npm run dev`. Game surfaces (`/host`, `/play`,
-> `/display`) are ported in Phases 3–4.
+Flow: `/signup` → `/onboarding` (creates your school) → `/dashboard`
+→ **Start a Standard game** → open `/display/CODE` on a projector and
+`/play/CODE` on phones.
+
+> **Verified:** `tsc --noEmit` clean, `next build` green (11 routes), schema +
+> RLS applied and checked at the DB level (anon can read a live session; the
+> `org_public` view exposes branding without leaking Stripe columns). Full
+> in-container live play was blocked only by the egress allowlist above.
 
 ## Roadmap
 
 | Phase | Scope                                                    | State       |
 | ----- | -------------------------------------------------------- | ----------- |
-| P0    | Foundation: schema + RLS, theming, tenant middleware     | ✅ this branch |
-| P1    | Sign-up, Stripe billing, subscription gate, dashboard     | next        |
+| P0    | Foundation: schema + RLS, theming, tenant middleware     | ✅ done      |
+| P1    | Auth, onboarding, subscription gate, dashboard            | ✅ done (billing UI pending) |
 | P2    | Question banks (JSON import, sections, export)            | —           |
-| P3    | Standard mode live on Supabase Realtime                  | —           |
+| P3    | Standard mode live on Supabase Realtime                  | ✅ host · play · display |
 | P4    | Team · Speed · Oral modes                                | —           |
 | P5    | Branding UI, exports, champion screen, polish            | —           |
+
+Billing (Stripe Checkout + portal) and the P2/P4/P5 items are next.
 
 ## Credits
 
