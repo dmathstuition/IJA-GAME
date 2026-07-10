@@ -20,7 +20,7 @@ export default async function DisplayPage({ params }: { params: Promise<{ code: 
 
   return (
     <div style={{ ...(themeToCssVars(theme) as React.CSSProperties), minHeight: '100vh', background: 'linear-gradient(160deg,var(--bg-from),var(--bg-to))' }}>
-      <DisplayClient sessionId={session.id} joinCode={session.join_code} schoolName={org?.name ?? 'Quiz'} />
+      <DisplayClient sessionId={session.id} joinCode={session.join_code} schoolName={org?.name ?? 'Quiz'} animation={theme.animation} />
     </div>
   );
 }

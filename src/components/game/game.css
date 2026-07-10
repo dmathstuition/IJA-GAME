@@ -1,0 +1,111 @@
+/* ============================================================================
+   Kahoot-grade game design system — bold shapes, chunky 3D buttons, playful
+   motion. Answer colours are fixed & iconic (like Kahoot); the per-school
+   theme drives the background + branding accents.
+   ============================================================================ */
+
+:root {
+  --a-red: #e21b3c;
+  --a-red-d: #a3132b;
+  --a-blue: #1368ce;
+  --a-blue-d: #0d4a94;
+  --a-yellow: #d89e00;
+  --a-yellow-d: #a37700;
+  --a-green: #26890c;
+  --a-green-d: #1a6008;
+  --ease-bounce: cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* ── Chunky 3D button (press = sink into its shadow) ─────────────────────── */
+.kbtn {
+  position: relative;
+  border: none;
+  border-radius: 16px;
+  font-family: inherit;
+  font-weight: 800;
+  color: #fff;
+  cursor: pointer;
+  transition: transform 0.08s ease, box-shadow 0.08s ease, filter 0.15s ease;
+  transform: translateY(0);
+  user-select: none;
+}
+.kbtn:hover:not(:disabled) { filter: brightness(1.06); }
+.kbtn:active:not(:disabled) { transform: translateY(var(--k-depth, 6px)); box-shadow: 0 0 0 rgba(0, 0, 0, 0.3) !important; }
+.kbtn:disabled { cursor: default; filter: saturate(0.5) brightness(0.8); }
+
+/* ── Answer tiles ────────────────────────────────────────────────────────── */
+.ans {
+  --k-depth: 7px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 18px 22px;
+  font-size: clamp(1rem, 2.2vw, 1.6rem);
+  text-align: left;
+  min-height: 88px;
+  box-shadow: 0 7px 0 var(--ans-shadow), 0 10px 22px rgba(0, 0, 0, 0.28);
+}
+.ans .shape { width: clamp(28px, 3.4vw, 40px); height: clamp(28px, 3.4vw, 40px); flex-shrink: 0; filter: drop-shadow(0 2px 2px rgba(0,0,0,.25)); }
+.ans .ans-txt { flex: 1; line-height: 1.15; }
+.ans.A { background: var(--a-red); --ans-shadow: var(--a-red-d); }
+.ans.B { background: var(--a-blue); --ans-shadow: var(--a-blue-d); }
+.ans.C { background: var(--a-yellow); --ans-shadow: var(--a-yellow-d); }
+.ans.D { background: var(--a-green); --ans-shadow: var(--a-green-d); }
+
+/* reveal states */
+.ans.reveal-correct { animation: correctPulse 0.7s var(--ease-bounce) both; box-shadow: 0 7px 0 var(--ans-shadow), 0 0 0 4px #fff, 0 0 40px 6px rgba(255, 255, 255, 0.5) !important; }
+.ans.reveal-wrong { animation: wrongFade 0.4s ease both; }
+@keyframes correctPulse { 0% { transform: scale(1); } 45% { transform: scale(1.06); } 100% { transform: scale(1.03); } }
+@keyframes wrongFade { to { opacity: 0.32; transform: scale(0.97); filter: grayscale(0.4); } }
+
+.ans.picked { animation: pickPop 0.35s var(--ease-bounce) both; box-shadow: 0 7px 0 var(--ans-shadow), 0 0 0 4px rgba(255, 255, 255, 0.85) !important; }
+@keyframes pickPop { 0% { transform: scale(1); } 50% { transform: scale(1.05); } 100% { transform: scale(1); } }
+
+/* ── Big pill / primary action ──────────────────────────────────────────── */
+.kpill { --k-depth: 6px; border-radius: 999px; padding: 16px 40px; font-size: 1.1rem; box-shadow: 0 6px 0 rgba(0, 0, 0, 0.35), 0 8px 20px rgba(0, 0, 0, 0.3); background: var(--primary); }
+
+/* ── Cards ──────────────────────────────────────────────────────────────── */
+.qcard {
+  background: rgba(255, 255, 255, 0.97);
+  color: #1a1030;
+  border-radius: 22px;
+  padding: clamp(20px, 4vw, 40px);
+  box-shadow: 0 18px 50px rgba(0, 0, 0, 0.35);
+  animation: dropIn 0.5s var(--ease-bounce) both;
+}
+@keyframes dropIn { from { opacity: 0; transform: translateY(-24px) scale(0.96); } to { opacity: 1; transform: translateY(0) scale(1); } }
+
+/* ── Entrance helpers ───────────────────────────────────────────────────── */
+@keyframes popIn { from { opacity: 0; transform: scale(0.5); } to { opacity: 1; transform: scale(1); } }
+@keyframes floatY { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-12px); } }
+@keyframes slideUp { from { opacity: 0; transform: translateY(28px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes streakPop { 0% { opacity: 0; transform: scale(0.4) translateY(10px); } 55% { opacity: 1; transform: scale(1.15); } 100% { opacity: 1; transform: scale(1) translateY(0); } }
+@keyframes badgeGlow { 0%, 100% { box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.3); } 50% { box-shadow: 0 0 0 10px rgba(255, 255, 255, 0); } }
+@keyframes shake { 10%,90%{transform:translateX(-2px)} 30%,70%{transform:translateX(4px)} 50%{transform:translateX(-6px)} }
+@keyframes spinSlow { to { transform: rotate(360deg); } }
+
+.pop-in { animation: popIn 0.45s var(--ease-bounce) both; }
+.float-y { animation: floatY 3.5s ease-in-out infinite; }
+.slide-up { animation: slideUp 0.5s var(--ease-bounce) both; }
+
+/* ── Join code chip ─────────────────────────────────────────────────────── */
+.codechip {
+  font-family: ui-monospace, monospace;
+  font-weight: 900;
+  letter-spacing: 0.12em;
+  background: #fff;
+  color: #1a1030;
+  border-radius: 16px;
+  padding: 0.15em 0.4em;
+  box-shadow: 0 8px 0 rgba(0, 0, 0, 0.25), 0 12px 30px rgba(0, 0, 0, 0.3);
+}
+
+/* ── Leaderboard rows ───────────────────────────────────────────────────── */
+.lbrow { display: flex; align-items: center; gap: 14px; border-radius: 14px; padding: 14px 18px; background: rgba(255,255,255,.12); backdrop-filter: blur(6px); animation: slideUp 0.4s var(--ease-bounce) both; }
+.lbrow.top1 { background: linear-gradient(100deg, rgba(255, 215, 0, 0.35), rgba(255, 255, 255, 0.15)); box-shadow: 0 0 30px rgba(255, 214, 0, 0.25); }
+.avatar { width: 44px; height: 44px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 900; color: #fff; flex-shrink: 0; box-shadow: inset 0 -3px 0 rgba(0,0,0,.2); }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.001ms !important; animation-iteration-count: 1 !important; transition-duration: 0.001ms !important; }
+}
