@@ -86,7 +86,7 @@ Flow: `/signup` → `/onboarding` (creates your school) → `/dashboard`
 | P0    | Foundation: schema + RLS, theming, tenant middleware     | ✅ done      |
 | P1    | Auth, onboarding, subscription gate, dashboard            | ✅ done      |
 | P1b   | Stripe billing: pricing, checkout, portal, webhook, gate  | ✅ done (needs keys) |
-| P2    | Question banks (JSON import, sections, export)            | —           |
+| P2    | Question banks (JSON import, sections, export)            | ✅ done      |
 | P3    | Standard mode live on Supabase Realtime                  | ✅ host · play · display |
 | P4    | Team · Speed · Oral modes                                | —           |
 | P5    | Branding UI, exports, champion screen, polish            | —           |
@@ -107,8 +107,15 @@ Flow: `/pricing` → Checkout → webhook flips `subscription_status` to `active
 → middleware unlocks `/host`. The Customer Portal (`/dashboard/billing` →
 Manage) handles upgrades, cards and cancellations.
 
-P2 (question banks), P4 (other game modes) and P5 (branding UI, exports,
-champion) are next.
+P4 (Team · Speed · Oral modes) and P5 (branding UI, exports, champion) are next.
+
+### Question banks (P2)
+
+`/dashboard/questions` — create reusable sets, each with named sections.
+Add questions one at a time or import JSON (file or paste) in the original
+game's format; export any set back to JSON. **Start game** on a set launches a
+live Standard session bound to it, and the host launches its questions instead
+of the built-in samples (samples remain the fallback when no set is chosen).
 
 ## Credits
 

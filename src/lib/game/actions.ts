@@ -15,14 +15,17 @@ async function orgId(supabase: Awaited<ReturnType<typeof createClient>>) {
 }
 
 /** Create a lobby session for the signed-in organiser's school. */
-export async function createSession(mode: 'standard' | 'team' | 'speed' | 'oral' = 'standard') {
+export async function createSession(
+  mode: 'standard' | 'team' | 'speed' | 'oral' = 'standard',
+  questionSetId?: string | null,
+) {
   const supabase = await createClient();
   const org = await orgId(supabase);
   if (!org) return { error: 'No organization for this user.' };
 
   const { data, error } = await supabase
     .from('game_sessions')
-    .insert({ org_id: org, join_code: code(), mode, state: 'lobby' })
+    .insert({ org_id: org, join_code: code(), mode, state: 'lobby', question_set_id: questionSetId ?? null })
     .select('id, join_code')
     .single();
 
