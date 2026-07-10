@@ -4,6 +4,7 @@ import { resolveTheme, themeToCssVars } from '@/lib/themes';
 import type { Section, Question } from '@/lib/types';
 import { HostClient } from './HostClient';
 import { TeamHostClient } from './TeamHostClient';
+import { SpeedHostClient } from './SpeedHostClient';
 
 export default async function HostPage({ params }: { params: Promise<{ sessionId: string }> }) {
   const { sessionId } = await params;
@@ -30,6 +31,8 @@ export default async function HostPage({ params }: { params: Promise<{ sessionId
     <div style={{ ...(themeToCssVars(theme) as React.CSSProperties), minHeight: '100vh', background: 'linear-gradient(160deg,var(--bg-from),var(--bg-to))' }}>
       {session.mode === 'team' ? (
         <TeamHostClient sessionId={session.id} joinCode={session.join_code} questions={questions} />
+      ) : session.mode === 'speed' ? (
+        <SpeedHostClient sessionId={session.id} joinCode={session.join_code} questions={questions} />
       ) : (
         <HostClient sessionId={session.id} joinCode={session.join_code} questions={questions} />
       )}

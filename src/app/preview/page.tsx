@@ -147,6 +147,25 @@ export default function Preview() {
           </div>
         </Frame>
 
+        {/* SPEED */}
+        <Frame label="Projector · Speed Round (solo runner)">
+          <div style={{ padding: '18px 28px 26px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 14 }}>
+              <span style={{ display: 'inline-flex', alignItems: 'center', gap: 10, fontWeight: 800, background: '#f97316', padding: '7px 16px', borderRadius: 999, fontSize: 18 }}>
+                <span className="avatar" style={{ width: 32, height: 32, fontSize: 14, background: 'rgba(0,0,0,.25)' }}>A</span>Amara
+              </span>
+              <span style={{ fontWeight: 900, fontFamily: 'ui-monospace,monospace', fontSize: 22, color: 'var(--accent)' }}>7 ✓ · Q9/15</span>
+              <TimerRing remaining={6} total={15} size={72} />
+            </div>
+            <div className="qcard" style={{ textAlign: 'center', marginBottom: 14 }}><div style={{ fontSize: 'clamp(22px,3.4vw,36px)', fontWeight: 900 }}>15% of 200 = ?</div></div>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
+              {(['A', 'B', 'C', 'D'] as Choice[]).map((c) => (
+                <AnswerTile key={c} choice={c} label={{ A: '25', B: '30', C: '35', D: '40' }[c]} />
+              ))}
+            </div>
+          </div>
+        </Frame>
+
         {/* PODIUM */}
         <Frame label="Projector · Champions">
           <Confetti inline continuous />

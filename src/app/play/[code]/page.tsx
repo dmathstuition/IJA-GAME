@@ -3,6 +3,7 @@ import { createClient } from '@/lib/supabase/server';
 import { resolveTheme, themeToCssVars } from '@/lib/themes';
 import { PlayClient } from './PlayClient';
 import { TeamPlayClient } from './TeamPlayClient';
+import { SpeedPlayClient } from './SpeedPlayClient';
 
 export default async function PlayPage({ params }: { params: Promise<{ code: string }> }) {
   const { code } = await params;
@@ -23,6 +24,8 @@ export default async function PlayPage({ params }: { params: Promise<{ code: str
     <div style={{ ...(themeToCssVars(theme) as React.CSSProperties), minHeight: '100vh', background: 'linear-gradient(160deg,var(--bg-from),var(--bg-to))' }}>
       {session.mode === 'team' ? (
         <TeamPlayClient sessionId={session.id} orgId={session.org_id} schoolName={org?.name ?? 'Quiz'} animation={theme.animation} />
+      ) : session.mode === 'speed' ? (
+        <SpeedPlayClient sessionId={session.id} orgId={session.org_id} schoolName={org?.name ?? 'Quiz'} animation={theme.animation} />
       ) : (
         <PlayClient sessionId={session.id} orgId={session.org_id} schoolName={org?.name ?? 'Quiz'} animation={theme.animation} />
       )}
