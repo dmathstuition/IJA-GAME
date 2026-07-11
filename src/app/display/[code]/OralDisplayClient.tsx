@@ -49,9 +49,25 @@ export function OralDisplayClient({ sessionId, joinCode, schoolName, animation }
             <TimerRing remaining={remaining} total={cq.timeLimit ?? 60} size={84} />
           </div>
           <div style={{ marginBottom: 14, width: '100%' }}><ScoreCards /></div>
-          <div className="qcard" style={{ width: '100%', marginBottom: 16, textAlign: 'center' }}><div style={{ fontSize: 'clamp(26px,4vw,44px)', fontWeight: 900 }}>{cq.text}</div></div>
+          <div className="qcard" style={{ width: '100%', marginBottom: 14, textAlign: 'center' }}><div style={{ fontSize: 'clamp(26px,4vw,44px)', fontWeight: 900 }}>{cq.text}</div></div>
+          {state === 'reveal' && ms.lastResult && (
+            <div className="pop-in" style={{ marginBottom: 14, fontSize: 'clamp(18px,2.4vw,26px)', fontWeight: 900, color: ms.lastResult.correct ? 'var(--correct)' : 'var(--wrong)' }}>
+              {ms.lastResult.groupName} answered <b>{ms.lastResult.chosen}</b> — {ms.lastResult.correct ? `Correct! +${ms.lastResult.points}` : ms.lastResult.outcome === 'passed' ? 'Wrong — passed to the other group' : `Wrong — the answer was ${ms.lastResult.answer}`}
+            </div>
+          )}
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12, width: '100%' }}>
-            {CHOICES.map((c) => <AnswerTile key={c} choice={c} label={cq.options[c]} state={state === 'reveal' ? (cq.answer === c ? 'reveal-correct' : 'reveal-wrong') : 'idle'} />)}
+            {CHOICES.map((c) => {
+              const chosen = ms.lastResult?.chosen;
+              const isCorrect = cq.answer === c;
+              const isChosen = state === 'reveal' && chosen === c;
+              const tileState = state === 'reveal' ? (isCorrect ? 'reveal-correct' : isChosen ? 'idle' : 'reveal-wrong') : 'idle';
+              return (
+                <div key={c} style={{ position: 'relative', borderRadius: 18, outline: isChosen && !isCorrect ? '3px solid var(--wrong)' : 'none' }}>
+                  <AnswerTile choice={c} label={cq.options[c]} state={tileState} />
+                  {isChosen && <span style={{ position: 'absolute', top: 10, right: 14, background: isCorrect ? 'var(--correct)' : 'var(--wrong)', padding: '3px 12px', borderRadius: 999, fontSize: 13, fontWeight: 800 }}>Learner {isCorrect ? '✓' : '✗'}</span>}
+                </div>
+              );
+            })}
           </div>
         </main>
       ) : state === 'leaderboard' || state === 'ended' ? (

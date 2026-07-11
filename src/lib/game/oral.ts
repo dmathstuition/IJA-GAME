@@ -23,6 +23,7 @@ interface OralState {
     correct: boolean;
     points: number;
     answer: Choice;
+    chosen: Choice;
     outcome: 'correct' | 'passed' | 'both_missed';
   } | null;
 }
@@ -73,12 +74,13 @@ export async function launchOralQuestion(sessionId: string, question: Question, 
 }
 
 /**
- * Host judges the active group's spoken answer.
- *  correct → +10 (or +5 bonus), reveal.
+ * The teacher records which option the learner actually said; correctness is
+ * derived from the question's answer.
+ *  chosen === answer → +10 (or +5 bonus), reveal.
  *  wrong & not bonus → pass to the other group (bonus round, same question).
  *  wrong & bonus → both missed, reveal.
  */
-export async function markOral(sessionId: string, correct: boolean) {
+export async function markOral(sessionId: string, chosen: Choice) {
   const supabase = await createClient();
   const s = await getState(supabase, sessionId);
   if (!s) return { error: 'Session not found' };
@@ -88,6 +90,7 @@ export async function markOral(sessionId: string, correct: boolean) {
   const active = s.active_team ?? 0;
   const bonus = s.is_bonus ?? false;
   if (!cq || qIndex < 0) return { error: 'No active question' };
+  const correct = chosen === cq.answer;
 
   const patch: Record<string, unknown> = {};
   let outcome: 'correct' | 'passed' | 'both_missed';
@@ -107,7 +110,7 @@ export async function markOral(sessionId: string, correct: boolean) {
     patch.state = 'reveal'; patch.is_bonus = false; outcome = 'both_missed';
   }
 
-  ms.lastResult = { group: active, groupName: ms.groups[active].name, correct, points: correct ? (bonus ? BONUS : NORMAL) : 0, answer: cq.answer, outcome };
+  ms.lastResult = { group: active, groupName: ms.groups[active].name, correct, points: correct ? (bonus ? BONUS : NORMAL) : 0, answer: cq.answer, chosen, outcome };
   patch.mode_state = ms as unknown as never;
   const { error } = await supabase.from('game_sessions').update(patch).eq('id', sessionId);
   return error ? { error: error.message } : { ok: true as const, outcome };
