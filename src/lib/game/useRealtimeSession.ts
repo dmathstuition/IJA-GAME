@@ -56,8 +56,11 @@ export function useRealtimeSession(sessionId: string) {
     }
     seed();
 
+    // Unique topic per mount: the browser client is a singleton, so two hooks
+    // (e.g. the mode panel + HostTools) sharing one topic would try to add
+    // callbacks to an already-subscribed channel and crash.
     const channel = supabase
-      .channel(`session:${sessionId}`)
+      .channel(`session:${sessionId}:${Math.random().toString(36).slice(2)}`)
       .on('postgres_changes', { event: '*', schema: 'public', table: 'game_sessions', filter: `id=eq.${sessionId}` },
         (payload) => setSession(payload.new as SessionRow))
       .on('postgres_changes', { event: '*', schema: 'public', table: 'players', filter: `session_id=eq.${sessionId}` },

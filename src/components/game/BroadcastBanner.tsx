@@ -20,8 +20,10 @@ export function BroadcastBanner({ sessionId }: { sessionId: string }) {
       if (active) setMsg((data?.broadcast as { text: string; ts: number } | null) ?? null);
     });
 
+    // Unique topic per mount — the singleton client rejects re-adding
+    // callbacks to an already-subscribed channel topic.
     const channel = supabase
-      .channel(`broadcast:${sessionId}`)
+      .channel(`broadcast:${sessionId}:${Math.random().toString(36).slice(2)}`)
       .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'game_sessions', filter: `id=eq.${sessionId}` },
         (payload) => setMsg(((payload.new as any).broadcast as { text: string; ts: number } | null) ?? null))
       .subscribe();
