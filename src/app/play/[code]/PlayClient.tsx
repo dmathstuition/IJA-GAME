@@ -2,6 +2,7 @@
 
 import '../../../components/game/game.css';
 import { useEffect, useState } from 'react';
+import { Trophy, PartyPopper, Rocket, Volume2, VolumeX } from 'lucide-react';
 import { useRealtimeSession } from '@/lib/game/useRealtimeSession';
 import { joinSession, submitAnswer } from '@/lib/game/player';
 import { useCountdown } from '@/components/game/useCountdown';
@@ -52,7 +53,7 @@ export function PlayClient({ sessionId, orgId, schoolName, animation }: { sessio
 
   const shell: React.CSSProperties = { position: 'relative', zIndex: 10, minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: 18, textAlign: 'center' };
   const MuteBtn = () => (
-    <button onClick={() => setMuted(toggleMute())} aria-label="Toggle sound" style={{ position: 'fixed', top: 12, right: 12, zIndex: 50, background: 'rgba(0,0,0,.35)', border: 'none', borderRadius: 10, padding: '6px 10px', fontSize: 18, cursor: 'pointer' }}>{muted ? '🔇' : '🔊'}</button>
+    <button onClick={() => setMuted(toggleMute())} aria-label="Toggle sound" style={{ position: 'fixed', top: 12, right: 12, zIndex: 50, background: 'rgba(0,0,0,.35)', border: 'none', borderRadius: 10, padding: '6px 10px', fontSize: 18, cursor: 'pointer' }}>{muted ? <VolumeX size={20} /> : <Volume2 size={20} />}</button>
   );
 
   return (
@@ -70,7 +71,7 @@ export function PlayClient({ sessionId, orgId, schoolName, animation }: { sessio
               onFocus={unlockAudio} />
             {err && <p style={{ color: 'var(--wrong)', fontSize: 13, marginTop: 10 }}>{err}</p>}
             <button className="kbtn kpill" onClick={join} disabled={busy || name.trim().length < 2} style={{ width: '100%', marginTop: 14 }}>
-              {busy ? 'Joining…' : '🚀 Join'}
+              {busy ? 'Joining…' : <><Rocket size={18} style={{ verticalAlign: '-3px', marginRight: 7 }} />Join</>}
             </button>
           </div>
         </main>
@@ -110,7 +111,7 @@ export function PlayClient({ sessionId, orgId, schoolName, animation }: { sessio
       {playerId && (state === 'leaderboard' || state === 'ended') && (
         <main style={{ ...shell, justifyContent: 'flex-start', paddingTop: 28 }}>
           {state === 'ended' && <Confetti continuous />}
-          <h1 style={{ fontFamily: '"Fredoka One",sans-serif', fontSize: 28, color: 'var(--accent)' }}>{state === 'ended' ? '🏆 Final scores' : 'Leaderboard'}</h1>
+          <h1 style={{ fontFamily: '"Fredoka One",sans-serif', fontSize: 28, color: 'var(--accent)' }}>{state === 'ended' ? <><Trophy size={24} style={{ verticalAlign: '-3px', marginRight: 8 }} />Final scores</> : 'Leaderboard'}</h1>
           <div style={{ width: '100%', maxWidth: 420, marginTop: 14, display: 'grid', gap: 8 }}>
             {[...players].sort((a, b) => b.score - a.score).map((p, i) => (
               <div key={p.id} className={`lbrow ${i === 0 ? 'top1' : ''}`} style={{ animationDelay: `${i * 0.05}s`, outline: p.id === playerId ? '2px solid var(--accent)' : 'none' }}>
@@ -127,7 +128,7 @@ export function PlayClient({ sessionId, orgId, schoolName, animation }: { sessio
       {playerId && (!state || state === 'lobby' || state === 'section_intro') && (
         <main style={shell}>
           <div className="qcard float-y" style={{ maxWidth: 340, color: '#1a1030' }}>
-            <div style={{ fontSize: 46 }}>🎉</div>
+            <div><PartyPopper size={46} color="var(--accent)" /></div>
             <h1 style={{ fontFamily: '"Fredoka One",sans-serif', fontSize: 24, color: 'var(--primary)' }}>You&apos;re in, {me?.name}!</h1>
             <p style={{ color: '#666', marginTop: 4 }}>Waiting for the host to start…</p>
             <div style={{ marginTop: 12, fontWeight: 800 }}>Score <b style={{ color: 'var(--primary)' }}>{me?.score ?? 0}</b></div>

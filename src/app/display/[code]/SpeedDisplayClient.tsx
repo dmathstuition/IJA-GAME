@@ -2,6 +2,7 @@
 
 import '../../../components/game/game.css';
 import { useEffect, useState } from 'react';
+import { Zap, Users } from 'lucide-react';
 import { useRealtimeSession } from '@/lib/game/useRealtimeSession';
 import { AnimatedBackground } from '@/components/game/AnimatedBackground';
 import { AnswerTile } from '@/components/game/AnswerTile';
@@ -54,7 +55,7 @@ export function SpeedDisplayClient({ sessionId, joinCode, schoolName, animation 
         <main style={{ ...shell, justifyContent: 'flex-start', paddingTop: 46 }}>
           {state === 'ended' && <Confetti continuous />}
           {state === 'ended' && <div className="float-y" style={{ display: 'inline-block' }}><Trophy size={80} /></div>}
-          <h1 style={{ fontFamily: '"Fredoka One",sans-serif', fontSize: 'clamp(30px,5vw,54px)', color: 'var(--accent)', margin: '4px 0 20px' }}>⚡ Speed Champions</h1>
+          <h1 style={{ fontFamily: '"Fredoka One",sans-serif', fontSize: 'clamp(30px,5vw,54px)', color: 'var(--accent)', margin: '4px 0 20px' }}><Zap size={40} style={{ verticalAlign: '-4px', marginRight: 10 }} />Speed Champions</h1>
           <div style={{ width: '100%', maxWidth: 640, display: 'grid', gap: 8 }}>
             {[...(ms.results ?? [])].sort((a: any, b: any) => b.score - a.score).slice(0, 10).map((r: any, i: number) => (
               <div key={r.playerId} className={`lbrow ${i === 0 ? 'top1' : ''}`} style={{ fontSize: 22 }}>
@@ -69,7 +70,7 @@ export function SpeedDisplayClient({ sessionId, joinCode, schoolName, animation 
         </main>
       ) : (
         <main style={shell}>
-          <div style={{ fontWeight: 900, letterSpacing: 5, color: 'var(--accent)', fontSize: 16 }}>{schoolName.toUpperCase()} · ⚡ SPEED ROUND</div>
+          <div style={{ fontWeight: 900, letterSpacing: 5, color: 'var(--accent)', fontSize: 16 }}>{schoolName.toUpperCase()} · <Zap size={15} style={{ verticalAlign: '-2px' }} /> SPEED ROUND</div>
           <div style={{ fontFamily: '"Fredoka One", sans-serif', fontSize: 'clamp(34px,7vw,68px)', color: 'var(--accent)', lineHeight: 1, margin: '10px 0' }}>{runner ? 'Get ready…' : 'Join the round!'}</div>
           <div className="codechip float-y" style={{ fontSize: 'clamp(50px,11vw,130px)' }}>{joinCode}</div>
           <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', justifyContent: 'center', maxWidth: 860, marginTop: 20 }}>
@@ -79,7 +80,7 @@ export function SpeedDisplayClient({ sessionId, joinCode, schoolName, animation 
               </span>
             ))}
           </div>
-          <div style={{ fontWeight: 800, color: 'var(--accent)', fontSize: 22, marginTop: 18 }}>👥 {players.length} joined</div>
+          <div style={{ fontWeight: 800, color: 'var(--accent)', fontSize: 22, marginTop: 18 }}><Users size={20} style={{ verticalAlign: '-3px', marginRight: 6 }} />{players.length} joined</div>
         </main>
       )}
     </div>

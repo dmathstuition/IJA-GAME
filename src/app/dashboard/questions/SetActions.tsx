@@ -2,6 +2,7 @@
 
 import { useTransition } from 'react';
 import { useRouter } from 'next/navigation';
+import { Play, Swords, Zap, Mic, Trash2 } from 'lucide-react';
 import { createSession } from '@/lib/game/actions';
 import { createTeamSession } from '@/lib/game/team';
 import { createSpeedSession } from '@/lib/game/speed';
@@ -25,9 +26,9 @@ export function SetActions({ setId, canStart }: { setId: string; canStart: boole
             else alert(r.error);
           })
         }
-        style={{ padding: '6px 12px', borderRadius: 7, border: 'none', background: canStart ? '#22c55e' : '#1c2330', color: '#fff', fontWeight: 700, fontSize: 12.5, cursor: canStart ? 'pointer' : 'not-allowed' }}
+        style={{ padding: '6px 12px', borderRadius: 7, border: 'none', display: 'inline-flex', alignItems: 'center', gap: 5, background: canStart ? '#22c55e' : '#1c2330', color: '#fff', fontWeight: 700, fontSize: 12.5, cursor: canStart ? 'pointer' : 'not-allowed' }}
       >
-        ▶ Standard
+        <Play size={13} fill="currentColor" /> Standard
       </button>
       <button
         disabled={pending || !canStart}
@@ -39,9 +40,9 @@ export function SetActions({ setId, canStart }: { setId: string; canStart: boole
             else alert(r.error);
           })
         }
-        style={{ padding: '6px 12px', borderRadius: 7, border: 'none', background: canStart ? '#e21b3c' : '#1c2330', color: '#fff', fontWeight: 700, fontSize: 12.5, cursor: canStart ? 'pointer' : 'not-allowed' }}
+        style={{ padding: '6px 12px', borderRadius: 7, border: 'none', display: 'inline-flex', alignItems: 'center', gap: 5, background: canStart ? '#e21b3c' : '#1c2330', color: '#fff', fontWeight: 700, fontSize: 12.5, cursor: canStart ? 'pointer' : 'not-allowed' }}
       >
-        ⚔️ Team
+        <Swords size={13} /> Team
       </button>
       <button
         disabled={pending || !canStart}
@@ -53,9 +54,9 @@ export function SetActions({ setId, canStart }: { setId: string; canStart: boole
             else alert(r.error);
           })
         }
-        style={{ padding: '6px 12px', borderRadius: 7, border: 'none', background: canStart ? '#f97316' : '#1c2330', color: '#fff', fontWeight: 700, fontSize: 12.5, cursor: canStart ? 'pointer' : 'not-allowed' }}
+        style={{ padding: '6px 12px', borderRadius: 7, border: 'none', display: 'inline-flex', alignItems: 'center', gap: 5, background: canStart ? '#f97316' : '#1c2330', color: '#fff', fontWeight: 700, fontSize: 12.5, cursor: canStart ? 'pointer' : 'not-allowed' }}
       >
-        ⚡ Speed
+        <Zap size={13} fill="currentColor" /> Speed
       </button>
       <button
         disabled={pending || !canStart}
@@ -67,16 +68,16 @@ export function SetActions({ setId, canStart }: { setId: string; canStart: boole
             else alert(r.error);
           })
         }
-        style={{ padding: '6px 12px', borderRadius: 7, border: 'none', background: canStart ? '#8b5cf6' : '#1c2330', color: '#fff', fontWeight: 700, fontSize: 12.5, cursor: canStart ? 'pointer' : 'not-allowed' }}
+        style={{ padding: '6px 12px', borderRadius: 7, border: 'none', display: 'inline-flex', alignItems: 'center', gap: 5, background: canStart ? '#8b5cf6' : '#1c2330', color: '#fff', fontWeight: 700, fontSize: 12.5, cursor: canStart ? 'pointer' : 'not-allowed' }}
       >
-        🎤 Oral
+        <Mic size={13} /> Oral
       </button>
       <button
         disabled={pending}
         onClick={() => start(async () => { if (confirm('Delete this set?')) { await deleteQuestionSet(setId); router.refresh(); } })}
-        style={{ background: 'none', border: 'none', color: '#f87171', cursor: 'pointer', fontSize: 13 }}
+        style={{ background: 'none', border: 'none', color: '#f87171', cursor: 'pointer', fontSize: 13, display: 'inline-flex', alignItems: 'center', gap: 4 }}
       >
-        Delete
+        <Trash2 size={14} /> Delete
       </button>
     </div>
   );

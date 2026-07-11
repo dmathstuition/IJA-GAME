@@ -2,6 +2,7 @@
 
 import '../../../components/game/game.css';
 import { useState, useTransition } from 'react';
+import { Swords, Eye, SkipForward, Trophy, Lock } from 'lucide-react';
 import { useRealtimeSession } from '@/lib/game/useRealtimeSession';
 import { setState } from '@/lib/game/actions';
 import { setTeamNames, assignPlayer, autoAssignTeams, setActiveTeam, launchTeamQuestion, revealTeam, skipTeamQuestion } from '@/lib/game/team';
@@ -40,7 +41,7 @@ export function TeamHostClient({ sessionId, joinCode, questions }: { sessionId: 
     <main style={{ maxWidth: 1000, margin: '0 auto', padding: 20, color: 'var(--text)', fontFamily: 'system-ui' }}>
       <header style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 12 }}>
         <div>
-          <div style={{ fontSize: 12, letterSpacing: 2, color: 'var(--text-dim)' }}>⚔️ TEAM BATTLE · {state ?? '…'} {bonus && '· BONUS'}</div>
+          <div style={{ fontSize: 12, letterSpacing: 2, color: 'var(--text-dim)' }}><Swords size={12} style={{ verticalAlign: '-2px', marginRight: 5 }} />TEAM BATTLE · {state ?? '…'} {bonus && '· BONUS'}</div>
           <h1 style={{ fontSize: 24, color: 'var(--accent)' }}>Team Control</h1>
         </div>
         <div style={{ textAlign: 'right' }}>
@@ -73,7 +74,7 @@ export function TeamHostClient({ sessionId, joinCode, questions }: { sessionId: 
                   const isLock = lock?.choice === c;
                   return (
                     <div key={c} style={{ padding: '8px 10px', borderRadius: 8, fontSize: 13, border: `1px solid ${isAns ? 'var(--correct)' : isLock ? 'var(--accent)' : 'rgba(255,255,255,.1)'}`, background: isAns ? 'rgba(34,197,94,.15)' : 'rgba(0,0,0,.2)' }}>
-                      <b>{c}</b> {cq.options[c]} {isLock && <span style={{ color: 'var(--accent)', fontSize: 11 }}>🔒 {players.find((p) => p.id === lock!.player_id)?.name}</span>}
+                      <b>{c}</b> {cq.options[c]} {isLock && <span style={{ color: 'var(--accent)', fontSize: 11 }}><Lock size={10} style={{ verticalAlign: '-1px' }} /> {players.find((p) => p.id === lock!.player_id)?.name}</span>}
                     </div>
                   );
                 })}
@@ -86,9 +87,9 @@ export function TeamHostClient({ sessionId, joinCode, questions }: { sessionId: 
               </div>
             )}
             <div style={{ display: 'flex', gap: 8, marginTop: 12, flexWrap: 'wrap' }}>
-              <button style={btn('var(--accent)')} disabled={pending || !live} onClick={() => start(() => { revealTeam(sessionId); })}>👁 Reveal {bonus ? '(bonus)' : ''}</button>
-              <button style={btn('#f97316')} disabled={pending || !cq} onClick={() => start(() => { skipTeamQuestion(sessionId); })}>⏭ Skip</button>
-              <button style={btn('#7c3aed')} disabled={pending} onClick={() => start(() => { setState(sessionId, 'leaderboard'); })}>🏆 Scores</button>
+              <button style={btn('var(--accent)')} disabled={pending || !live} onClick={() => start(() => { revealTeam(sessionId); })}><Eye size={14} style={{ verticalAlign: '-2px', marginRight: 5 }} />Reveal {bonus ? '(bonus)' : ''}</button>
+              <button style={btn('#f97316')} disabled={pending || !cq} onClick={() => start(() => { skipTeamQuestion(sessionId); })}><SkipForward size={14} style={{ verticalAlign: '-2px', marginRight: 5 }} />Skip</button>
+              <button style={btn('#7c3aed')} disabled={pending} onClick={() => start(() => { setState(sessionId, 'leaderboard'); })}><Trophy size={14} style={{ verticalAlign: '-2px', marginRight: 5 }} />Scores</button>
               <button style={btn('var(--wrong)')} disabled={pending} onClick={() => start(() => { setState(sessionId, 'ended'); })}>End</button>
             </div>
           </div>

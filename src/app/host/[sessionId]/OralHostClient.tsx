@@ -2,6 +2,7 @@
 
 import '../../../components/game/game.css';
 import { useState, useTransition } from 'react';
+import { Mic, SkipForward, Trophy } from 'lucide-react';
 import { useRealtimeSession } from '@/lib/game/useRealtimeSession';
 import { useCountdown } from '@/components/game/useCountdown';
 import { setState } from '@/lib/game/actions';
@@ -36,7 +37,7 @@ export function OralHostClient({ sessionId, joinCode, questions }: { sessionId: 
     <main style={{ maxWidth: 940, margin: '0 auto', padding: 20, color: 'var(--text)', fontFamily: 'system-ui' }}>
       <header style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 12 }}>
         <div>
-          <div style={{ fontSize: 12, letterSpacing: 2, color: 'var(--text-dim)' }}>🎤 ORAL ROUND · {state ?? '…'} {bonus && '· BONUS'}</div>
+          <div style={{ fontSize: 12, letterSpacing: 2, color: 'var(--text-dim)' }}><Mic size={12} style={{ verticalAlign: '-2px', marginRight: 5 }} />ORAL ROUND · {state ?? '…'} {bonus && '· BONUS'}</div>
           <h1 style={{ fontSize: 24, color: 'var(--accent)' }}>Oral Control</h1>
         </div>
         <div style={{ textAlign: 'right' }}>
@@ -107,8 +108,8 @@ export function OralHostClient({ sessionId, joinCode, questions }: { sessionId: 
           </div>
         )}
         <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
-          <button style={btn('#f97316')} disabled={pending || !cq} onClick={() => start(() => { skipOral(sessionId); })}>⏭ Skip</button>
-          <button style={btn('#7c3aed')} disabled={pending} onClick={() => start(() => { setState(sessionId, 'leaderboard'); })}>🏆 Scores</button>
+          <button style={btn('#f97316')} disabled={pending || !cq} onClick={() => start(() => { skipOral(sessionId); })}><SkipForward size={14} style={{ verticalAlign: '-2px', marginRight: 5 }} />Skip</button>
+          <button style={btn('#7c3aed')} disabled={pending} onClick={() => start(() => { setState(sessionId, 'leaderboard'); })}><Trophy size={14} style={{ verticalAlign: '-2px', marginRight: 5 }} />Scores</button>
           <button style={btn('var(--wrong)')} disabled={pending} onClick={() => start(() => { setState(sessionId, 'ended'); })}>End</button>
         </div>
       </div>

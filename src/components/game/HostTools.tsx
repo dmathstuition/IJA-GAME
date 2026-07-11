@@ -1,6 +1,7 @@
 'use client';
 
 import { useRef, useState, useTransition } from 'react';
+import { Wrench, X, Upload, FolderOpen, Download, Megaphone, RotateCcw, LogOut, AlertTriangle, Plus, Trash2 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useRealtimeSession } from '@/lib/game/useRealtimeSession';
 import { parseImport, IMPORT_EXAMPLE } from '@/lib/game/importParse';
@@ -13,8 +14,8 @@ type Tab = 'questions' | 'broadcast' | 'players';
 
 const card: React.CSSProperties = { border: '1px solid rgba(255,255,255,.12)', borderRadius: 14, padding: 14, background: 'linear-gradient(160deg, rgba(30,20,45,.55), rgba(15,10,25,.7))' };
 const input: React.CSSProperties = { width: '100%', padding: 9, borderRadius: 8, border: '1px solid rgba(255,255,255,.15)', background: '#0c0916', color: '#fff', fontSize: 13, boxSizing: 'border-box' };
-const btn = (bg: string): React.CSSProperties => ({ padding: '8px 14px', borderRadius: 9, border: 'none', color: '#fff', background: bg, fontWeight: 800, cursor: 'pointer', fontSize: 13 });
-const ghost: React.CSSProperties = { padding: '8px 14px', borderRadius: 9, border: '1px solid rgba(255,255,255,.18)', color: '#c9c2d6', background: 'transparent', fontWeight: 700, cursor: 'pointer', fontSize: 13 };
+const btn = (bg: string): React.CSSProperties => ({ padding: '8px 14px', borderRadius: 9, border: 'none', color: '#fff', background: bg, fontWeight: 800, cursor: 'pointer', fontSize: 13, display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: 6 });
+const ghost: React.CSSProperties = { padding: '8px 14px', borderRadius: 9, border: '1px solid rgba(255,255,255,.18)', color: '#c9c2d6', background: 'transparent', fontWeight: 700, cursor: 'pointer', fontSize: 13, display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: 6 };
 
 /**
  * Organiser Tools drawer — brings the original control panel's full toolset into
@@ -92,15 +93,15 @@ export function HostTools({ sessionId, joinCode, questions }: { sessionId: strin
     <>
       {/* Floating launcher */}
       <button onClick={() => setOpen((o) => !o)} style={{ position: 'fixed', right: 20, bottom: 20, zIndex: 60, ...btn('linear-gradient(140deg,#ff7a1a,#ff2d55)'), padding: '12px 18px', fontSize: 14, boxShadow: '0 10px 30px rgba(255,45,85,.35)' }}>
-        🛠 Organiser Tools
+        <Wrench size={16} /> Organiser Tools
       </button>
 
       {open && (
         <div onClick={() => setOpen(false)} style={{ position: 'fixed', inset: 0, zIndex: 55, background: 'rgba(4,2,10,.6)', backdropFilter: 'blur(3px)' }}>
           <aside onClick={(e) => e.stopPropagation()} style={{ position: 'fixed', top: 0, right: 0, height: '100vh', width: 'min(460px, 100vw)', overflowY: 'auto', background: '#0a0714', borderLeft: '1px solid rgba(255,255,255,.1)', padding: 18, color: 'var(--text)', fontFamily: 'system-ui' }}>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 12 }}>
-              <b style={{ fontSize: 16 }}>🛠 Organiser Tools</b>
-              <button onClick={() => setOpen(false)} style={ghost}>✕ Close</button>
+              <b style={{ fontSize: 16, display: 'inline-flex', alignItems: 'center', gap: 8 }}><Wrench size={17} /> Organiser Tools</b>
+              <button onClick={() => setOpen(false)} style={ghost}><X size={14} /> Close</button>
             </div>
 
             {msg && <div style={{ ...card, padding: 10, marginBottom: 12, background: 'rgba(255,122,26,.15)', borderColor: '#ff7a1a', fontSize: 13, fontWeight: 700 }}>{msg}</div>}
@@ -132,10 +133,10 @@ export function HostTools({ sessionId, joinCode, questions }: { sessionId: strin
                     Replace existing bank (otherwise append)
                   </label>
                   <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
-                    <button style={btn('var(--correct)')} disabled={pending || !preview?.questions.length} onClick={() => runImport(paste)}>⬆ Import paste</button>
-                    <button style={ghost} disabled={pending} onClick={() => fileRef.current?.click()}>📁 Import file…</button>
+                    <button style={btn('var(--correct)')} disabled={pending || !preview?.questions.length} onClick={() => runImport(paste)}><Upload size={14} /> Import paste</button>
+                    <button style={ghost} disabled={pending} onClick={() => fileRef.current?.click()}><FolderOpen size={14} /> Import file…</button>
                     <input ref={fileRef} type="file" accept="application/json,.json" onChange={onFile} style={{ display: 'none' }} />
-                    <button style={ghost} disabled={!questions.length} onClick={exportJson}>⬇ Export JSON</button>
+                    <button style={ghost} disabled={!questions.length} onClick={exportJson}><Download size={14} /> Export JSON</button>
                   </div>
                 </div>
 
@@ -164,7 +165,7 @@ export function HostTools({ sessionId, joinCode, questions }: { sessionId: strin
                     <input type="number" min={5} max={120} value={nq.timeLimit} onChange={(e) => setNq({ ...nq, timeLimit: Number(e.target.value) || 30 })} style={{ ...input, width: 80 }} />
                     {nq.kind !== 'theory' && <span style={{ fontSize: 12, color: 'var(--text-dim)' }}>Correct: <b style={{ color: 'var(--accent)' }}>{nq.answer}</b></span>}
                   </div>
-                  <button style={btn('var(--primary)')} disabled={pending} onClick={addOne}>+ Add question</button>
+                  <button style={btn('var(--primary)')} disabled={pending} onClick={addOne}><Plus size={14} /> Add question</button>
                 </div>
 
                 {/* List + clear */}
@@ -178,7 +179,7 @@ export function HostTools({ sessionId, joinCode, questions }: { sessionId: strin
                     {questions.map((q, i) => (
                       <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 8, justifyContent: 'space-between', padding: '5px 8px', borderRadius: 8, background: 'rgba(255,255,255,.04)' }}>
                         <span style={{ fontSize: 12, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{i + 1}. {q.text} <span style={{ color: 'var(--text-dim)' }}>{q.kind === 'theory' ? '(theory)' : `(${q.answer})`}</span></span>
-                        <button style={{ ...ghost, padding: '4px 8px', color: 'var(--wrong)', borderColor: 'transparent' }} disabled={pending} onClick={() => start(async () => { await deleteQuestion(sessionId, i); refresh(); })}>✕</button>
+                        <button style={{ ...ghost, padding: '4px 8px', color: 'var(--wrong)', borderColor: 'transparent' }} disabled={pending} onClick={() => start(async () => { await deleteQuestion(sessionId, i); refresh(); })}><X size={13} /></button>
                       </div>
                     ))}
                   </div>
@@ -193,7 +194,7 @@ export function HostTools({ sessionId, joinCode, questions }: { sessionId: strin
                   <div style={{ fontSize: 12, color: 'var(--text-dim)', marginBottom: 8, fontWeight: 800, letterSpacing: 1 }}>MESSAGE ALL SCREENS</div>
                   <textarea value={bcast} onChange={(e) => setBcast(e.target.value)} rows={3} placeholder="e.g. Break time — back in 5 minutes!" style={{ ...input, resize: 'vertical', marginBottom: 10 }} />
                   <div style={{ display: 'flex', gap: 8 }}>
-                    <button style={btn('var(--primary)')} disabled={pending || !bcast.trim()} onClick={() => start(async () => { await broadcastMessage(sessionId, bcast); flash('Broadcast sent.'); setBcast(''); })}>📢 Send</button>
+                    <button style={btn('var(--primary)')} disabled={pending || !bcast.trim()} onClick={() => start(async () => { await broadcastMessage(sessionId, bcast); flash('Broadcast sent.'); setBcast(''); })}><Megaphone size={14} /> Send</button>
                     <button style={ghost} disabled={pending || !broadcast} onClick={() => start(async () => { await clearBroadcast(sessionId); flash('Broadcast cleared.'); })}>Clear banner</button>
                   </div>
                 </div>
@@ -219,7 +220,7 @@ export function HostTools({ sessionId, joinCode, questions }: { sessionId: strin
                     {[...players].sort((a, b) => b.score - a.score).map((p) => (
                       <div key={p.id} style={{ display: 'flex', alignItems: 'center', gap: 8, justifyContent: 'space-between', padding: '5px 8px', borderRadius: 8, background: 'rgba(255,255,255,.04)' }}>
                         <span style={{ fontSize: 13 }}>{p.name} <b style={{ color: 'var(--accent)', fontFamily: 'ui-monospace' }}>{p.score}</b></span>
-                        <button style={{ ...ghost, padding: '4px 8px', color: 'var(--wrong)', borderColor: 'transparent' }} disabled={pending} onClick={() => start(async () => { await removePlayer(sessionId, p.id); })}>Remove</button>
+                        <button style={{ ...ghost, padding: '4px 8px', color: 'var(--wrong)', borderColor: 'transparent' }} disabled={pending} onClick={() => start(async () => { await removePlayer(sessionId, p.id); })}><Trash2 size={13} /> Remove</button>
                       </div>
                     ))}
                   </div>
@@ -227,9 +228,9 @@ export function HostTools({ sessionId, joinCode, questions }: { sessionId: strin
                 <div style={card}>
                   <div style={{ fontSize: 12, color: 'var(--text-dim)', marginBottom: 8, fontWeight: 800, letterSpacing: 1 }}>DANGER ZONE</div>
                   <div style={{ display: 'grid', gap: 8 }}>
-                    <button style={ghost} disabled={pending} onClick={() => confirmAct('Reset all scores', () => resetScores(sessionId))}>♻ Reset scores (keep players)</button>
-                    <button style={ghost} disabled={pending} onClick={() => confirmAct('End & log everyone out', () => endAndLogoutAll(sessionId))}>🚪 End & logout all</button>
-                    <button style={btn('var(--wrong)')} disabled={pending} onClick={() => confirmAct('Full reset — wipe everything back to lobby', () => fullReset(sessionId))}>⚠ Full reset</button>
+                    <button style={ghost} disabled={pending} onClick={() => confirmAct('Reset all scores', () => resetScores(sessionId))}><RotateCcw size={14} /> Reset scores (keep players)</button>
+                    <button style={ghost} disabled={pending} onClick={() => confirmAct('End & log everyone out', () => endAndLogoutAll(sessionId))}><LogOut size={14} /> End & logout all</button>
+                    <button style={btn('var(--wrong)')} disabled={pending} onClick={() => confirmAct('Full reset — wipe everything back to lobby', () => fullReset(sessionId))}><AlertTriangle size={14} /> Full reset</button>
                   </div>
                 </div>
               </div>

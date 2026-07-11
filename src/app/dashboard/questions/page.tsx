@@ -1,6 +1,7 @@
 import { createClient } from '@/lib/supabase/server';
 import type { Section } from '@/lib/types';
 import { AdminShell, adminCard } from '@/components/AdminShell';
+import { Library } from 'lucide-react';
 import { NewSetButton } from './NewSetButton';
 import { SetActions } from './SetActions';
 
@@ -27,7 +28,7 @@ export default async function QuestionsPage() {
           const count = countQuestions(s.sections as Section[]);
           return (
             <div key={s.id} style={{ ...adminCard, padding: '16px 20px', display: 'flex', alignItems: 'center', gap: 14, flexWrap: 'wrap' }}>
-              <span style={{ fontSize: 22 }}>📚</span>
+              <Library size={22} color="#60a5fa" />
               <div style={{ flex: 1, minWidth: 160 }}>
                 <div style={{ fontWeight: 800, fontSize: 16 }}>{s.name}</div>
                 <div style={{ fontSize: 12.5, color: '#8b8296' }}>{count} question{count === 1 ? '' : 's'}</div>

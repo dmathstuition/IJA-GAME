@@ -1,6 +1,7 @@
 'use client';
 
 import '../../../components/game/game.css';
+import { Mic, Zap } from 'lucide-react';
 import { useRealtimeSession } from '@/lib/game/useRealtimeSession';
 import { useCountdown } from '@/components/game/useCountdown';
 import { AnimatedBackground } from '@/components/game/AnimatedBackground';
@@ -44,8 +45,8 @@ export function OralDisplayClient({ sessionId, joinCode, schoolName, animation }
       {(state === 'question_active' || state === 'reveal') && cq ? (
         <main style={{ ...shell, justifyContent: 'flex-start', paddingTop: 30, maxWidth: 1100, margin: '0 auto' }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%', marginBottom: 14 }}>
-            <span style={{ fontWeight: 800, fontFamily: 'ui-monospace,monospace', background: 'rgba(0,0,0,.3)', padding: '8px 16px', borderRadius: 999 }}>🎤 Q{qIndex + 1} · {groups[active].name}</span>
-            {bonus && <span style={{ fontWeight: 900, color: '#f97316', background: 'rgba(249,115,22,.15)', border: '1px solid #f97316', padding: '8px 18px', borderRadius: 999 }}>⚡ BONUS · +5</span>}
+            <span style={{ fontWeight: 800, fontFamily: 'ui-monospace,monospace', background: 'rgba(0,0,0,.3)', padding: '8px 16px', borderRadius: 999 }}><Mic size={14} style={{ verticalAlign: '-2px', marginRight: 5 }} />Q{qIndex + 1} · {groups[active].name}</span>
+            {bonus && <span style={{ fontWeight: 900, color: '#f97316', background: 'rgba(249,115,22,.15)', border: '1px solid #f97316', padding: '8px 18px', borderRadius: 999 }}><Zap size={16} style={{ verticalAlign: '-2px', marginRight: 4 }} />BONUS · +5</span>}
             <TimerRing remaining={remaining} total={cq.timeLimit ?? 60} size={84} />
           </div>
           <div style={{ marginBottom: 14, width: '100%' }}><ScoreCards /></div>
@@ -58,7 +59,7 @@ export function OralDisplayClient({ sessionId, joinCode, schoolName, animation }
           {cq.kind === 'theory' ? (
             <div style={{ width: '100%', textAlign: 'center' }}>
               {state === 'question_active' ? (
-                <div style={{ fontSize: 'clamp(18px,2.6vw,28px)', color: 'var(--text-dim)', fontWeight: 700 }}>🎤 The learner answers aloud…</div>
+                <div style={{ fontSize: 'clamp(18px,2.6vw,28px)', color: 'var(--text-dim)', fontWeight: 700 }}><Mic size={22} style={{ verticalAlign: '-4px', marginRight: 8 }} />The learner answers aloud…</div>
               ) : (
                 <div className="qcard pop-in" style={{ padding: '20px 24px', border: '2px solid var(--correct)' }}>
                   <div style={{ fontSize: 13, letterSpacing: 2, color: 'var(--correct)', fontWeight: 900, marginBottom: 6 }}>MODEL ANSWER</div>
@@ -94,7 +95,7 @@ export function OralDisplayClient({ sessionId, joinCode, schoolName, animation }
         </main>
       ) : (
         <main style={shell}>
-          <div style={{ fontWeight: 900, letterSpacing: 5, color: 'var(--accent)', fontSize: 16 }}>{schoolName.toUpperCase()} · 🎤 ORAL ROUND</div>
+          <div style={{ fontWeight: 900, letterSpacing: 5, color: 'var(--accent)', fontSize: 16 }}>{schoolName.toUpperCase()} · <Mic size={15} style={{ verticalAlign: '-2px' }} /> ORAL ROUND</div>
           <div style={{ fontFamily: '"Fredoka One", sans-serif', fontSize: 'clamp(34px,7vw,64px)', color: 'var(--accent)', lineHeight: 1, margin: '12px 0 20px' }}>Get ready!</div>
           <ScoreCards big />
           <p style={{ color: 'var(--text-dim)', fontSize: 18, marginTop: 16 }}>The host will read each question aloud.</p>

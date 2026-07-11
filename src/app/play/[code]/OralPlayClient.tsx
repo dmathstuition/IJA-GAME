@@ -1,6 +1,7 @@
 'use client';
 
 import '../../../components/game/game.css';
+import { Mic } from 'lucide-react';
 import { useRealtimeSession } from '@/lib/game/useRealtimeSession';
 import { AnimatedBackground } from '@/components/game/AnimatedBackground';
 import type { AnimationStyle } from '@/lib/themes';
@@ -23,7 +24,7 @@ export function OralPlayClient({ sessionId, schoolName, animation }: { sessionId
     <div style={{ minHeight: '100vh', color: 'var(--text)', fontFamily: 'Nunito, system-ui, sans-serif' }}>
       <AnimatedBackground style={animation} />
       <main style={{ position: 'relative', zIndex: 10, minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: 20, textAlign: 'center' }}>
-        <div style={{ fontWeight: 900, letterSpacing: 3, color: 'var(--accent)', fontSize: 13 }}>{schoolName.toUpperCase()} · 🎤 ORAL ROUND</div>
+        <div style={{ fontWeight: 900, letterSpacing: 3, color: 'var(--accent)', fontSize: 13 }}>{schoolName.toUpperCase()} · <Mic size={13} style={{ verticalAlign: '-2px' }} /> ORAL ROUND</div>
         <h1 style={{ fontFamily: '"Fredoka One", sans-serif', fontSize: 26, color: 'var(--accent)', margin: '8px 0 6px' }}>
           {ended ? (groups[0].score === groups[1].score ? "It's a tie!" : `${groups[groups[0].score > groups[1].score ? 0 : 1].name} win!`) : live ? `${groups[active].name} is answering${bonus ? ' (bonus)' : ''}…` : 'Watch the big screen'}
         </h1>

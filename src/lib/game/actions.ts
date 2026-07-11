@@ -99,6 +99,13 @@ export async function revealCurrent(sessionId: string) {
   return { ok: true };
 }
 
+/** Permanently delete a session (players and answers cascade with it). */
+export async function deleteSession(sessionId: string) {
+  const supabase = await createClient();
+  const { error } = await supabase.from('game_sessions').delete().eq('id', sessionId);
+  return error ? { error: error.message } : { ok: true };
+}
+
 export async function setState(sessionId: string, state: 'lobby' | 'leaderboard' | 'ended') {
   const supabase = await createClient();
   const patch: Record<string, unknown> = { state };

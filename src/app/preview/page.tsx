@@ -1,5 +1,6 @@
 'use client';
 
+import { Zap, Users } from 'lucide-react';
 import '../../components/game/game.css';
 import { useEffect, useState } from 'react';
 import { resolveTheme, themeToCssVars, THEME_PRESETS, type Theme } from '@/lib/themes';
@@ -66,7 +67,7 @@ export default function Preview() {
                 </span>
               ))}
             </div>
-            <div style={{ fontWeight: 800, color: 'var(--accent)', marginTop: 6 }}>👥 {PLAYERS.length} joined</div>
+            <div style={{ fontWeight: 800, color: 'var(--accent)', marginTop: 6 }}><Users size={16} style={{ verticalAlign: '-2px', marginRight: 5 }} />{PLAYERS.length} joined</div>
           </div>
         </Frame>
 
@@ -75,7 +76,7 @@ export default function Preview() {
           <div style={{ padding: '18px 28px 28px' }}>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 14 }}>
               <span style={{ fontWeight: 800, fontFamily: 'ui-monospace,monospace', background: 'rgba(0,0,0,.3)', padding: '6px 14px', borderRadius: 999 }}>Question 1 / 5</span>
-              <span style={{ display: 'inline-flex', alignItems: 'center', gap: 8, fontWeight: 800, background: 'rgba(0,0,0,.3)', padding: '6px 14px', borderRadius: 999 }}>👥 24 answered</span>
+              <span style={{ display: 'inline-flex', alignItems: 'center', gap: 8, fontWeight: 800, background: 'rgba(0,0,0,.3)', padding: '6px 14px', borderRadius: 999 }}><Users size={16} /> 24 answered</span>
               <TimerRing remaining={8} total={20} size={84} />
             </div>
             <div className="qcard" style={{ textAlign: 'center', marginBottom: 18 }}>
@@ -128,7 +129,7 @@ export default function Preview() {
           <div style={{ padding: '18px 28px 26px' }}>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 12 }}>
               <span style={{ fontWeight: 800, fontFamily: 'ui-monospace,monospace', background: 'rgba(0,0,0,.3)', padding: '6px 14px', borderRadius: 999 }}>Q3 · Blue Lions</span>
-              <span style={{ fontWeight: 900, color: '#f97316', background: 'rgba(249,115,22,.15)', border: '1px solid #f97316', padding: '6px 16px', borderRadius: 999 }}>⚡ BONUS · +5</span>
+              <span style={{ fontWeight: 900, color: '#f97316', background: 'rgba(249,115,22,.15)', border: '1px solid #f97316', padding: '6px 16px', borderRadius: 999 }}><Zap size={16} style={{ verticalAlign: '-2px', marginRight: 4 }} />BONUS · +5</span>
               <TimerRing remaining={11} total={20} size={72} />
             </div>
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14, marginBottom: 14 }}>

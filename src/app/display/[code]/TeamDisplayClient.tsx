@@ -1,6 +1,7 @@
 'use client';
 
 import '../../../components/game/game.css';
+import { Swords, Zap, Users } from 'lucide-react';
 import { useRealtimeSession } from '@/lib/game/useRealtimeSession';
 import { useCountdown } from '@/components/game/useCountdown';
 import { AnimatedBackground } from '@/components/game/AnimatedBackground';
@@ -49,7 +50,7 @@ export function TeamDisplayClient({ sessionId, joinCode, schoolName, animation }
         <main style={{ ...shell, justifyContent: 'flex-start', paddingTop: 30, maxWidth: 1100, margin: '0 auto' }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%', marginBottom: 14 }}>
             <span style={{ fontWeight: 800, fontFamily: 'ui-monospace,monospace', background: 'rgba(0,0,0,.3)', padding: '8px 16px', borderRadius: 999 }}>Q{qIndex + 1} · {teams[active].name}</span>
-            {bonus && <span style={{ fontWeight: 900, color: '#f97316', background: 'rgba(249,115,22,.15)', border: '1px solid #f97316', padding: '8px 18px', borderRadius: 999 }}>⚡ BONUS · +5</span>}
+            {bonus && <span style={{ fontWeight: 900, color: '#f97316', background: 'rgba(249,115,22,.15)', border: '1px solid #f97316', padding: '8px 18px', borderRadius: 999 }}><Zap size={16} style={{ verticalAlign: '-2px', marginRight: 4 }} />BONUS · +5</span>}
             <TimerRing remaining={remaining} total={cq.timeLimit} size={84} />
           </div>
           <div style={{ marginBottom: 14, width: '100%' }}><ScoreCards /></div>
@@ -73,7 +74,7 @@ export function TeamDisplayClient({ sessionId, joinCode, schoolName, animation }
         </main>
       ) : (
         <main style={shell}>
-          <div style={{ fontWeight: 900, letterSpacing: 5, color: 'var(--accent)', fontSize: 16 }}>{schoolName.toUpperCase()} · ⚔️ TEAM BATTLE</div>
+          <div style={{ fontWeight: 900, letterSpacing: 5, color: 'var(--accent)', fontSize: 16 }}>{schoolName.toUpperCase()} · <Swords size={15} style={{ verticalAlign: '-2px' }} /> TEAM BATTLE</div>
           <div style={{ fontFamily: '"Fredoka One", sans-serif', fontSize: 'clamp(34px,7vw,68px)', color: 'var(--accent)', lineHeight: 1, margin: '10px 0' }}>Join the battle!</div>
           <div className="codechip float-y" style={{ fontSize: 'clamp(50px,11vw,130px)' }}>{joinCode}</div>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16, width: '100%', maxWidth: 820, marginTop: 22 }}>
@@ -91,7 +92,7 @@ export function TeamDisplayClient({ sessionId, joinCode, schoolName, animation }
               </div>
             ))}
           </div>
-          <div style={{ fontWeight: 800, color: 'var(--accent)', fontSize: 22, marginTop: 16 }}>👥 {players.length} joined</div>
+          <div style={{ fontWeight: 800, color: 'var(--accent)', fontSize: 22, marginTop: 16 }}><Users size={20} style={{ verticalAlign: '-3px', marginRight: 6 }} />{players.length} joined</div>
         </main>
       )}
     </div>
