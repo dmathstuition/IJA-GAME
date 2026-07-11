@@ -2,6 +2,7 @@
 
 import '../../../components/game/game.css';
 import { useState, useTransition } from 'react';
+import { Swords, Eye, SkipForward, Trophy, Lock } from 'lucide-react';
 import { useRealtimeSession } from '@/lib/game/useRealtimeSession';
 import { setState } from '@/lib/game/actions';
 import { setTeamNames, assignPlayer, autoAssignTeams, setActiveTeam, launchTeamQuestion, revealTeam, skipTeamQuestion } from '@/lib/game/team';
@@ -40,7 +41,7 @@ export function TeamHostClient({ sessionId, joinCode, questions }: { sessionId: 
     <main style={{ maxWidth: 1000, margin: '0 auto', padding: 20, color: 'var(--text)', fontFamily: 'system-ui' }}>
       <header style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 12 }}>
         <div>
-          <div style={{ fontSize: 12, letterSpacing: 2, color: 'var(--text-dim)' }}>⚔️ TEAM BATTLE · {state ?? '…'} {bonus && '· BONUS'}</div>
+          <div style={{ fontSize: 12, letterSpacing: 2, color: 'var(--text-dim)' }}><Swords size={12} style={{ verticalAlign: '-2px', marginRight: 5 }} />TEAM BATTLE · {state ?? '…'} {bonus && '· BONUS'}</div>
           <h1 style={{ fontSize: 24, color: 'var(--accent)' }}>Team Control</h1>
         </div>
         <div style={{ textAlign: 'right' }}>
@@ -73,7 +74,7 @@ export function TeamHostClient({ sessionId, joinCode, questions }: { sessionId: 
                   const isLock = lock?.choice === c;
                   return (
                     <div key={c} style={{ padding: '8px 10px', borderRadius: 8, fontSize: 13, border: `1px solid ${isAns ? 'var(--correct)' : isLock ? 'var(--accent)' : 'rgba(255,255,255,.1)'}`, background: isAns ? 'rgba(34,197,94,.15)' : 'rgba(0,0,0,.2)' }}>
-                      <b>{c}</b> {cq.options[c]} {isLock && <span style={{ color: 'var(--accent)', fontSize: 11 }}>🔒 {players.find((p) => p.id === lock!.player_id)?.name}</span>}
+                      <b>{c}</b> {cq.options[c]} {isLock && <span style={{ color: 'var(--accent)', fontSize: 11 }}><Lock size={10} style={{ verticalAlign: '-1px' }} /> {players.find((p) => p.id === lock!.player_id)?.name}</span>}
                     </div>
                   );
                 })}
@@ -86,10 +87,10 @@ export function TeamHostClient({ sessionId, joinCode, questions }: { sessionId: 
               </div>
             )}
             <div style={{ display: 'flex', gap: 8, marginTop: 12, flexWrap: 'wrap' }}>
-              <button style={btn('var(--accent)')} disabled={pending || !live} onClick={() => start(() => { revealTeam(sessionId); })}>👁 Reveal {bonus ? '(bonus)' : ''}</button>
-              <button style={btn('#f97316')} disabled={pending || !cq} onClick={() => start(() => { skipTeamQuestion(sessionId); })}>⏭ Skip</button>
-              <button style={btn('#7c3aed')} disabled={pending} onClick={() => start(() => { setState(sessionId, 'leaderboard'); })}>🏆 Scores</button>
-              <button style={btn('var(--wrong)')} disabled={pending} onClick={() => start(() => { setState(sessionId, 'ended'); })}>End</button>
+              <button style={btn('var(--accent)')} disabled={pending || !live} onClick={() => start(async () => { await revealTeam(sessionId); })}><Eye size={14} style={{ verticalAlign: '-2px', marginRight: 5 }} />Reveal {bonus ? '(bonus)' : ''}</button>
+              <button style={btn('#f97316')} disabled={pending || !cq} onClick={() => start(async () => { await skipTeamQuestion(sessionId); })}><SkipForward size={14} style={{ verticalAlign: '-2px', marginRight: 5 }} />Skip</button>
+              <button style={btn('#7c3aed')} disabled={pending} onClick={() => start(async () => { await setState(sessionId, 'leaderboard'); })}><Trophy size={14} style={{ verticalAlign: '-2px', marginRight: 5 }} />Scores</button>
+              <button style={btn('var(--wrong)')} disabled={pending} onClick={() => start(async () => { await setState(sessionId, 'ended'); })}>End</button>
             </div>
           </div>
 
@@ -98,7 +99,7 @@ export function TeamHostClient({ sessionId, joinCode, questions }: { sessionId: 
             <div style={{ fontSize: 12, color: 'var(--text-dim)', marginBottom: 8 }}>ACTIVE TEAM</div>
             <div style={{ display: 'flex', gap: 8 }}>
               {teams.map((t, i) => (
-                <button key={i} style={{ ...btn(active === i ? TEAM_COLOR[i] : 'transparent'), border: `1px solid ${TEAM_COLOR[i]}`, flex: 1 }} disabled={pending || live} onClick={() => start(() => { setActiveTeam(sessionId, i); })}>{t.name}</button>
+                <button key={i} style={{ ...btn(active === i ? TEAM_COLOR[i] : 'transparent'), border: `1px solid ${TEAM_COLOR[i]}`, flex: 1 }} disabled={pending || live} onClick={() => start(async () => { await setActiveTeam(sessionId, i); })}>{t.name}</button>
               ))}
             </div>
           </div>
@@ -111,7 +112,7 @@ export function TeamHostClient({ sessionId, joinCode, questions }: { sessionId: 
               {bank.map((q, i) => (
                 <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 10, justifyContent: 'space-between', opacity: used.includes(i) ? 0.4 : 1 }}>
                   <span style={{ fontSize: 13 }}>{i + 1}. {q.text}</span>
-                  <button style={btn('var(--correct)')} disabled={pending || live || used.includes(i)} onClick={() => start(() => { launchTeamQuestion(sessionId, q, i); })}>{used.includes(i) ? 'Used' : `Launch → ${teams[active].name}`}</button>
+                  <button style={btn('var(--correct)')} disabled={pending || live || used.includes(i)} onClick={() => start(async () => { await launchTeamQuestion(sessionId, q, i); })}>{used.includes(i) ? 'Used' : `Launch → ${teams[active].name}`}</button>
                 </div>
               ))}
             </div>
@@ -125,8 +126,8 @@ export function TeamHostClient({ sessionId, joinCode, questions }: { sessionId: 
             <input value={n0} onChange={(e) => setN0(e.target.value)} placeholder={teams[0].name} style={{ padding: 8, borderRadius: 8, border: `1px solid ${TEAM_COLOR[0]}`, background: '#0c1018', color: '#fff', fontSize: 13 }} />
             <input value={n1} onChange={(e) => setN1(e.target.value)} placeholder={teams[1].name} style={{ padding: 8, borderRadius: 8, border: `1px solid ${TEAM_COLOR[1]}`, background: '#0c1018', color: '#fff', fontSize: 13 }} />
             <div style={{ display: 'flex', gap: 6 }}>
-              <button style={{ ...btn('var(--primary)'), flex: 1 }} disabled={pending} onClick={() => start(() => { setTeamNames(sessionId, n0 || teams[0].name, n1 || teams[1].name); })}>Save names</button>
-              <button style={btn('#334155')} disabled={pending} onClick={() => start(() => { autoAssignTeams(sessionId); })}>Auto</button>
+              <button style={{ ...btn('var(--primary)'), flex: 1 }} disabled={pending} onClick={() => start(async () => { await setTeamNames(sessionId, n0 || teams[0].name, n1 || teams[1].name); })}>Save names</button>
+              <button style={btn('#334155')} disabled={pending} onClick={() => start(async () => { await autoAssignTeams(sessionId); })}>Auto</button>
             </div>
           </div>
           {[0, 1, 2].map((col) => (
@@ -134,7 +135,7 @@ export function TeamHostClient({ sessionId, joinCode, questions }: { sessionId: 
               <div style={{ fontSize: 11, fontWeight: 800, color: col === 2 ? 'var(--text-dim)' : TEAM_COLOR[col], marginBottom: 4 }}>{col === 2 ? 'UNASSIGNED' : teams[col].name} ({rosters[col].length})</div>
               <div style={{ display: 'flex', flexWrap: 'wrap', gap: 4 }}>
                 {rosters[col].map((p) => (
-                  <button key={p.id} title="Click to move" onClick={() => start(() => { assignPlayer(p.id, col === 0 ? 1 : col === 1 ? -1 : 0); })}
+                  <button key={p.id} title="Click to move" onClick={() => start(async () => { await assignPlayer(p.id, col === 0 ? 1 : col === 1 ? -1 : 0); })}
                     style={{ fontSize: 12, padding: '3px 9px', borderRadius: 999, border: '1px solid rgba(255,255,255,.15)', background: 'rgba(255,255,255,.08)', color: '#fff', cursor: 'pointer' }}>{p.name} · {p.score}</button>
                 ))}
                 {rosters[col].length === 0 && <span style={{ fontSize: 12, color: 'var(--text-dim)' }}>—</span>}

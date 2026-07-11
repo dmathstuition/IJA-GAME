@@ -2,6 +2,7 @@
 
 import '../../../components/game/game.css';
 import { useEffect, useRef, useTransition } from 'react';
+import { Zap, Trophy, Square, Play } from 'lucide-react';
 import { useRealtimeSession } from '@/lib/game/useRealtimeSession';
 import { setState } from '@/lib/game/actions';
 import { startRunner, advanceSpeed, stopSpeed } from '@/lib/game/speed';
@@ -46,7 +47,7 @@ export function SpeedHostClient({ sessionId, joinCode, questions }: { sessionId:
     <main style={{ maxWidth: 900, margin: '0 auto', padding: 20, color: 'var(--text)', fontFamily: 'system-ui' }}>
       <header style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 12 }}>
         <div>
-          <div style={{ fontSize: 12, letterSpacing: 2, color: 'var(--text-dim)' }}>⚡ SPEED · {limit} questions · {SPEED_SECS}s each</div>
+          <div style={{ fontSize: 12, letterSpacing: 2, color: 'var(--text-dim)' }}><Zap size={12} style={{ verticalAlign: '-2px', marginRight: 5 }} />SPEED · {limit} questions · {SPEED_SECS}s each</div>
           <h1 style={{ fontSize: 24, color: 'var(--accent)' }}>Speed Control</h1>
         </div>
         <div style={{ textAlign: 'right' }}>
@@ -56,9 +57,9 @@ export function SpeedHostClient({ sessionId, joinCode, questions }: { sessionId:
       </header>
 
       <div style={{ display: 'flex', gap: 8, margin: '16px 0', flexWrap: 'wrap' }}>
-        <button style={btn('#7c3aed')} disabled={pending} onClick={() => start(() => { setState(sessionId, 'leaderboard'); })}>🏆 Results</button>
-        <button style={btn('#f97316')} disabled={pending || !runnerId} onClick={() => start(() => { stopSpeed(sessionId); })}>⏹ Stop runner</button>
-        <button style={btn('var(--wrong)')} disabled={pending} onClick={() => start(() => { setState(sessionId, 'ended'); })}>End</button>
+        <button style={btn('#7c3aed')} disabled={pending} onClick={() => start(async () => { await setState(sessionId, 'leaderboard'); })}><Trophy size={14} style={{ verticalAlign: '-2px', marginRight: 5 }} />Results</button>
+        <button style={btn('#f97316')} disabled={pending || !runnerId} onClick={() => start(async () => { await stopSpeed(sessionId); })}><Square size={13} fill="currentColor" style={{ verticalAlign: '-1px', marginRight: 5 }} />Stop runner</button>
+        <button style={btn('var(--wrong)')} disabled={pending} onClick={() => start(async () => { await setState(sessionId, 'ended'); })}>End</button>
       </div>
 
       {/* Current runner */}
@@ -76,13 +77,13 @@ export function SpeedHostClient({ sessionId, joinCode, questions }: { sessionId:
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
         {/* Registered players */}
         <div style={{ border: '1px solid rgba(255,255,255,.12)', borderRadius: 14, padding: 14, background: 'linear-gradient(160deg, rgba(30,20,45,.55), rgba(15,10,25,.7))' }}>
-          <div style={{ fontSize: 12, color: 'var(--text-dim)', marginBottom: 8 }}>PLAYERS — CLICK ▶ TO LAUNCH</div>
+          <div style={{ fontSize: 12, color: 'var(--text-dim)', marginBottom: 8 }}>PLAYERS — TAP TO LAUNCH</div>
           {players.length === 0 && <p style={{ fontSize: 13, color: 'var(--text-dim)' }}>No players yet.</p>}
           <div style={{ display: 'grid', gap: 5 }}>
             {players.map((p) => (
               <div key={p.id} style={{ display: 'flex', alignItems: 'center', gap: 8, justifyContent: 'space-between', padding: '6px 8px', borderRadius: 8, background: 'rgba(255,255,255,.05)' }}>
                 <span style={{ fontSize: 14 }}>{p.name} {p.sp_state === 'done' && <span style={{ fontSize: 11, color: 'var(--correct)' }}>done</span>}{p.sp_state === 'running' && <span style={{ fontSize: 11, color: '#f97316' }}>running…</span>}</span>
-                <button style={btn(bank.length ? '#f97316' : '#555')} disabled={pending || !!runnerId || !bank.length} onClick={() => start(() => { startRunner(sessionId, p.id, p.name, bank[0]); })}>▶</button>
+                <button style={btn(bank.length ? '#f97316' : '#555')} disabled={pending || !!runnerId || !bank.length} onClick={() => start(async () => { await startRunner(sessionId, p.id, p.name, bank[0]); })}><Play size={13} fill="currentColor" /></button>
               </div>
             ))}
           </div>

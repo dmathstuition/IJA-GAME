@@ -2,6 +2,7 @@
 
 import '../../../components/game/game.css';
 import { useEffect, useState } from 'react';
+import { Swords, Zap, Trophy, Rocket } from 'lucide-react';
 import { useRealtimeSession } from '@/lib/game/useRealtimeSession';
 import { joinSession, submitAnswer } from '@/lib/game/player';
 import { useCountdown } from '@/components/game/useCountdown';
@@ -56,7 +57,7 @@ export function TeamPlayClient({ sessionId, orgId, schoolName, animation }: { se
 
   const shell: React.CSSProperties = { position: 'relative', zIndex: 10, minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: 18, textAlign: 'center' };
   const TeamBadge = () => myTeam >= 0 ? (
-    <div style={{ display: 'inline-block', padding: '6px 18px', borderRadius: 999, fontWeight: 800, background: TEAM_COLOR[myTeam], marginBottom: 6 }}>⚔️ {teams[myTeam].name}</div>
+    <div style={{ display: 'inline-block', padding: '6px 18px', borderRadius: 999, fontWeight: 800, background: TEAM_COLOR[myTeam], marginBottom: 6 }}><Swords size={14} style={{ verticalAlign: '-2px', marginRight: 5 }} />{teams[myTeam].name}</div>
   ) : null;
   const Scores = () => (
     <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10, width: '100%', maxWidth: 360, marginTop: 12 }}>
@@ -77,11 +78,11 @@ export function TeamPlayClient({ sessionId, orgId, schoolName, animation }: { se
         <main style={shell}>
           <div className="qcard" style={{ width: '100%', maxWidth: 380, color: '#1a1030' }}>
             <div style={{ fontWeight: 900, letterSpacing: 3, color: 'var(--primary)', fontSize: 12 }}>{schoolName.toUpperCase()}</div>
-            <h1 style={{ fontFamily: '"Fredoka One", Nunito, sans-serif', fontSize: 28, color: 'var(--primary)', margin: '6px 0 16px' }}>⚔️ Team Battle</h1>
+            <h1 style={{ fontFamily: '"Fredoka One", Nunito, sans-serif', fontSize: 28, color: 'var(--primary)', margin: '6px 0 16px' }}><Swords size={24} style={{ verticalAlign: '-2px', marginRight: 8 }} />Team Battle</h1>
             <input value={name} onChange={(e) => setName(e.target.value)} placeholder="Your name" maxLength={30} onFocus={unlockAudio}
               style={{ width: '100%', padding: 15, borderRadius: 14, border: '2px solid #ddd', fontSize: 18, textAlign: 'center', fontWeight: 700, outline: 'none' }} />
             {err && <p style={{ color: 'var(--wrong)', fontSize: 13, marginTop: 10 }}>{err}</p>}
-            <button className="kbtn kpill" onClick={join} disabled={busy || name.trim().length < 2} style={{ width: '100%', marginTop: 14 }}>{busy ? 'Joining…' : '🚀 Join'}</button>
+            <button className="kbtn kpill" onClick={join} disabled={busy || name.trim().length < 2} style={{ width: '100%', marginTop: 14 }}>{busy ? 'Joining…' : <><Rocket size={18} style={{ verticalAlign: '-3px', marginRight: 7 }} />Join</>}</button>
           </div>
         </main>
       ) : state === 'question_active' && cq && myTurn && !picked ? (
@@ -90,7 +91,7 @@ export function TeamPlayClient({ sessionId, orgId, schoolName, animation }: { se
             <TeamBadge /><TimerRing remaining={remaining} total={cq.timeLimit} size={56} />
           </div>
           <div className="qcard" style={{ width: '100%', maxWidth: 460, marginBottom: 12, padding: 20 }}>
-            {bonus && <div style={{ color: '#f97316', fontWeight: 900, fontSize: 13, marginBottom: 4 }}>⚡ BONUS · +5</div>}
+            {bonus && <div style={{ color: '#f97316', fontWeight: 900, fontSize: 13, marginBottom: 4 }}><Zap size={12} style={{ verticalAlign: '-1px', marginRight: 3 }} />BONUS · +5</div>}
             <div style={{ fontSize: 21, fontWeight: 900 }}>{cq.text}</div>
           </div>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10, width: '100%', maxWidth: 460 }}>
@@ -117,14 +118,14 @@ export function TeamPlayClient({ sessionId, orgId, schoolName, animation }: { se
       ) : (state === 'leaderboard' || state === 'ended') ? (
         <main style={shell}>
           {state === 'ended' && <Confetti continuous />}
-          <h1 style={{ fontFamily: '"Fredoka One",sans-serif', fontSize: 28, color: 'var(--accent)' }}>{state === 'ended' ? '🏆 Final Score' : 'Scores'}</h1>
+          <h1 style={{ fontFamily: '"Fredoka One",sans-serif', fontSize: 28, color: 'var(--accent)' }}>{state === 'ended' ? <><Trophy size={24} style={{ verticalAlign: '-3px', marginRight: 8 }} />Final Score</> : 'Scores'}</h1>
           {state === 'ended' && <div style={{ fontSize: 20, fontWeight: 800, marginTop: 6 }}>{teams[0].score === teams[1].score ? "It's a tie!" : `${teams[teams[0].score > teams[1].score ? 0 : 1].name} win!`}</div>}
           <Scores />
         </main>
       ) : (
         <main style={shell}>
           <div className="qcard float-y" style={{ maxWidth: 340, color: '#1a1030' }}>
-            <div style={{ fontSize: 40 }}>⚔️</div>
+            <div><Swords size={40} color="var(--accent)" /></div>
             <h1 style={{ fontFamily: '"Fredoka One",sans-serif', fontSize: 22, color: 'var(--primary)' }}>You&apos;re in, {me?.name}!</h1>
             <p style={{ color: '#666', marginTop: 4 }}>{myTeam >= 0 ? `Team: ${teams[myTeam].name}` : 'Waiting for the host to assign your team…'}</p>
           </div>

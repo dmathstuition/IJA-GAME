@@ -2,9 +2,18 @@
 import { createClient } from '@/lib/supabase/server';
 import { AdminShell, adminCard } from '@/components/AdminShell';
 import { canHostLive } from '@/lib/billing';
+import { Lock, Library, Play, Smartphone, FileText, Swords, Zap, Mic, Palette, CreditCard } from 'lucide-react';
 import { StartSessionButton } from './StartSessionButton';
+import { SessionActions } from './SessionActions';
 
-const STATUS_LABEL: Record<string, string> = { trialing: 'Free trial', active: 'Active', past_due: 'Payment overdue', canceled: 'Canceled', incomplete: 'Incomplete' };
+const STATUS_LABEL: Record<string, string> = { trialing: 'Free trial', active: 'Active', past_due: 'Payment overdue', canceled: 'Canceled', incomplete: 'Not activated' };
+
+const MODE_ICON: Record<string, React.ReactNode> = {
+  standard: <FileText size={22} color="#60a5fa" />,
+  team: <Swords size={22} color="#e21b3c" />,
+  speed: <Zap size={22} color="#f97316" />,
+  oral: <Mic size={22} color="#8b5cf6" />,
+};
 
 export default async function Dashboard() {
   const supabase = await createClient();
@@ -17,13 +26,12 @@ export default async function Dashboard() {
     .order('created_at', { ascending: false })
     .limit(10);
 
-  const modeIcon: Record<string, string> = { standard: '📝', team: '⚔️', speed: '⚡', oral: '🎤' };
-
   return (
     <AdminShell active="Sessions" title={org?.name ?? 'Dashboard'} subtitle={org ? `${org.slug}.quizarena.app · ${STATUS_LABEL[org.subscription_status] ?? org.subscription_status}` : 'Finish onboarding to continue.'}>
       {!live && (
-        <a href="/dashboard/billing" style={{ ...adminCard, display: 'block', textDecoration: 'none', color: 'inherit', marginBottom: 16, borderColor: 'rgba(255,214,0,.35)', background: 'rgba(255,214,0,.07)' }}>
-          <b style={{ color: '#fbbf24' }}>🔒 Live hosting is locked.</b> <span style={{ color: '#c9c2d6', fontSize: 14 }}>Activate your school with a one-time PayPal payment to run live games. Building questions & branding stays free →</span>
+        <a href="/dashboard/billing" style={{ ...adminCard, display: 'flex', alignItems: 'center', gap: 10, textDecoration: 'none', color: 'inherit', marginBottom: 16, borderColor: 'rgba(255,214,0,.35)', background: 'rgba(255,214,0,.07)' }}>
+          <Lock size={18} color="#fbbf24" />
+          <span><b style={{ color: '#fbbf24' }}>Live hosting is locked.</b> <span style={{ color: '#c9c2d6', fontSize: 14 }}>Activate your school with a one-time PayPal payment to run live games. Building questions & branding stays free →</span></span>
         </a>
       )}
 
@@ -40,24 +48,24 @@ export default async function Dashboard() {
       <h2 style={{ fontSize: 14, color: '#8b8296', letterSpacing: 1, textTransform: 'uppercase', fontWeight: 800, margin: '0 0 12px' }}>How it works</h2>
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(210px,1fr))', gap: 12, marginBottom: 26 }}>
         {[
-          ['1', '📚', 'Build your questions', 'Create a question bank, or import JSON straight into a live game from the Organiser Tools.', '/dashboard/questions'],
-          ['2', '▶', 'Start a game', 'Launch a mode (Standard, Team, Speed or Oral) and put the join code on the projector.', null],
-          ['3', '📱', 'Players join & you host', 'Students open your link, type the code, and you drive the whole game live from any device.', null],
+          ['1', <Library key="i" size={22} color="#60a5fa" />, 'Build your questions', 'Create a question bank, or import JSON straight into a live game from the Organiser Tools.', '/dashboard/questions'],
+          ['2', <Play key="i" size={22} color="#4ade80" />, 'Start a game', 'Launch a mode (Standard, Team, Speed or Oral) and put the join code on the projector.', null],
+          ['3', <Smartphone key="i" size={22} color="#f97316" />, 'Players join & you host', 'Students open your link, type the code, and you drive the whole game live from any device.', null],
         ].map(([n, icon, title, desc, href]) => {
           const inner = (
             <>
               <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 8 }}>
-                <span style={{ width: 26, height: 26, borderRadius: 999, background: 'linear-gradient(135deg,#ff7a1a,#ff2d55)', color: '#fff', fontWeight: 900, fontSize: 14, display: 'grid', placeItems: 'center' }}>{n}</span>
-                <span style={{ fontSize: 22 }}>{icon}</span>
+                <span style={{ width: 26, height: 26, borderRadius: 999, background: 'linear-gradient(135deg,#ff7a1a,#ff2d55)', color: '#fff', fontWeight: 900, fontSize: 14, display: 'grid', placeItems: 'center' }}>{n as string}</span>
+                {icon}
               </div>
-              <div style={{ fontWeight: 800, fontSize: 15.5 }}>{title}</div>
-              <div style={{ color: '#8b8296', fontSize: 13, marginTop: 3, lineHeight: 1.5 }}>{desc}</div>
+              <div style={{ fontWeight: 800, fontSize: 15.5 }}>{title as string}</div>
+              <div style={{ color: '#8b8296', fontSize: 13, marginTop: 3, lineHeight: 1.5 }}>{desc as string}</div>
             </>
           );
           return href ? (
-            <a key={n} href={href as string} style={{ ...adminCard, textDecoration: 'none', color: 'inherit' }}>{inner}</a>
+            <a key={n as string} href={href as string} style={{ ...adminCard, textDecoration: 'none', color: 'inherit' }}>{inner}</a>
           ) : (
-            <div key={n} style={adminCard}>{inner}</div>
+            <div key={n as string} style={adminCard}>{inner}</div>
           );
         })}
       </div>
@@ -68,17 +76,13 @@ export default async function Dashboard() {
       )}
       <div style={{ display: 'grid', gap: 10 }}>
         {sessions?.map((s) => (
-          <div key={s.id} style={{ ...adminCard, padding: '16px 20px', display: 'flex', alignItems: 'center', gap: 14 }}>
-            <span style={{ fontSize: 22 }}>{modeIcon[s.mode] ?? '📝'}</span>
-            <div style={{ flex: 1 }}>
+          <div key={s.id} style={{ ...adminCard, padding: '16px 20px', display: 'flex', alignItems: 'center', gap: 14, flexWrap: 'wrap' }}>
+            {MODE_ICON[s.mode] ?? MODE_ICON.standard}
+            <div style={{ flex: 1, minWidth: 140 }}>
               <div style={{ fontFamily: 'ui-monospace,monospace', letterSpacing: 3, fontSize: 20, fontWeight: 800 }}>{s.join_code}</div>
               <div style={{ fontSize: 12, color: '#8b8296', textTransform: 'capitalize' }}>{s.mode} · {s.state}</div>
             </div>
-            <div style={{ display: 'flex', gap: 8, fontSize: 13, fontWeight: 700 }}>
-              <a href={`/host/${s.id}`} style={{ color: '#fff', background: 'rgba(255,255,255,.08)', padding: '8px 14px', borderRadius: 9, textDecoration: 'none' }}>Control</a>
-              <a href={`/display/${s.join_code}`} style={{ color: '#a49db3', padding: '8px 12px', borderRadius: 9, textDecoration: 'none' }}>Display</a>
-              <a href={`/play/${s.join_code}`} style={{ color: '#a49db3', padding: '8px 12px', borderRadius: 9, textDecoration: 'none' }}>Play</a>
-            </div>
+            <SessionActions sessionId={s.id} joinCode={s.join_code} />
           </div>
         ))}
       </div>
@@ -86,14 +90,14 @@ export default async function Dashboard() {
       <h2 style={{ fontSize: 14, color: '#8b8296', letterSpacing: 1, textTransform: 'uppercase', fontWeight: 800, margin: '30px 0 12px' }}>Manage</h2>
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(220px,1fr))', gap: 12 }}>
         {[
-          ['📚', 'Question banks', '/dashboard/questions', 'Build & import questions'],
-          ['🎨', 'Branding', '/dashboard/branding', 'Theme & animation'],
-          ['💳', 'Billing', '/dashboard/billing', 'Plan & payment'],
+          [<Library key="i" size={24} color="#60a5fa" />, 'Question banks', '/dashboard/questions', 'Build & import questions'],
+          [<Palette key="i" size={24} color="#8b5cf6" />, 'Branding', '/dashboard/branding', 'Theme & animation'],
+          [<CreditCard key="i" size={24} color="#4ade80" />, 'Billing', '/dashboard/billing', 'Plan & payment'],
         ].map(([icon, label, href, desc]) => (
-          <a key={href} href={href} style={{ ...adminCard, textDecoration: 'none', color: 'inherit', transition: 'border-color .15s' }}>
-            <div style={{ fontSize: 24, marginBottom: 8 }}>{icon}</div>
-            <div style={{ fontWeight: 800, fontSize: 16 }}>{label}</div>
-            <div style={{ color: '#8b8296', fontSize: 13, marginTop: 2 }}>{desc}</div>
+          <a key={href as string} href={href as string} style={{ ...adminCard, textDecoration: 'none', color: 'inherit', transition: 'border-color .15s' }}>
+            <div style={{ marginBottom: 8 }}>{icon}</div>
+            <div style={{ fontWeight: 800, fontSize: 16 }}>{label as string}</div>
+            <div style={{ color: '#8b8296', fontSize: 13, marginTop: 2 }}>{desc as string}</div>
           </a>
         ))}
       </div>

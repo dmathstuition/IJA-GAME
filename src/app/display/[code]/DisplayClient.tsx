@@ -1,6 +1,7 @@
 'use client';
 
 import '../../../components/game/game.css';
+import { Users } from 'lucide-react';
 import { useRealtimeSession } from '@/lib/game/useRealtimeSession';
 import { useCountdown } from '@/components/game/useCountdown';
 import { AnimatedBackground } from '@/components/game/AnimatedBackground';
@@ -37,7 +38,7 @@ export function DisplayClient({ sessionId, joinCode, schoolName, animation }: { 
         <main style={{ ...shell, justifyContent: 'flex-start', paddingTop: 34, maxWidth: 1100, margin: '0 auto' }}>
           <div style={{ width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 16 }}>
             <span style={{ fontWeight: 800, fontFamily: 'ui-monospace,monospace', background: 'rgba(0,0,0,.3)', padding: '8px 16px', borderRadius: 999, fontSize: 18 }}>Question {qIndex + 1}</span>
-            <span style={{ display: 'inline-flex', alignItems: 'center', gap: 8, fontWeight: 800, background: 'rgba(0,0,0,.3)', padding: '8px 16px', borderRadius: 999, fontSize: 18 }}>👥 {answered} answered</span>
+            <span style={{ display: 'inline-flex', alignItems: 'center', gap: 8, fontWeight: 800, background: 'rgba(0,0,0,.3)', padding: '8px 16px', borderRadius: 999, fontSize: 18 }}><Users size={17} /> {answered} answered</span>
             <TimerRing remaining={remaining} total={cq.timeLimit} size={92} />
           </div>
           <div className="qcard" style={{ width: '100%', marginBottom: 20, textAlign: 'center' }}>
@@ -104,7 +105,7 @@ export function DisplayClient({ sessionId, joinCode, schoolName, animation }: { 
               </span>
             ))}
           </div>
-          <div style={{ fontWeight: 800, color: 'var(--accent)', fontSize: 24, marginTop: 18 }}>👥 {players.length} joined</div>
+          <div style={{ fontWeight: 800, color: 'var(--accent)', fontSize: 24, marginTop: 18 }}><Users size={22} style={{ verticalAlign: '-3px', marginRight: 6 }} />{players.length} joined</div>
         </main>
       )}
     </div>

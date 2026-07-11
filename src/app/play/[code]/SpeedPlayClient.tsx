@@ -2,6 +2,7 @@
 
 import '../../../components/game/game.css';
 import { useEffect, useState } from 'react';
+import { Zap, Rocket } from 'lucide-react';
 import { useRealtimeSession } from '@/lib/game/useRealtimeSession';
 import { joinSession, submitAnswer } from '@/lib/game/player';
 import { AnimatedBackground } from '@/components/game/AnimatedBackground';
@@ -62,18 +63,18 @@ export function SpeedPlayClient({ sessionId, orgId, schoolName, animation }: { s
     body = (
       <div className="qcard" style={{ width: '100%', maxWidth: 380, color: '#1a1030' }}>
         <div style={{ fontWeight: 900, letterSpacing: 3, color: 'var(--primary)', fontSize: 12 }}>{schoolName.toUpperCase()}</div>
-        <h1 style={{ fontFamily: '"Fredoka One", Nunito, sans-serif', fontSize: 28, color: 'var(--primary)', margin: '6px 0 16px' }}>⚡ Speed Round</h1>
+        <h1 style={{ fontFamily: '"Fredoka One", Nunito, sans-serif', fontSize: 28, color: 'var(--primary)', margin: '6px 0 16px' }}><Zap size={24} style={{ verticalAlign: '-2px', marginRight: 8 }} />Speed Round</h1>
         <input value={name} onChange={(e) => setName(e.target.value)} placeholder="Your name" maxLength={30} onFocus={unlockAudio}
           style={{ width: '100%', padding: 15, borderRadius: 14, border: '2px solid #ddd', fontSize: 18, textAlign: 'center', fontWeight: 700, outline: 'none' }} />
         {err && <p style={{ color: 'var(--wrong)', fontSize: 13, marginTop: 10 }}>{err}</p>}
-        <button className="kbtn kpill" onClick={join} disabled={busy || name.trim().length < 2} style={{ width: '100%', marginTop: 14 }}>{busy ? 'Joining…' : '🚀 Join'}</button>
+        <button className="kbtn kpill" onClick={join} disabled={busy || name.trim().length < 2} style={{ width: '100%', marginTop: 14 }}>{busy ? 'Joining…' : <><Rocket size={18} style={{ verticalAlign: '-3px', marginRight: 7 }} />Join</>}</button>
       </div>
     );
   } else if (amRunner && state === 'question_active' && cq) {
     body = (
       <div style={{ width: '100%', maxWidth: 460 }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10 }}>
-          <span style={{ fontWeight: 800, background: '#f97316', padding: '5px 14px', borderRadius: 999 }}>⚡ Q{qIndex + 1}/{limit}</span>
+          <span style={{ fontWeight: 800, background: '#f97316', padding: '5px 14px', borderRadius: 999 }}><Zap size={13} style={{ verticalAlign: '-2px', marginRight: 3 }} />Q{qIndex + 1}/{limit}</span>
           <span style={{ fontWeight: 900, color: 'var(--accent)' }}>{ms.runnerScore ?? 0} ✓</span>
           <TimerRing remaining={remaining} total={SPEED_SECS} size={52} />
         </div>
@@ -89,7 +90,7 @@ export function SpeedPlayClient({ sessionId, orgId, schoolName, animation }: { s
     const myScore = (ms.results ?? []).find((r: any) => r.playerId === playerId)?.score ?? me?.score ?? 0;
     body = (<>
       <Confetti continuous />
-      <div className="pop-in" style={{ fontSize: 60 }}>⚡</div>
+      <div className="pop-in"><Zap size={60} color="var(--accent)" fill="var(--accent)" /></div>
       <h1 style={{ fontFamily: '"Fredoka One",sans-serif', fontSize: 30, color: 'var(--accent)' }}>Run complete!</h1>
       <div style={{ fontFamily: 'ui-monospace,monospace', fontWeight: 900, fontSize: 44, color: 'var(--accent)' }}>{myScore}/{limit}</div>
     </>);
@@ -97,7 +98,7 @@ export function SpeedPlayClient({ sessionId, orgId, schoolName, animation }: { s
     const results = [...(ms.results ?? [])].sort((a: any, b: any) => b.score - a.score);
     body = (<>
       {state === 'ended' && <Confetti continuous />}
-      <h1 style={{ fontFamily: '"Fredoka One",sans-serif', fontSize: 26, color: 'var(--accent)' }}>⚡ Speed Results</h1>
+      <h1 style={{ fontFamily: '"Fredoka One",sans-serif', fontSize: 26, color: 'var(--accent)' }}><Zap size={24} style={{ verticalAlign: '-2px', marginRight: 8 }} />Speed Results</h1>
       <div style={{ width: '100%', maxWidth: 400, marginTop: 12, display: 'grid', gap: 8 }}>
         {results.map((r: any, i: number) => (
           <div key={r.playerId} className={`lbrow ${i === 0 ? 'top1' : ''}`} style={{ outline: r.playerId === playerId ? '2px solid var(--accent)' : 'none' }}>
@@ -109,7 +110,7 @@ export function SpeedPlayClient({ sessionId, orgId, schoolName, animation }: { s
   } else {
     body = (
       <div className="qcard float-y" style={{ maxWidth: 340, color: '#1a1030' }}>
-        <div style={{ fontSize: 40 }}>⚡</div>
+        <div><Zap size={40} color="var(--accent)" fill="var(--accent)" /></div>
         <h1 style={{ fontFamily: '"Fredoka One",sans-serif', fontSize: 22, color: 'var(--primary)' }}>Get ready, {me?.name}!</h1>
         <p style={{ color: '#666', marginTop: 4 }}>{runnerName ? `${runnerName} is on the clock…` : 'Waiting for the host to launch a runner…'}</p>
       </div>

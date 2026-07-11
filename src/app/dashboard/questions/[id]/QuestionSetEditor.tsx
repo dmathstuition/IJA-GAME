@@ -1,5 +1,6 @@
 'use client';
 
+import { Trash2 } from 'lucide-react';
 import { useRef, useState, useTransition } from 'react';
 import { saveQuestionSet } from '@/lib/questions/actions';
 import { parseQuestionsJSON, IMPORT_EXAMPLE } from '@/lib/questions/parse';
@@ -91,7 +92,7 @@ export function QuestionSetEditor({ setId, initialName, initialSections }: { set
               <div key={qi} style={{ border: '1px solid #1c2330', borderRadius: 10, padding: 12, background: '#0c1018' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', gap: 10 }}>
                   <b style={{ fontSize: 14 }}>{qi + 1}. {q.text}</b>
-                  <button onClick={() => deleteQ(qi)} style={{ background: 'none', border: 'none', color: '#f87171', cursor: 'pointer', fontSize: 13 }}>✕</button>
+                  <button onClick={() => deleteQ(qi)} style={{ background: 'none', border: 'none', color: '#f87171', cursor: 'pointer', fontSize: 13 }}><Trash2 size={14} /></button>
                 </div>
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 5, marginTop: 8 }}>
                   {CHOICES.map((c) => (

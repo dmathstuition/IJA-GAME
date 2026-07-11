@@ -1,5 +1,6 @@
 'use client';
 
+import { Zap, Trophy, School, Play, ShieldCheck, Users, Gamepad2, Flame, Crown, TrendingUp } from 'lucide-react';
 import { useEffect, useState } from 'react';
 
 const ORANGE = '#ff7a1a';
@@ -11,10 +12,10 @@ const GOLD = '#f5b301';
 
 const NAV = ['Features', 'How It Works', 'Schools', 'Pricing', 'Resources'];
 const CHIPS = [
-  { i: '⚡', c: ORANGE, t: 'Team Battles', s: 'Real-time action' },
+  { i: <Zap size={22} />, c: ORANGE, t: 'Team Battles', s: 'Real-time action' },
   { i: '◎', c: PINK, t: 'AI Questions', s: 'Smart & adaptive' },
-  { i: '🏆', c: GOLD, t: 'Live Rankings', s: 'Updated instantly' },
-  { i: '🛡', c: GREEN, t: 'Secure & Fair', s: '100% trusted' },
+  { i: <Trophy size={22} />, c: GOLD, t: 'Live Rankings', s: 'Updated instantly' },
+  { i: <ShieldCheck size={22} />, c: GREEN, t: 'Secure & Fair', s: '100% trusted' },
 ];
 const OPTS = [['A', 'x = 6'], ['B', 'x = 7'], ['C', 'x = 8'], ['D', 'x = 11']] as const;
 const LEADERS = [
@@ -22,10 +23,10 @@ const LEADERS = [
   ['Royal Academy', '9,230', true], ['Bright Future School', '8,900', true],
 ] as const;
 const STATS = [
-  { i: '🏫', c: PURPLE, n: '245 +', l: 'Schools Onboarded' },
-  { i: '👥', c: ORANGE, n: '48,000 +', l: 'Students Engaged' },
-  { i: '🎮', c: PINK, n: '12,300 +', l: 'Games Played' },
-  { i: '🛡', c: GREEN, n: '99.99%', l: 'Uptime Guarantee' },
+  { i: <School size={22} />, c: PURPLE, n: '245 +', l: 'Schools Onboarded' },
+  { i: <Users size={22} />, c: ORANGE, n: '48,000 +', l: 'Students Engaged' },
+  { i: <Gamepad2 size={22} />, c: PINK, n: '12,300 +', l: 'Games Played' },
+  { i: <ShieldCheck size={22} />, c: GREEN, n: '99.99%', l: 'Uptime Guarantee' },
 ];
 const SCHOOLS = ['Greenfield School', 'Whyte Pyramid Academy', 'King’s College', 'Royal Academy', 'Wisdom Academy', 'Bright Future School'];
 
@@ -105,7 +106,7 @@ export default function Landing() {
           </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
             <a href="/login" style={{ color: '#fff', fontWeight: 700, textDecoration: 'none', border: '1px solid rgba(255,255,255,.15)', padding: '10px 22px', borderRadius: 10 }}>Login</a>
-            <a href="/signup" className="primaryCta" style={{ ...pill(`linear-gradient(135deg, ${ORANGE}, ${RED})`), padding: '11px 22px', textDecoration: 'none' }}>⚡ Start Free Trial</a>
+            <a href="/signup" className="primaryCta" style={{ ...pill(`linear-gradient(135deg, ${ORANGE}, ${RED})`), padding: '11px 22px', textDecoration: 'none' }}><Zap size={16} style={{ verticalAlign: '-3px', marginRight: 6 }} />Start Free Trial</a>
           </div>
         </nav>
 
@@ -114,7 +115,7 @@ export default function Landing() {
           {/* LEFT */}
           <div>
             <div style={{ display: 'inline-flex', alignItems: 'center', gap: 10, background: 'rgba(255,255,255,.05)', border: '1px solid rgba(255,255,255,.1)', borderRadius: 999, padding: '9px 18px', fontWeight: 800, fontSize: 13, letterSpacing: 0.5 }}>
-              🔥 125 SCHOOLS LIVE RIGHT NOW <span style={{ width: 9, height: 9, borderRadius: '50%', background: GREEN, animation: 'liveDot 1.5s infinite', boxShadow: `0 0 8px ${GREEN}` }} />
+              <Flame size={14} color={ORANGE} style={{ verticalAlign: '-2px', marginRight: 5 }} />125 SCHOOLS LIVE RIGHT NOW <span style={{ width: 9, height: 9, borderRadius: '50%', background: GREEN, animation: 'liveDot 1.5s infinite', boxShadow: `0 0 8px ${GREEN}` }} />
             </div>
             <h1 style={{ fontSize: 'clamp(48px, 6.6vw, 92px)', fontWeight: 900, lineHeight: 0.98, letterSpacing: -2, margin: '22px 0 0' }}>
               <span style={{ background: `linear-gradient(100deg, ${ORANGE}, ${RED})`, WebkitBackgroundClip: 'text', backgroundClip: 'text', color: 'transparent' }}>Live Quiz</span><br />
@@ -133,8 +134,8 @@ export default function Landing() {
             </div>
 
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: 16, alignItems: 'center' }}>
-              <a href="/signup" className="primaryCta" style={{ ...pill(`linear-gradient(135deg, ${ORANGE}, ${RED})`), padding: '17px 34px', fontSize: 17, textDecoration: 'none', boxShadow: `0 12px 30px ${RED}55` }}>🔥 Start Hosting Quiz <span style={{ fontSize: 20 }}>→</span></a>
-              <button style={{ ...pill('rgba(255,255,255,.05)'), padding: '17px 30px', fontSize: 17, border: '1px solid rgba(255,255,255,.15)' }}>▶ Watch Live Demo</button>
+              <a href="/signup" className="primaryCta" style={{ ...pill(`linear-gradient(135deg, ${ORANGE}, ${RED})`), padding: '17px 34px', fontSize: 17, textDecoration: 'none', boxShadow: `0 12px 30px ${RED}55` }}><Flame size={17} style={{ verticalAlign: '-3px', marginRight: 7 }} />Start Hosting Quiz <span style={{ fontSize: 20 }}>→</span></a>
+              <button style={{ ...pill('rgba(255,255,255,.05)'), padding: '17px 30px', fontSize: 17, border: '1px solid rgba(255,255,255,.15)' }}><Play size={16} fill="currentColor" style={{ verticalAlign: '-3px', marginRight: 7 }} />Watch Live Demo</button>
             </div>
             <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginTop: 26 }}>
               <div style={{ display: 'flex' }}>
@@ -199,7 +200,7 @@ export default function Landing() {
                 </div>
                 {/* leaderboard */}
                 <div style={{ background: 'rgba(0,0,0,.25)', borderRadius: 12, padding: '12px 14px' }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: 6, fontWeight: 800, fontSize: 12, marginBottom: 10 }}>🏆 LEADERBOARD</div>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 6, fontWeight: 800, fontSize: 12, marginBottom: 10 }}><Trophy size={13} color={GOLD} /> LEADERBOARD</div>
                   {LEADERS.map(([name, pts, up], i) => (
                     <div key={name} style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '5px 0', fontSize: 12 }}>
                       <b style={{ color: '#8b8296', width: 12 }}>{i + 1}</b>
@@ -213,24 +214,24 @@ export default function Landing() {
             </div>
 
             {/* trophy */}
-            <div style={{ position: 'absolute', bottom: 62, left: '43%', transform: 'translateX(-50%)', fontSize: 76, zIndex: 4, filter: `drop-shadow(0 10px 30px ${GOLD}88)`, animation: 'floaty 4s ease-in-out infinite alternate' }}>🏆</div>
+            <div style={{ position: 'absolute', bottom: 62, left: '43%', transform: 'translateX(-50%)', fontSize: 76, zIndex: 4, filter: `drop-shadow(0 10px 30px ${GOLD}88)`, animation: 'floaty 4s ease-in-out infinite alternate' }}><Trophy size={76} color={GOLD} strokeWidth={1.6} /></div>
 
             {/* mini cards */}
             <div style={{ position: 'absolute', bottom: 0, left: 18, right: 8, display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 10, zIndex: 3 }}>
               <div style={{ ...card, padding: 12 }}>
-                <div style={{ fontSize: 11, fontWeight: 800, color: GOLD, marginBottom: 4 }}>👑 Weekly Champions</div>
+                <div style={{ fontSize: 11, fontWeight: 800, color: GOLD, marginBottom: 4 }}><Crown size={12} style={{ verticalAlign: '-2px', marginRight: 4 }} />Weekly Champions</div>
                 <div style={{ fontSize: 12, fontWeight: 700 }}>Greenfield School</div>
                 <div style={{ fontFamily: 'ui-monospace,monospace', fontWeight: 900, color: GOLD, fontSize: 18 }}>9,540 <span style={{ fontSize: 10, color: '#8b8296' }}>pts</span></div>
                 <div style={{ fontSize: 10, color: '#8b8296', marginTop: 2 }}>View all champions →</div>
               </div>
               <div style={{ ...card, padding: 12 }}>
-                <div style={{ fontSize: 11, fontWeight: 800, color: PURPLE, marginBottom: 4 }}>⚡ Speed Round</div>
+                <div style={{ fontSize: 11, fontWeight: 800, color: PURPLE, marginBottom: 4 }}><Zap size={12} style={{ verticalAlign: '-2px', marginRight: 3 }} />Speed Round</div>
                 <div style={{ fontSize: 11, color: '#8b8296' }}>Starts in</div>
                 <div style={{ fontFamily: 'ui-monospace,monospace', fontWeight: 900, color: PURPLE, fontSize: 20 }}>00:{t.s}</div>
                 <div style={{ fontSize: 10, color: '#8b8296', marginTop: 2 }}>Be ready!</div>
               </div>
               <div style={{ ...card, padding: 12 }}>
-                <div style={{ fontSize: 11, fontWeight: 800, color: GREEN, marginBottom: 4 }}>📈 Live Participants</div>
+                <div style={{ fontSize: 11, fontWeight: 800, color: GREEN, marginBottom: 4 }}><TrendingUp size={12} style={{ verticalAlign: '-2px', marginRight: 4 }} />Live Participants</div>
                 <div style={{ fontFamily: 'ui-monospace,monospace', fontWeight: 900, fontSize: 20 }}>18,245</div>
                 <div style={{ fontSize: 10, color: '#8b8296' }}>Students online</div>
                 <svg viewBox="0 0 80 20" style={{ width: '100%', height: 18, marginTop: 2 }}><polyline points="0,16 15,12 30,14 45,7 60,9 80,2" fill="none" stroke={GREEN} strokeWidth="2" /></svg>
