@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { createClient } from '@/lib/supabase/client';
 import { AuthShell, field, primaryBtn } from '@/components/AuthShell';
@@ -15,6 +15,17 @@ export default function OnboardingPage() {
   const [err, setErr] = useState('');
   const [busy, setBusy] = useState(false);
   const effectiveSlug = slug || slugify(name);
+
+  // Must be signed in to name a school; skip if already onboarded.
+  useEffect(() => {
+    const supabase = createClient();
+    (async () => {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) { router.replace('/login?next=/onboarding'); return; }
+      const { data: profile } = await supabase.from('profiles').select('org_id').maybeSingle();
+      if (profile) router.replace('/dashboard');
+    })();
+  }, [router]);
 
   async function submit(e: React.FormEvent) {
     e.preventDefault();

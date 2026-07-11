@@ -10,6 +10,7 @@ import type { Question, Choice } from '@/lib/types';
 
 const CHOICES: Choice[] = ['A', 'B', 'C', 'D'];
 const GROUP_COLOR = ['#8b5cf6', '#f97316'];
+const ANS_COLOR: Record<Choice, string> = { A: '#e21b3c', B: '#1368ce', C: '#d89e00', D: '#26890c' };
 
 export function OralHostClient({ sessionId, joinCode, questions }: { sessionId: string; joinCode: string; questions?: Question[] }) {
   const { session } = useRealtimeSession(sessionId);
@@ -71,13 +72,23 @@ export function OralHostClient({ sessionId, joinCode, questions }: { sessionId: 
         )}
         {ms.lastResult && state === 'reveal' && (
           <div style={{ fontSize: 13, fontWeight: 700, marginBottom: 8, color: ms.lastResult.correct ? 'var(--correct)' : 'var(--wrong)' }}>
-            {ms.lastResult.outcome === 'correct' && `✓ ${ms.lastResult.groupName} +${ms.lastResult.points}`}
-            {ms.lastResult.outcome === 'both_missed' && `✗ Both groups missed — answer was ${ms.lastResult.answer}`}
+            {ms.lastResult.groupName} picked <b>{ms.lastResult.chosen}</b> —{' '}
+            {ms.lastResult.outcome === 'correct' && `✓ Correct! +${ms.lastResult.points}`}
+            {ms.lastResult.outcome === 'passed' && `✗ wrong, passed to the other group`}
+            {ms.lastResult.outcome === 'both_missed' && `✗ wrong — answer was ${ms.lastResult.answer}`}
+          </div>
+        )}
+        {live && (
+          <div style={{ marginBottom: 10 }}>
+            <div style={{ fontSize: 12, color: 'var(--text-dim)', marginBottom: 6 }}>TAP THE ANSWER THE LEARNER GAVE</div>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr 1fr', gap: 6 }}>
+              {CHOICES.map((c) => (
+                <button key={c} style={{ ...btn(ANS_COLOR[c]), padding: '14px 8px', fontSize: 16 }} disabled={pending} onClick={() => start(() => { markOral(sessionId, c); })}>{c}. {cq.options[c]}</button>
+              ))}
+            </div>
           </div>
         )}
         <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
-          <button style={btn('var(--correct)')} disabled={pending || !live} onClick={() => start(() => { markOral(sessionId, true); })}>✓ Correct</button>
-          <button style={btn('var(--wrong)')} disabled={pending || !live} onClick={() => start(() => { markOral(sessionId, false); })}>✗ Wrong / Pass</button>
           <button style={btn('#f97316')} disabled={pending || !cq} onClick={() => start(() => { skipOral(sessionId); })}>⏭ Skip</button>
           <button style={btn('#7c3aed')} disabled={pending} onClick={() => start(() => { setState(sessionId, 'leaderboard'); })}>🏆 Scores</button>
           <button style={btn('var(--wrong)')} disabled={pending} onClick={() => start(() => { setState(sessionId, 'ended'); })}>End</button>

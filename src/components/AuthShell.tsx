@@ -1,25 +1,31 @@
 import type { CSSProperties, ReactNode } from 'react';
 
+const ORANGE = '#ff7a1a';
+const RED = '#ff2d55';
+const PURPLE = '#8b5cf6';
+
 export const field: CSSProperties = {
-  padding: '11px 14px',
-  borderRadius: 10,
-  border: '1px solid rgba(255,255,255,.15)',
-  background: 'rgba(0,0,0,.25)',
-  color: 'var(--text)',
+  padding: '13px 15px',
+  borderRadius: 12,
+  border: '1px solid rgba(255,255,255,.12)',
+  background: 'rgba(0,0,0,.3)',
+  color: '#fff',
   fontSize: 15,
   outline: 'none',
+  width: '100%',
 };
 
 export const primaryBtn: CSSProperties = {
-  padding: '12px 16px',
-  borderRadius: 10,
+  padding: '14px 18px',
+  borderRadius: 12,
   border: 'none',
-  background: 'var(--primary)',
+  background: `linear-gradient(135deg, ${ORANGE}, ${RED})`,
   color: '#fff',
   fontWeight: 800,
   fontSize: 15,
   cursor: 'pointer',
-  marginTop: 4,
+  marginTop: 6,
+  boxShadow: `0 10px 26px ${RED}44`,
 };
 
 export function AuthShell({ title, sub, children }: { title: string; sub: string; children: ReactNode }) {
@@ -28,25 +34,41 @@ export function AuthShell({ title, sub, children }: { title: string; sub: string
       style={{
         minHeight: '100vh',
         display: 'flex',
+        flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'center',
-        padding: 20,
-        background: 'linear-gradient(160deg, var(--bg-from), var(--bg-to))',
+        padding: 24,
+        background: '#080511',
+        position: 'relative',
+        overflow: 'hidden',
+        fontFamily: 'system-ui, -apple-system, "Segoe UI", sans-serif',
       }}
     >
+      <div aria-hidden style={{ position: 'absolute', inset: 0, pointerEvents: 'none' }}>
+        <div style={{ position: 'absolute', width: 600, height: 500, top: -160, left: -120, background: `radial-gradient(ellipse, ${ORANGE}22, transparent 65%)`, filter: 'blur(40px)' }} />
+        <div style={{ position: 'absolute', width: 600, height: 500, bottom: -160, right: -120, background: `radial-gradient(ellipse, ${PURPLE}25, transparent 65%)`, filter: 'blur(40px)' }} />
+      </div>
+
+      <a href="/" style={{ display: 'flex', alignItems: 'center', gap: 11, marginBottom: 22, textDecoration: 'none', zIndex: 1 }}>
+        <div style={{ width: 42, height: 42, borderRadius: 12, background: `linear-gradient(140deg, ${ORANGE}, ${RED})`, display: 'grid', placeItems: 'center', fontWeight: 900, fontSize: 25, color: '#fff', boxShadow: `0 8px 20px ${RED}55` }}>Q</div>
+        <div style={{ fontWeight: 900, fontSize: 21, letterSpacing: -0.5, color: '#fff' }}>QUIZ<span style={{ color: ORANGE }}>ARENA</span></div>
+      </a>
+
       <div
         style={{
           width: '100%',
-          maxWidth: 380,
-          background: 'rgba(0,0,0,.35)',
+          maxWidth: 400,
+          background: 'rgba(20,14,30,.72)',
           border: '1px solid rgba(255,255,255,.1)',
-          borderRadius: 20,
-          padding: 32,
-          backdropFilter: 'blur(16px)',
+          borderRadius: 22,
+          padding: 34,
+          backdropFilter: 'blur(20px)',
+          boxShadow: '0 30px 70px rgba(0,0,0,.5)',
+          zIndex: 1,
         }}
       >
-        <h1 style={{ fontSize: 24, color: 'var(--accent)', marginBottom: 4 }}>{title}</h1>
-        <p style={{ color: 'var(--text-dim)', fontSize: 14, marginBottom: 22 }}>{sub}</p>
+        <h1 style={{ fontSize: 25, fontWeight: 900, color: '#fff', marginBottom: 6, letterSpacing: -0.5 }}>{title}</h1>
+        <p style={{ color: '#a49db3', fontSize: 14.5, marginBottom: 22, lineHeight: 1.5 }}>{sub}</p>
         {children}
       </div>
     </main>

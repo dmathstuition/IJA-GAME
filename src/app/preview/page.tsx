@@ -147,6 +147,34 @@ export default function Preview() {
           </div>
         </Frame>
 
+        {/* ORAL */}
+        <Frame label="Projector · Oral (teacher recorded the learner's answer)">
+          <div style={{ padding: '18px 28px 26px' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14, marginBottom: 14 }}>
+              {[['Group A', 20, '#8b5cf6'], ['Group B', 30, '#f97316']].map(([n, s, col]) => (
+                <div key={n as string} style={{ borderRadius: 16, padding: 14, border: `3px solid ${col as string}`, background: `${col as string}22` }}>
+                  <div style={{ fontWeight: 800, fontSize: 16 }}>{n as string}</div>
+                  <div style={{ fontFamily: 'ui-monospace,monospace', fontWeight: 900, fontSize: 34, color: 'var(--accent)' }}>{s as number}</div>
+                </div>
+              ))}
+            </div>
+            <div className="qcard" style={{ textAlign: 'center', marginBottom: 12 }}><div style={{ fontSize: 'clamp(20px,3vw,32px)', fontWeight: 900 }}>Which is a prime number?</div></div>
+            <div style={{ textAlign: 'center', fontWeight: 900, fontSize: 20, color: 'var(--wrong)', marginBottom: 12 }}>Group B answered <b>C</b> — Wrong — the answer was A</div>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
+              {(['A', 'B', 'C', 'D'] as Choice[]).map((c) => {
+                const isCorrect = c === 'A';
+                const isChosen = c === 'C';
+                return (
+                  <div key={c} style={{ position: 'relative', borderRadius: 18, outline: isChosen ? '3px solid var(--wrong)' : 'none' }}>
+                    <AnswerTile choice={c} label={{ A: '29', B: '27', C: '21', D: '33' }[c]} state={isCorrect ? 'reveal-correct' : isChosen ? 'idle' : 'reveal-wrong'} />
+                    {isChosen && <span style={{ position: 'absolute', top: 10, right: 14, background: 'var(--wrong)', padding: '3px 12px', borderRadius: 999, fontSize: 13, fontWeight: 800 }}>Learner ✗</span>}
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        </Frame>
+
         {/* SPEED */}
         <Frame label="Projector · Speed Round (solo runner)">
           <div style={{ padding: '18px 28px 26px' }}>
