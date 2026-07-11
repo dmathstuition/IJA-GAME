@@ -35,7 +35,7 @@ const STATS = [
   { i: <Gamepad2 size={22} />, c: PINK, n: '12,300 +', l: 'Games Played' },
   { i: <ShieldCheck size={22} />, c: GREEN, n: '99.99%', l: 'Uptime Guarantee' },
 ];
-const SCHOOLS = ['Greenfield School', 'Whyte Pyramid Academy', 'King’s College', 'Royal Academy', 'Wisdom Academy', 'Bright Future School'];
+const SCHOOLS = ['Infant Jesus Academy', 'DMaths Academy'];
 
 const FEATURES = [
   { i: <MonitorPlay size={22} />, c: ORANGE, t: 'Four game modes', d: 'Standard, Team Battle, Speed round and on-stage Quiz Bowl — one question bank, any format.' },
@@ -279,14 +279,13 @@ export default function Landing() {
         {/* TRUSTED BY */}
         <div style={{ ...card, padding: '20px 30px', marginBottom: 50 }}>
           <div style={{ textAlign: 'center', letterSpacing: 4, fontSize: 12, fontWeight: 800, color: '#8b8296', marginBottom: 18 }}>TRUSTED BY SCHOOLS WORLDWIDE</div>
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 20, flexWrap: 'wrap' }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 48, flexWrap: 'wrap' }}>
             {SCHOOLS.map((s, i) => (
-              <div key={s} style={{ display: 'flex', alignItems: 'center', gap: 10, opacity: 0.85 }}>
-                <svg width="34" height="40" viewBox="0 0 34 40"><path d="M17 2 L31 7 V20 C31 30 24 36 17 38 C10 36 3 30 3 20 V7 Z" fill={`${[PURPLE, ORANGE, GOLD, RED, PURPLE, GREEN][i]}33`} stroke={[PURPLE, ORANGE, GOLD, RED, PURPLE, GREEN][i]} strokeWidth="1.5" /><text x="17" y="24" textAnchor="middle" fontSize="12" fill="#fff" fontWeight="900">{s[0]}</text></svg>
-                <span style={{ fontWeight: 800, fontSize: 13, maxWidth: 90, lineHeight: 1.15 }}>{s.toUpperCase()}</span>
+              <div key={s} style={{ display: 'flex', alignItems: 'center', gap: 12, opacity: 0.9 }}>
+                <svg width="38" height="44" viewBox="0 0 34 40"><path d="M17 2 L31 7 V20 C31 30 24 36 17 38 C10 36 3 30 3 20 V7 Z" fill={`${[ORANGE, PURPLE][i]}33`} stroke={[ORANGE, PURPLE][i]} strokeWidth="1.5" /><text x="17" y="24" textAnchor="middle" fontSize="12" fill="#fff" fontWeight="900">{s[0]}</text></svg>
+                <span style={{ fontWeight: 800, fontSize: 15, lineHeight: 1.15 }}>{s.toUpperCase()}</span>
               </div>
             ))}
-            <div style={{ textAlign: 'center' }}><div style={{ fontWeight: 900, fontSize: 22, color: PINK }}>+200</div><div style={{ fontSize: 11, color: '#8b8296' }}>More Schools</div></div>
           </div>
         </div>
 
