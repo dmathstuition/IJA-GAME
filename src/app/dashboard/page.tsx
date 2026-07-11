@@ -17,14 +17,20 @@ const MODE_ICON: Record<string, React.ReactNode> = {
 
 export default async function Dashboard() {
   const supabase = await createClient();
-  const { data: org } = await supabase.from('organizations').select('name, slug, subscription_status, paid_until').maybeSingle();
+  const { data: org } = await supabase.from('organizations').select('id, name, slug, subscription_status, paid_until').maybeSingle();
   const live = canHostLive(org?.subscription_status, (org as { paid_until?: string | null } | null)?.paid_until);
-  const { data: sessions } = await supabase
-    .from('game_sessions')
-    .select('id, join_code, mode, state')
-    .is('ended_at', null)
-    .order('created_at', { ascending: false })
-    .limit(10);
+  // Scope explicitly to this school: the public-read policy (which lets
+  // players join by code) would otherwise leak other orgs' live sessions
+  // into this list — rows the organiser can see but never delete.
+  const { data: sessions } = org
+    ? await supabase
+        .from('game_sessions')
+        .select('id, join_code, mode, state')
+        .eq('org_id', org.id)
+        .is('ended_at', null)
+        .order('created_at', { ascending: false })
+        .limit(10)
+    : { data: [] };
 
   return (
     <AdminShell active="Sessions" title={org?.name ?? 'Dashboard'} subtitle={org ? `${org.slug}.quizarena.app · ${STATUS_LABEL[org.subscription_status] ?? org.subscription_status}` : 'Finish onboarding to continue.'}>

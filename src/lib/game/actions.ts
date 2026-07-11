@@ -81,11 +81,17 @@ export async function revealCurrent(sessionId: string) {
   return error ? { error: error.message } : { ok: true };
 }
 
-/** Permanently delete a session (players and answers cascade with it). */
+/**
+ * Permanently delete a session (players and answers cascade with it).
+ * Returns the deleted row so an RLS-blocked delete (0 rows) surfaces as an
+ * error instead of silently "working".
+ */
 export async function deleteSession(sessionId: string) {
   const supabase = await createClient();
-  const { error } = await supabase.from('game_sessions').delete().eq('id', sessionId);
-  return error ? { error: error.message } : { ok: true };
+  const { data, error } = await supabase.from('game_sessions').delete().eq('id', sessionId).select('id');
+  if (error) return { error: error.message };
+  if (!data?.length) return { error: 'This session could not be deleted — it does not belong to your school.' };
+  return { ok: true };
 }
 
 export async function setState(sessionId: string, state: 'lobby' | 'leaderboard' | 'ended') {
