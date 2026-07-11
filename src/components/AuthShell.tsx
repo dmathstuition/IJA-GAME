@@ -1,4 +1,5 @@
 import type { CSSProperties, ReactNode } from 'react';
+import { BrandLogo } from '@/components/BrandLogo';
 
 const ORANGE = '#ff7a1a';
 const RED = '#ff2d55';
@@ -49,9 +50,8 @@ export function AuthShell({ title, sub, children }: { title: string; sub: string
         <div style={{ position: 'absolute', width: 600, height: 500, bottom: -160, right: -120, background: `radial-gradient(ellipse, ${PURPLE}25, transparent 65%)`, filter: 'blur(40px)' }} />
       </div>
 
-      <a href="/" style={{ display: 'flex', alignItems: 'center', gap: 11, marginBottom: 22, textDecoration: 'none', zIndex: 1 }}>
-        <div style={{ width: 42, height: 42, borderRadius: 12, background: `linear-gradient(140deg, ${ORANGE}, ${RED})`, display: 'grid', placeItems: 'center', fontWeight: 900, fontSize: 25, color: '#fff', boxShadow: `0 8px 20px ${RED}55` }}>Q</div>
-        <div style={{ fontWeight: 900, fontSize: 21, letterSpacing: -0.5, color: '#fff' }}>QUIZ<span style={{ color: ORANGE }}>ARENA</span></div>
+      <a href="/" style={{ marginBottom: 22, textDecoration: 'none', zIndex: 1 }}>
+        <BrandLogo height={42} tone="dark" />
       </a>
 
       <div
