@@ -1,6 +1,6 @@
 'use client';
 
-import { Zap, Trophy, School, Play, ShieldCheck, Users, Gamepad2, Flame, Crown, TrendingUp } from 'lucide-react';
+import { Zap, Trophy, School, Play, ShieldCheck, Users, Gamepad2, Flame, Crown, TrendingUp, Mic, Upload, Palette, Timer, MonitorPlay, Check, ArrowRight } from 'lucide-react';
 import { useEffect, useState } from 'react';
 
 const ORANGE = '#ff7a1a';
@@ -10,7 +10,13 @@ const PINK = '#ec4899';
 const GREEN = '#25d366';
 const GOLD = '#f5b301';
 
-const NAV = ['Features', 'How It Works', 'Schools', 'Pricing', 'Resources'];
+const NAV: { label: string; href: string }[] = [
+  { label: 'Features', href: '#features' },
+  { label: 'How It Works', href: '#how' },
+  { label: 'Schools', href: '#schools' },
+  { label: 'Pricing', href: '/pricing' },
+  { label: 'Resources', href: '#resources' },
+];
 const CHIPS = [
   { i: <Zap size={22} />, c: ORANGE, t: 'Team Battles', s: 'Real-time action' },
   { i: '◎', c: PINK, t: 'AI Questions', s: 'Smart & adaptive' },
@@ -29,6 +35,27 @@ const STATS = [
   { i: <ShieldCheck size={22} />, c: GREEN, n: '99.99%', l: 'Uptime Guarantee' },
 ];
 const SCHOOLS = ['Greenfield School', 'Whyte Pyramid Academy', 'King’s College', 'Royal Academy', 'Wisdom Academy', 'Bright Future School'];
+
+const FEATURES = [
+  { i: <MonitorPlay size={22} />, c: ORANGE, t: 'Four game modes', d: 'Standard, Team Battle, Speed round and on-stage Quiz Bowl — one question bank, any format.' },
+  { i: <Mic size={22} />, c: PURPLE, t: 'No-device quiz bowl', d: 'Interswitch-SPAK style: 2–6 groups compete out loud, the host judges, misses pass on for bonus. No phones needed.' },
+  { i: <Upload size={22} />, c: GREEN, t: 'Instant JSON import', d: 'Paste or upload questions straight into a live game — MCQ or theory — with a live validity preview.' },
+  { i: <Palette size={22} />, c: PINK, t: 'Your school’s brand', d: 'Choose colours, themes and animations so every screen looks like it belongs to your school.' },
+  { i: <Trophy size={22} />, c: GOLD, t: 'Live projector leaderboards', d: 'Big-screen scoreboards, timers and confetti update in real time as students answer.' },
+  { i: <Timer size={22} />, c: RED, t: 'Time-based scoring', d: 'Faster correct answers earn more — 10 points plus up to 5 for speed, just like the big competitions.' },
+];
+const STEPS: [string, string, string][] = [
+  ['1', 'Build your questions', 'Create a reusable bank in the dashboard, or import JSON in seconds — MCQ and theory both supported.'],
+  ['2', 'Start a game & share the code', 'Pick a mode and put the join code on the projector for the whole hall to see.'],
+  ['3', 'Play live — devices optional', 'Students buzz in from any phone browser, or compete on stage with no devices at all.'],
+];
+const USE_CASES = ['Inter-house championships', 'Interswitch-SPAK style quiz bowls', 'Revision & end-of-term games', 'Science & maths olympiad heats', 'Assembly & open-day showcases', 'Club and society tournaments'];
+const FAQ: [string, string][] = [
+  ['Do students need to install an app?', 'No. Players join from any phone browser at your link — and for Quiz Bowl mode, no devices are needed at all.'],
+  ['How does payment work?', 'A one-time PayPal payment activates your school for the term or the year. No subscription, and no card details are stored.'],
+  ['Can we use our own questions?', 'Yes — paste or upload JSON right inside the live controller, or build reusable banks in the dashboard.'],
+  ['How many students can take part?', 'Up to 250 on the Annual plan, and a live game runs on a single projector for the whole room.'],
+];
 
 function Tile({ letter, from, to, pos }: { letter: string; from: string; to: string; pos: React.CSSProperties }) {
   return (
@@ -77,8 +104,12 @@ export default function Landing() {
         @keyframes floaty{from{transform:translateY(0) rotate(-4deg)}to{transform:translateY(-22px) rotate(4deg)}}
         @keyframes glowPulse{0%,100%{opacity:.5}50%{opacity:1}}
         @keyframes liveDot{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(1.4)}}
+        html{scroll-behavior:smooth}
+        section[id]{scroll-margin-top:24px}
         .navlink{color:#c9c2d6;font-weight:600;font-size:15px;cursor:pointer;transition:color .15s}
         .navlink:hover{color:#fff}
+        .featcard{transition:transform .15s, border-color .15s}
+        .featcard:hover{transform:translateY(-4px);border-color:rgba(255,255,255,.2)}
         .primaryCta:hover{filter:brightness(1.08);transform:translateY(-2px)}
         .primaryCta{transition:all .15s}
         @media(max-width:960px){.hero-grid{grid-template-columns:1fr!important}.right-col{display:none!important}.navlinks{display:none!important}}
@@ -102,7 +133,7 @@ export default function Landing() {
             </div>
           </div>
           <div className="navlinks" style={{ display: 'flex', gap: 30 }}>
-            {NAV.map((n) => <span key={n} className="navlink">{n}{(n === 'Features' || n === 'Resources') ? ' ▾' : ''}</span>)}
+            {NAV.map((n) => <a key={n.label} href={n.href} className="navlink" style={{ textDecoration: 'none' }}>{n.label}</a>)}
           </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
             <a href="/login" style={{ color: '#fff', fontWeight: 700, textDecoration: 'none', border: '1px solid rgba(255,255,255,.15)', padding: '10px 22px', borderRadius: 10 }}>Login</a>
@@ -263,6 +294,122 @@ export default function Landing() {
             <div style={{ textAlign: 'center' }}><div style={{ fontWeight: 900, fontSize: 22, color: PINK }}>+200</div><div style={{ fontSize: 11, color: '#8b8296' }}>More Schools</div></div>
           </div>
         </div>
+
+        {/* FEATURES */}
+        <section id="features" style={{ padding: '40px 0 20px' }}>
+          <div style={{ textAlign: 'center', maxWidth: 640, margin: '0 auto 34px' }}>
+            <div style={{ color: ORANGE, letterSpacing: 3, fontWeight: 800, fontSize: 12 }}>FEATURES</div>
+            <h2 style={{ fontSize: 'clamp(28px,4vw,42px)', fontWeight: 900, letterSpacing: -1, margin: '10px 0 8px' }}>Everything you need to run a live quiz</h2>
+            <p style={{ color: '#a49db3', fontSize: 16, lineHeight: 1.55 }}>From casual revision to full inter-school championships — all on one branded platform.</p>
+          </div>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(280px,1fr))', gap: 16 }}>
+            {FEATURES.map((f) => (
+              <div key={f.t} className="featcard" style={{ ...card, padding: 22 }}>
+                <span style={{ width: 48, height: 48, borderRadius: 12, background: `${f.c}1f`, color: f.c, display: 'grid', placeItems: 'center', marginBottom: 14 }}>{f.i}</span>
+                <div style={{ fontWeight: 800, fontSize: 17, marginBottom: 6 }}>{f.t}</div>
+                <div style={{ color: '#a49db3', fontSize: 14, lineHeight: 1.55 }}>{f.d}</div>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* HOW IT WORKS */}
+        <section id="how" style={{ padding: '48px 0 20px' }}>
+          <div style={{ textAlign: 'center', maxWidth: 640, margin: '0 auto 34px' }}>
+            <div style={{ color: PURPLE, letterSpacing: 3, fontWeight: 800, fontSize: 12 }}>HOW IT WORKS</div>
+            <h2 style={{ fontSize: 'clamp(28px,4vw,42px)', fontWeight: 900, letterSpacing: -1, margin: '10px 0 8px' }}>Live in three steps</h2>
+            <p style={{ color: '#a49db3', fontSize: 16 }}>No setup calls, no installs — sign up and run your first game the same day.</p>
+          </div>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(260px,1fr))', gap: 16 }}>
+            {STEPS.map(([n, t, d]) => (
+              <div key={n} style={{ ...card, padding: 24 }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 12 }}>
+                  <span style={{ width: 40, height: 40, borderRadius: 999, background: `linear-gradient(135deg,${ORANGE},${RED})`, display: 'grid', placeItems: 'center', fontWeight: 900, fontSize: 18, boxShadow: `0 6px 16px ${RED}44` }}>{n}</span>
+                  <div style={{ fontWeight: 800, fontSize: 17 }}>{t}</div>
+                </div>
+                <div style={{ color: '#a49db3', fontSize: 14.5, lineHeight: 1.55 }}>{d}</div>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* SCHOOLS */}
+        <section id="schools" style={{ padding: '48px 0 20px' }}>
+          <div style={{ ...card, padding: 'clamp(24px,4vw,44px)', display: 'grid', gridTemplateColumns: 'minmax(0,1fr) minmax(0,1fr)', gap: 36, alignItems: 'center' }} className="hero-grid">
+            <div>
+              <div style={{ color: GREEN, letterSpacing: 3, fontWeight: 800, fontSize: 12 }}>FOR SCHOOLS</div>
+              <h2 style={{ fontSize: 'clamp(26px,3.4vw,38px)', fontWeight: 900, letterSpacing: -1, margin: '10px 0 14px' }}>Built for real school competitions</h2>
+              <p style={{ color: '#a49db3', fontSize: 16, lineHeight: 1.6, marginBottom: 20 }}>Whether it&apos;s an inter-house championship on the assembly stage or a quick revision buzzer game in class, QuizArena runs it — projected big, scored automatically, branded as yours.</p>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10, marginBottom: 24 }}>
+                {USE_CASES.map((u) => (
+                  <div key={u} style={{ display: 'flex', alignItems: 'center', gap: 9, fontSize: 14, color: '#d9d3e6' }}>
+                    <span style={{ width: 20, height: 20, borderRadius: 999, background: `${GREEN}22`, color: GREEN, display: 'grid', placeItems: 'center', flexShrink: 0 }}><Check size={12} /></span>{u}
+                  </div>
+                ))}
+              </div>
+              <a href="/signup" className="primaryCta" style={{ ...pill(`linear-gradient(135deg, ${ORANGE}, ${RED})`), padding: '14px 26px', fontSize: 15, textDecoration: 'none' }}>Start your free trial <ArrowRight size={16} /></a>
+            </div>
+            <div style={{ display: 'grid', gap: 12 }}>
+              {[['Greenfield School', 'Ran a 12-house championship for 480 students on one screen.', PURPLE, 'G'], ['King’s College', 'Weekly Friday quiz bowl — zero devices, full hall engaged.', ORANGE, 'K'], ['Wisdom Academy', 'Imported past exam questions as JSON and launched in minutes.', GREEN, 'W']].map(([name, quote, col, ltr]) => (
+                <div key={name as string} style={{ background: 'rgba(0,0,0,.25)', border: '1px solid rgba(255,255,255,.08)', borderRadius: 14, padding: 16, display: 'flex', gap: 14, alignItems: 'flex-start' }}>
+                  <span style={{ width: 42, height: 42, borderRadius: 11, background: `linear-gradient(135deg, ${col}, #222)`, display: 'grid', placeItems: 'center', fontWeight: 900, flexShrink: 0 }}>{ltr}</span>
+                  <div><div style={{ fontWeight: 800, fontSize: 14.5 }}>{name}</div><div style={{ color: '#a49db3', fontSize: 13.5, lineHeight: 1.5, marginTop: 2 }}>{quote}</div></div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* PRICING teaser */}
+        <section style={{ padding: '48px 0 20px', textAlign: 'center' }}>
+          <div style={{ color: GOLD, letterSpacing: 3, fontWeight: 800, fontSize: 12 }}>PRICING</div>
+          <h2 style={{ fontSize: 'clamp(28px,4vw,42px)', fontWeight: 900, letterSpacing: -1, margin: '10px 0 8px' }}>Simple, one-time pricing</h2>
+          <p style={{ color: '#a49db3', fontSize: 16, maxWidth: 560, margin: '0 auto 26px' }}>Start with a free trial, then pay once with PayPal to unlock live hosting for the term or the year. No subscription.</p>
+          <div style={{ display: 'inline-flex', gap: 16, flexWrap: 'wrap', justifyContent: 'center', marginBottom: 26 }}>
+            {[['Term pass', '$99', '120 days'], ['Annual', '$249', '365 days']].map(([n, p, dur], i) => (
+              <div key={n} style={{ ...card, padding: '22px 28px', minWidth: 200, border: i === 1 ? `1px solid ${ORANGE}66` : card.border }}>
+                <div style={{ fontWeight: 800, fontSize: 15, color: '#a49db3' }}>{n}</div>
+                <div style={{ fontWeight: 900, fontSize: 40, letterSpacing: -1, margin: '4px 0' }}>{p}</div>
+                <div style={{ fontSize: 12.5, color: '#8b8296' }}>one-time · {dur}</div>
+              </div>
+            ))}
+          </div>
+          <div><a href="/pricing" className="primaryCta" style={{ ...pill(`linear-gradient(135deg, ${ORANGE}, ${RED})`), padding: '14px 30px', fontSize: 15, textDecoration: 'none' }}>See full pricing <ArrowRight size={16} /></a></div>
+        </section>
+
+        {/* RESOURCES / FAQ */}
+        <section id="resources" style={{ padding: '48px 0 30px' }}>
+          <div style={{ textAlign: 'center', maxWidth: 640, margin: '0 auto 30px' }}>
+            <div style={{ color: PINK, letterSpacing: 3, fontWeight: 800, fontSize: 12 }}>RESOURCES</div>
+            <h2 style={{ fontSize: 'clamp(28px,4vw,42px)', fontWeight: 900, letterSpacing: -1, margin: '10px 0 8px' }}>Frequently asked questions</h2>
+          </div>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(300px,1fr))', gap: 14, maxWidth: 960, margin: '0 auto' }}>
+            {FAQ.map(([q, a]) => (
+              <div key={q} style={{ ...card, padding: 20 }}>
+                <div style={{ fontWeight: 800, fontSize: 15.5, marginBottom: 8 }}>{q}</div>
+                <div style={{ color: '#a49db3', fontSize: 14, lineHeight: 1.6 }}>{a}</div>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* FOOTER */}
+        <footer style={{ borderTop: '1px solid rgba(255,255,255,.08)', padding: '34px 0 40px', display: 'flex', flexWrap: 'wrap', gap: 20, alignItems: 'center', justifyContent: 'space-between' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+            <div style={{ width: 38, height: 38, borderRadius: 10, background: `linear-gradient(140deg, ${ORANGE}, ${RED})`, display: 'grid', placeItems: 'center', fontWeight: 900, fontSize: 22 }}>Q</div>
+            <div>
+              <div style={{ fontWeight: 900, fontSize: 17 }}>QUIZ<span style={{ color: ORANGE }}>ARENA</span></div>
+              <div style={{ fontSize: 12, color: '#8b8296' }}>© {new Date().getFullYear()} QuizArena. Live. Compete. Win.</div>
+            </div>
+          </div>
+          <div style={{ display: 'flex', gap: 24, flexWrap: 'wrap' }}>
+            <a href="#features" className="navlink" style={{ textDecoration: 'none' }}>Features</a>
+            <a href="#how" className="navlink" style={{ textDecoration: 'none' }}>How it works</a>
+            <a href="/pricing" className="navlink" style={{ textDecoration: 'none' }}>Pricing</a>
+            <a href="/login" className="navlink" style={{ textDecoration: 'none' }}>Login</a>
+            <a href="/signup" className="navlink" style={{ textDecoration: 'none', color: ORANGE }}>Start free trial</a>
+          </div>
+        </footer>
       </div>
     </div>
   );
