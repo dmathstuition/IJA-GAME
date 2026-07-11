@@ -45,6 +45,23 @@ export function normalizeQuestion(raw: Record<string, unknown>): Question | null
     D: opts[3] ?? '',
   };
 
+  // Theory (oral) question: explicitly typed, or no options given at all — the
+  // learner answers aloud, so `answer`/`solution` is the model answer text.
+  const kindHint = str(raw.kind ?? raw.type).toLowerCase();
+  const hasOptions = LETTERS.some((L) => options[L] !== '');
+  if (kindHint === 'theory' || kindHint === 'oral' || kindHint === 'open' || !hasOptions) {
+    const solution = str(raw.solution ?? raw.answer ?? raw.correct ?? raw.model);
+    const tl = Number(raw.timeLimit ?? raw.time ?? raw.seconds ?? 60);
+    return {
+      text,
+      kind: 'theory',
+      solution,
+      options: { A: '', B: '', C: '', D: '' },
+      answer: 'A',
+      timeLimit: Number.isFinite(tl) && tl > 0 ? Math.round(tl) : 60,
+    };
+  }
+
   // answer may be a letter, an index (0-3 / 1-4), or the full option text
   let answer: Choice = 'A';
   const rawAns = str(raw.answer ?? raw.correct ?? raw.correctAnswer).toUpperCase();
@@ -128,6 +145,7 @@ export const IMPORT_EXAMPLE = JSON.stringify(
       timeLimit: 20,
     },
     { text: 'How many continents are there?', a: '5', b: '6', c: '7', d: '8', answer: 'C' },
+    { text: 'Explain why the sky appears blue.', kind: 'theory', solution: 'Rayleigh scattering — shorter blue wavelengths scatter more.' },
   ],
   null,
   2,

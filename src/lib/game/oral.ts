@@ -23,8 +23,10 @@ interface OralState {
     correct: boolean;
     points: number;
     answer: Choice;
-    chosen: Choice;
+    chosen: Choice | null;
     outcome: 'correct' | 'passed' | 'both_missed';
+    kind?: 'mcq' | 'theory';
+    solution?: string;
   } | null;
 }
 const fresh = (g0: string, g1: string): OralState => ({ groups: [{ name: g0, score: 0 }, { name: g1, score: 0 }], used: [], lastResult: null });
@@ -81,6 +83,19 @@ export async function launchOralQuestion(sessionId: string, question: Question, 
  *  wrong & bonus → both missed, reveal.
  */
 export async function markOral(sessionId: string, chosen: Choice) {
+  return scoreOral(sessionId, (cq) => chosen === cq.answer, chosen);
+}
+
+/**
+ * Judge a spoken answer to a theory (no-options) question. The host decides
+ * correctness; scoring/pass/bonus follows the same rules as an MCQ oral.
+ */
+export async function markOralTheory(sessionId: string, correct: boolean) {
+  return scoreOral(sessionId, () => correct, null);
+}
+
+/** Shared oral scoring for both MCQ (derive correctness) and theory (host judges). */
+async function scoreOral(sessionId: string, judge: (cq: Question) => boolean, chosen: Choice | null) {
   const supabase = await createClient();
   const s = await getState(supabase, sessionId);
   if (!s) return { error: 'Session not found' };
@@ -90,7 +105,7 @@ export async function markOral(sessionId: string, chosen: Choice) {
   const active = s.active_team ?? 0;
   const bonus = s.is_bonus ?? false;
   if (!cq || qIndex < 0) return { error: 'No active question' };
-  const correct = chosen === cq.answer;
+  const correct = judge(cq);
 
   const patch: Record<string, unknown> = {};
   let outcome: 'correct' | 'passed' | 'both_missed';
@@ -110,7 +125,7 @@ export async function markOral(sessionId: string, chosen: Choice) {
     patch.state = 'reveal'; patch.is_bonus = false; outcome = 'both_missed';
   }
 
-  ms.lastResult = { group: active, groupName: ms.groups[active].name, correct, points: correct ? (bonus ? BONUS : NORMAL) : 0, answer: cq.answer, chosen, outcome };
+  ms.lastResult = { group: active, groupName: ms.groups[active].name, correct, points: correct ? (bonus ? BONUS : NORMAL) : 0, answer: cq.answer, chosen, outcome, kind: cq.kind ?? 'mcq', solution: cq.solution };
   patch.mode_state = ms as unknown as never;
   const { error } = await supabase.from('game_sessions').update(patch).eq('id', sessionId);
   return error ? { error: error.message } : { ok: true as const, outcome };

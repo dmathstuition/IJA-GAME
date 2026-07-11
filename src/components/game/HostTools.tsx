@@ -61,13 +61,14 @@ export function HostTools({ sessionId, joinCode, questions }: { sessionId: strin
   };
 
   // ── add single ─────────────────────────────────────────────────────────────
-  const [nq, setNq] = useState<Question>({ text: '', options: { A: '', B: '', C: '', D: '' }, answer: 'A', timeLimit: 30 });
+  const [nq, setNq] = useState<Question>({ text: '', options: { A: '', B: '', C: '', D: '' }, answer: 'A', timeLimit: 30, kind: 'mcq' });
   const addOne = () => {
     if (!nq.text.trim()) { flash('Enter question text.'); return; }
+    if (nq.kind === 'theory' && !nq.solution?.trim()) { flash('Enter a model answer.'); return; }
     start(async () => {
       const r = await addQuestion(sessionId, nq);
       if ((r as any).error) flash((r as any).error);
-      else { flash('Question added.'); setNq({ text: '', options: { A: '', B: '', C: '', D: '' }, answer: 'A', timeLimit: 30 }); refresh(); }
+      else { flash('Question added.'); setNq({ text: '', options: { A: '', B: '', C: '', D: '' }, answer: 'A', timeLimit: nq.kind === 'theory' ? 60 : 30, kind: nq.kind }); refresh(); }
     });
   };
 
@@ -140,18 +141,28 @@ export function HostTools({ sessionId, joinCode, questions }: { sessionId: strin
 
                 {/* Add single */}
                 <div style={card}>
-                  <div style={{ fontSize: 12, color: 'var(--text-dim)', marginBottom: 8, fontWeight: 800, letterSpacing: 1 }}>ADD ONE QUESTION</div>
-                  <input value={nq.text} onChange={(e) => setNq({ ...nq, text: e.target.value })} placeholder="Question text" style={{ ...input, marginBottom: 6 }} />
-                  {CHOICES.map((c) => (
-                    <div key={c} style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 6 }}>
-                      <button onClick={() => setNq({ ...nq, answer: c })} title="Mark correct" style={{ width: 30, ...btn(nq.answer === c ? 'var(--correct)' : '#2a2340') }}>{c}</button>
-                      <input value={nq.options[c]} onChange={(e) => setNq({ ...nq, options: { ...nq.options, [c]: e.target.value } })} placeholder={`Option ${c}`} style={input} />
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
+                    <div style={{ fontSize: 12, color: 'var(--text-dim)', fontWeight: 800, letterSpacing: 1 }}>ADD ONE QUESTION</div>
+                    <div style={{ display: 'flex', gap: 4 }}>
+                      <button onClick={() => setNq({ ...nq, kind: 'mcq' })} style={{ ...(nq.kind !== 'theory' ? btn('var(--primary)') : ghost), padding: '5px 10px', fontSize: 12 }}>Multiple choice</button>
+                      <button onClick={() => setNq({ ...nq, kind: 'theory' })} style={{ ...(nq.kind === 'theory' ? btn('var(--primary)') : ghost), padding: '5px 10px', fontSize: 12 }}>Theory (oral)</button>
                     </div>
-                  ))}
+                  </div>
+                  <input value={nq.text} onChange={(e) => setNq({ ...nq, text: e.target.value })} placeholder="Question text" style={{ ...input, marginBottom: 6 }} />
+                  {nq.kind === 'theory' ? (
+                    <textarea value={nq.solution ?? ''} onChange={(e) => setNq({ ...nq, solution: e.target.value })} rows={2} placeholder="Model answer (shown on reveal / to the host)" style={{ ...input, resize: 'vertical', marginBottom: 6 }} />
+                  ) : (
+                    CHOICES.map((c) => (
+                      <div key={c} style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 6 }}>
+                        <button onClick={() => setNq({ ...nq, answer: c })} title="Mark correct" style={{ width: 30, ...btn(nq.answer === c ? 'var(--correct)' : '#2a2340') }}>{c}</button>
+                        <input value={nq.options[c]} onChange={(e) => setNq({ ...nq, options: { ...nq.options, [c]: e.target.value } })} placeholder={`Option ${c}`} style={input} />
+                      </div>
+                    ))
+                  )}
                   <div style={{ display: 'flex', alignItems: 'center', gap: 8, margin: '4px 0 10px' }}>
                     <span style={{ fontSize: 12, color: 'var(--text-dim)' }}>Time (s)</span>
                     <input type="number" min={5} max={120} value={nq.timeLimit} onChange={(e) => setNq({ ...nq, timeLimit: Number(e.target.value) || 30 })} style={{ ...input, width: 80 }} />
-                    <span style={{ fontSize: 12, color: 'var(--text-dim)' }}>Correct: <b style={{ color: 'var(--accent)' }}>{nq.answer}</b></span>
+                    {nq.kind !== 'theory' && <span style={{ fontSize: 12, color: 'var(--text-dim)' }}>Correct: <b style={{ color: 'var(--accent)' }}>{nq.answer}</b></span>}
                   </div>
                   <button style={btn('var(--primary)')} disabled={pending} onClick={addOne}>+ Add question</button>
                 </div>
@@ -166,7 +177,7 @@ export function HostTools({ sessionId, joinCode, questions }: { sessionId: strin
                   <div style={{ display: 'grid', gap: 5 }}>
                     {questions.map((q, i) => (
                       <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 8, justifyContent: 'space-between', padding: '5px 8px', borderRadius: 8, background: 'rgba(255,255,255,.04)' }}>
-                        <span style={{ fontSize: 12, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{i + 1}. {q.text} <span style={{ color: 'var(--text-dim)' }}>({q.answer})</span></span>
+                        <span style={{ fontSize: 12, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{i + 1}. {q.text} <span style={{ color: 'var(--text-dim)' }}>{q.kind === 'theory' ? '(theory)' : `(${q.answer})`}</span></span>
                         <button style={{ ...ghost, padding: '4px 8px', color: 'var(--wrong)', borderColor: 'transparent' }} disabled={pending} onClick={() => start(async () => { await deleteQuestion(sessionId, i); refresh(); })}>✕</button>
                       </div>
                     ))}
