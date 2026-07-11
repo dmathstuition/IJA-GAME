@@ -26,16 +26,15 @@ const CHIPS = [
 ];
 const OPTS = [['A', 'x = 6'], ['B', 'x = 7'], ['C', 'x = 8'], ['D', 'x = 11']] as const;
 const LEADERS = [
-  ['Greenfield School', '9,840', true], ['Wisdom Academy', '9,750', true], ['King’s College', '9,600', false],
-  ['Royal Academy', '9,230', true], ['Bright Future School', '8,900', true],
+  ['Infant Jesus Academy', '9,840', true], ['DMaths Academy', '9,600', true],
 ] as const;
 const STATS = [
-  { i: <School size={22} />, c: PURPLE, n: '245 +', l: 'Schools Onboarded' },
+  { i: <School size={22} />, c: PURPLE, n: '2', l: 'Schools Onboarded' },
   { i: <Users size={22} />, c: ORANGE, n: '48,000 +', l: 'Students Engaged' },
   { i: <Gamepad2 size={22} />, c: PINK, n: '12,300 +', l: 'Games Played' },
   { i: <ShieldCheck size={22} />, c: GREEN, n: '99.99%', l: 'Uptime Guarantee' },
 ];
-const SCHOOLS = ['Greenfield School', 'Whyte Pyramid Academy', 'King’s College', 'Royal Academy', 'Wisdom Academy', 'Bright Future School'];
+const SCHOOLS = ['Infant Jesus Academy', 'DMaths Academy'];
 
 const FEATURES = [
   { i: <MonitorPlay size={22} />, c: ORANGE, t: 'Four game modes', d: 'Standard, Team Battle, Speed round and on-stage Quiz Bowl — one question bank, any format.' },
@@ -141,7 +140,7 @@ export default function Landing() {
           {/* LEFT */}
           <div>
             <div style={{ display: 'inline-flex', alignItems: 'center', gap: 10, background: 'rgba(255,255,255,.05)', border: '1px solid rgba(255,255,255,.1)', borderRadius: 999, padding: '9px 18px', fontWeight: 800, fontSize: 13, letterSpacing: 0.5 }}>
-              <Flame size={14} color={ORANGE} style={{ verticalAlign: '-2px', marginRight: 5 }} />125 SCHOOLS LIVE RIGHT NOW <span style={{ width: 9, height: 9, borderRadius: '50%', background: GREEN, animation: 'liveDot 1.5s infinite', boxShadow: `0 0 8px ${GREEN}` }} />
+              <Flame size={14} color={ORANGE} style={{ verticalAlign: '-2px', marginRight: 5 }} />LIVE QUIZZES RUNNING NOW <span style={{ width: 9, height: 9, borderRadius: '50%', background: GREEN, animation: 'liveDot 1.5s infinite', boxShadow: `0 0 8px ${GREEN}` }} />
             </div>
             <h1 style={{ fontSize: 'clamp(48px, 6.6vw, 92px)', fontWeight: 900, lineHeight: 0.98, letterSpacing: -2, margin: '22px 0 0' }}>
               <span style={{ background: `linear-gradient(100deg, ${ORANGE}, ${RED})`, WebkitBackgroundClip: 'text', backgroundClip: 'text', color: 'transparent' }}>Live Quiz</span><br />
@@ -165,9 +164,9 @@ export default function Landing() {
             </div>
             <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginTop: 26 }}>
               <div style={{ display: 'flex' }}>
-                {[PURPLE, ORANGE, PINK, GREEN].map((c, i) => <div key={i} style={{ width: 38, height: 38, borderRadius: '50%', background: `linear-gradient(135deg, ${c}, #222)`, border: '2px solid #080511', marginLeft: i ? -12 : 0, display: 'grid', placeItems: 'center', fontSize: 13, fontWeight: 800 }}>{'AKMS'[i]}</div>)}
+                {[ORANGE, PURPLE].map((c, i) => <div key={i} style={{ width: 38, height: 38, borderRadius: '50%', background: `linear-gradient(135deg, ${c}, #222)`, border: '2px solid #080511', marginLeft: i ? -12 : 0, display: 'grid', placeItems: 'center', fontSize: 13, fontWeight: 800 }}>{'ID'[i]}</div>)}
               </div>
-              <span style={{ color: '#a49db3', fontSize: 15 }}>Join <b style={{ color: ORANGE }}>245+</b> schools already competing</span>
+              <span style={{ color: '#a49db3', fontSize: 15 }}>Trusted by <b style={{ color: ORANGE }}>Infant Jesus Academy</b> &amp; <b style={{ color: ORANGE }}>DMaths Academy</b></span>
             </div>
           </div>
 
@@ -246,7 +245,7 @@ export default function Landing() {
             <div style={{ position: 'absolute', bottom: 0, left: 18, right: 8, display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 10, zIndex: 3 }}>
               <div style={{ ...card, padding: 12 }}>
                 <div style={{ fontSize: 11, fontWeight: 800, color: GOLD, marginBottom: 4 }}><Crown size={12} style={{ verticalAlign: '-2px', marginRight: 4 }} />Weekly Champions</div>
-                <div style={{ fontSize: 12, fontWeight: 700 }}>Greenfield School</div>
+                <div style={{ fontSize: 12, fontWeight: 700 }}>Infant Jesus Academy</div>
                 <div style={{ fontFamily: 'ui-monospace,monospace', fontWeight: 900, color: GOLD, fontSize: 18 }}>9,540 <span style={{ fontSize: 10, color: '#8b8296' }}>pts</span></div>
                 <div style={{ fontSize: 10, color: '#8b8296', marginTop: 2 }}>View all champions →</div>
               </div>
@@ -279,14 +278,13 @@ export default function Landing() {
         {/* TRUSTED BY */}
         <div style={{ ...card, padding: '20px 30px', marginBottom: 50 }}>
           <div style={{ textAlign: 'center', letterSpacing: 4, fontSize: 12, fontWeight: 800, color: '#8b8296', marginBottom: 18 }}>TRUSTED BY SCHOOLS WORLDWIDE</div>
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 20, flexWrap: 'wrap' }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 48, flexWrap: 'wrap' }}>
             {SCHOOLS.map((s, i) => (
-              <div key={s} style={{ display: 'flex', alignItems: 'center', gap: 10, opacity: 0.85 }}>
-                <svg width="34" height="40" viewBox="0 0 34 40"><path d="M17 2 L31 7 V20 C31 30 24 36 17 38 C10 36 3 30 3 20 V7 Z" fill={`${[PURPLE, ORANGE, GOLD, RED, PURPLE, GREEN][i]}33`} stroke={[PURPLE, ORANGE, GOLD, RED, PURPLE, GREEN][i]} strokeWidth="1.5" /><text x="17" y="24" textAnchor="middle" fontSize="12" fill="#fff" fontWeight="900">{s[0]}</text></svg>
-                <span style={{ fontWeight: 800, fontSize: 13, maxWidth: 90, lineHeight: 1.15 }}>{s.toUpperCase()}</span>
+              <div key={s} style={{ display: 'flex', alignItems: 'center', gap: 12, opacity: 0.9 }}>
+                <svg width="38" height="44" viewBox="0 0 34 40"><path d="M17 2 L31 7 V20 C31 30 24 36 17 38 C10 36 3 30 3 20 V7 Z" fill={`${[ORANGE, PURPLE][i]}33`} stroke={[ORANGE, PURPLE][i]} strokeWidth="1.5" /><text x="17" y="24" textAnchor="middle" fontSize="12" fill="#fff" fontWeight="900">{s[0]}</text></svg>
+                <span style={{ fontWeight: 800, fontSize: 15, lineHeight: 1.15 }}>{s.toUpperCase()}</span>
               </div>
             ))}
-            <div style={{ textAlign: 'center' }}><div style={{ fontWeight: 900, fontSize: 22, color: PINK }}>+200</div><div style={{ fontSize: 11, color: '#8b8296' }}>More Schools</div></div>
           </div>
         </div>
 
@@ -345,7 +343,7 @@ export default function Landing() {
               <a href="/signup" className="primaryCta" style={{ ...pill(`linear-gradient(135deg, ${ORANGE}, ${RED})`), padding: '14px 26px', fontSize: 15, textDecoration: 'none' }}>Start your free trial <ArrowRight size={16} /></a>
             </div>
             <div style={{ display: 'grid', gap: 12 }}>
-              {[['Greenfield School', 'Ran a 12-house championship for 480 students on one screen.', PURPLE, 'G'], ['King’s College', 'Weekly Friday quiz bowl — zero devices, full hall engaged.', ORANGE, 'K'], ['Wisdom Academy', 'Imported past exam questions as JSON and launched in minutes.', GREEN, 'W']].map(([name, quote, col, ltr]) => (
+              {[['Infant Jesus Academy', 'Runs inter-house championships for the whole hall on one screen.', ORANGE, 'I'], ['DMaths Academy', 'Weekly quiz bowls — zero devices, every group engaged.', PURPLE, 'D']].map(([name, quote, col, ltr]) => (
                 <div key={name as string} style={{ background: 'rgba(0,0,0,.25)', border: '1px solid rgba(255,255,255,.08)', borderRadius: 14, padding: 16, display: 'flex', gap: 14, alignItems: 'flex-start' }}>
                   <span style={{ width: 42, height: 42, borderRadius: 11, background: `linear-gradient(135deg, ${col}, #222)`, display: 'grid', placeItems: 'center', fontWeight: 900, flexShrink: 0 }}>{ltr}</span>
                   <div><div style={{ fontWeight: 800, fontSize: 14.5 }}>{name}</div><div style={{ color: '#a49db3', fontSize: 13.5, lineHeight: 1.5, marginTop: 2 }}>{quote}</div></div>
