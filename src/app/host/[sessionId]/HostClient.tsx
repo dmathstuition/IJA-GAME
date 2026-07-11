@@ -52,7 +52,7 @@ export function HostClient({ sessionId, joinCode, questions }: { sessionId: stri
           </div>
 
           {/* Current question + distribution */}
-          <div style={{ border: '1px solid rgba(255,255,255,.12)', borderRadius: 14, padding: 16, background: 'rgba(0,0,0,.25)' }}>
+          <div style={{ border: '1px solid rgba(255,255,255,.12)', borderRadius: 14, padding: 16, background: 'linear-gradient(160deg, rgba(30,20,45,.55), rgba(15,10,25,.7))' }}>
             <div style={{ fontSize: 12, color: 'var(--text-dim)' }}>{cq ? `Question ${qIndex + 1}` : 'No question live'}</div>
             <div style={{ fontSize: 18, fontWeight: 800, margin: '6px 0 12px' }}>{cq?.text ?? 'Launch a question below →'}</div>
             {cq && CHOICES.map((c, i) => {
@@ -73,7 +73,7 @@ export function HostClient({ sessionId, joinCode, questions }: { sessionId: stri
           </div>
 
           {/* Question bank */}
-          <div style={{ border: '1px solid rgba(255,255,255,.12)', borderRadius: 14, padding: 16, background: 'rgba(0,0,0,.25)' }}>
+          <div style={{ border: '1px solid rgba(255,255,255,.12)', borderRadius: 14, padding: 16, background: 'linear-gradient(160deg, rgba(30,20,45,.55), rgba(15,10,25,.7))' }}>
             <div style={{ fontSize: 12, color: 'var(--text-dim)', marginBottom: 8 }}>
               {questions && questions.length ? `QUESTION BANK · ${bank.length}` : 'SAMPLE QUESTION BANK (no set selected)'}
             </div>
@@ -91,7 +91,7 @@ export function HostClient({ sessionId, joinCode, questions }: { sessionId: stri
         </div>
 
         {/* Players */}
-        <aside style={{ border: '1px solid rgba(255,255,255,.12)', borderRadius: 14, padding: 14, background: 'rgba(0,0,0,.25)' }}>
+        <aside style={{ border: '1px solid rgba(255,255,255,.12)', borderRadius: 14, padding: 14, background: 'linear-gradient(160deg, rgba(30,20,45,.55), rgba(15,10,25,.7))' }}>
           <div style={{ fontSize: 12, color: 'var(--text-dim)', marginBottom: 8 }}>PLAYERS</div>
           {ranked.length === 0 && <p style={{ fontSize: 13, color: 'var(--text-dim)' }}>Waiting for players to join…</p>}
           {ranked.map((p) => (

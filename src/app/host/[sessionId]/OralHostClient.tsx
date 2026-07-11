@@ -55,7 +55,7 @@ export function OralHostClient({ sessionId, joinCode, questions }: { sessionId: 
       </div>
 
       {/* current question — host reads it */}
-      <div style={{ border: '1px solid rgba(255,255,255,.12)', borderRadius: 14, padding: 16, background: 'rgba(0,0,0,.25)', marginBottom: 12 }}>
+      <div style={{ border: '1px solid rgba(255,255,255,.12)', borderRadius: 14, padding: 16, background: 'linear-gradient(160deg, rgba(30,20,45,.55), rgba(15,10,25,.7))', marginBottom: 12 }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
           <div style={{ fontSize: 12, color: 'var(--text-dim)' }}>{cq ? `Q${qIndex + 1} · read to ${groups[active].name}${bonus ? ' (bonus)' : ''}` : 'No question live'}</div>
           {live && <div style={{ fontFamily: 'ui-monospace,monospace', fontWeight: 900, fontSize: 22, color: remaining <= 10 ? 'var(--wrong)' : 'var(--accent)' }}>{Math.ceil(remaining)}s</div>}
@@ -97,7 +97,7 @@ export function OralHostClient({ sessionId, joinCode, questions }: { sessionId: 
 
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 300px', gap: 12 }}>
         {/* bank */}
-        <div style={{ border: '1px solid rgba(255,255,255,.12)', borderRadius: 14, padding: 16, background: 'rgba(0,0,0,.25)' }}>
+        <div style={{ border: '1px solid rgba(255,255,255,.12)', borderRadius: 14, padding: 16, background: 'linear-gradient(160deg, rgba(30,20,45,.55), rgba(15,10,25,.7))' }}>
           <div style={{ fontSize: 12, color: 'var(--text-dim)', marginBottom: 8 }}>QUESTION BANK · {used.length}/{bank.length} used</div>
           {bank.length === 0 && <p style={{ fontSize: 13, color: 'var(--text-dim)' }}>No question set. Start Oral from a question bank.</p>}
           <div style={{ display: 'grid', gap: 6 }}>
@@ -110,7 +110,7 @@ export function OralHostClient({ sessionId, joinCode, questions }: { sessionId: 
           </div>
         </div>
         {/* group setup */}
-        <aside style={{ border: '1px solid rgba(255,255,255,.12)', borderRadius: 14, padding: 14, background: 'rgba(0,0,0,.25)' }}>
+        <aside style={{ border: '1px solid rgba(255,255,255,.12)', borderRadius: 14, padding: 14, background: 'linear-gradient(160deg, rgba(30,20,45,.55), rgba(15,10,25,.7))' }}>
           <div style={{ fontSize: 12, color: 'var(--text-dim)', marginBottom: 8 }}>GROUPS</div>
           <input value={g0} onChange={(e) => setG0(e.target.value)} placeholder={groups[0].name} style={{ width: '100%', padding: 8, borderRadius: 8, border: `1px solid ${GROUP_COLOR[0]}`, background: '#0c1018', color: '#fff', fontSize: 13, marginBottom: 6 }} />
           <input value={g1} onChange={(e) => setG1(e.target.value)} placeholder={groups[1].name} style={{ width: '100%', padding: 8, borderRadius: 8, border: `1px solid ${GROUP_COLOR[1]}`, background: '#0c1018', color: '#fff', fontSize: 13, marginBottom: 8 }} />

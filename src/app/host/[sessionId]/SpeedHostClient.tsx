@@ -61,7 +61,7 @@ export function SpeedHostClient({ sessionId, joinCode, questions }: { sessionId:
       </div>
 
       {/* Current runner */}
-      <div style={{ border: '1px solid rgba(255,255,255,.12)', borderRadius: 14, padding: 16, background: 'rgba(0,0,0,.25)', marginBottom: 12 }}>
+      <div style={{ border: '1px solid rgba(255,255,255,.12)', borderRadius: 14, padding: 16, background: 'linear-gradient(160deg, rgba(30,20,45,.55), rgba(15,10,25,.7))', marginBottom: 12 }}>
         <div style={{ fontSize: 12, color: 'var(--text-dim)', marginBottom: 6 }}>CURRENT RUNNER</div>
         {runner ? (
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
@@ -74,7 +74,7 @@ export function SpeedHostClient({ sessionId, joinCode, questions }: { sessionId:
 
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
         {/* Registered players */}
-        <div style={{ border: '1px solid rgba(255,255,255,.12)', borderRadius: 14, padding: 14, background: 'rgba(0,0,0,.25)' }}>
+        <div style={{ border: '1px solid rgba(255,255,255,.12)', borderRadius: 14, padding: 14, background: 'linear-gradient(160deg, rgba(30,20,45,.55), rgba(15,10,25,.7))' }}>
           <div style={{ fontSize: 12, color: 'var(--text-dim)', marginBottom: 8 }}>PLAYERS — CLICK ▶ TO LAUNCH</div>
           {players.length === 0 && <p style={{ fontSize: 13, color: 'var(--text-dim)' }}>No players yet.</p>}
           <div style={{ display: 'grid', gap: 5 }}>
@@ -87,7 +87,7 @@ export function SpeedHostClient({ sessionId, joinCode, questions }: { sessionId:
           </div>
         </div>
         {/* Results */}
-        <div style={{ border: '1px solid rgba(255,255,255,.12)', borderRadius: 14, padding: 14, background: 'rgba(0,0,0,.25)' }}>
+        <div style={{ border: '1px solid rgba(255,255,255,.12)', borderRadius: 14, padding: 14, background: 'linear-gradient(160deg, rgba(30,20,45,.55), rgba(15,10,25,.7))' }}>
           <div style={{ fontSize: 12, color: 'var(--text-dim)', marginBottom: 8 }}>RESULTS</div>
           {results.length === 0 && <p style={{ fontSize: 13, color: 'var(--text-dim)' }}>No runs completed yet.</p>}
           <div style={{ display: 'grid', gap: 4 }}>

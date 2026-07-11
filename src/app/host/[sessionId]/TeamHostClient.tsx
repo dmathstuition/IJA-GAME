@@ -62,7 +62,7 @@ export function TeamHostClient({ sessionId, joinCode, questions }: { sessionId: 
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 300px', gap: 16 }}>
         <div style={{ display: 'grid', gap: 12 }}>
           {/* Current question */}
-          <div style={{ border: '1px solid rgba(255,255,255,.12)', borderRadius: 14, padding: 16, background: 'rgba(0,0,0,.25)' }}>
+          <div style={{ border: '1px solid rgba(255,255,255,.12)', borderRadius: 14, padding: 16, background: 'linear-gradient(160deg, rgba(30,20,45,.55), rgba(15,10,25,.7))' }}>
             <div style={{ fontSize: 12, color: 'var(--text-dim)', marginBottom: 6 }}>{cq ? `Q${qIndex + 1} · for ${teams[active].name}${bonus ? ' (bonus)' : ''}` : 'No question live'}</div>
             <div style={{ fontSize: 18, fontWeight: 800, marginBottom: 10 }}>{cq?.text ?? 'Launch a question for the active team below →'}</div>
             {cq && (
@@ -93,7 +93,7 @@ export function TeamHostClient({ sessionId, joinCode, questions }: { sessionId: 
           </div>
 
           {/* Active team switch */}
-          <div style={{ border: '1px solid rgba(255,255,255,.12)', borderRadius: 14, padding: 14, background: 'rgba(0,0,0,.25)' }}>
+          <div style={{ border: '1px solid rgba(255,255,255,.12)', borderRadius: 14, padding: 14, background: 'linear-gradient(160deg, rgba(30,20,45,.55), rgba(15,10,25,.7))' }}>
             <div style={{ fontSize: 12, color: 'var(--text-dim)', marginBottom: 8 }}>ACTIVE TEAM</div>
             <div style={{ display: 'flex', gap: 8 }}>
               {teams.map((t, i) => (
@@ -103,7 +103,7 @@ export function TeamHostClient({ sessionId, joinCode, questions }: { sessionId: 
           </div>
 
           {/* Question bank */}
-          <div style={{ border: '1px solid rgba(255,255,255,.12)', borderRadius: 14, padding: 16, background: 'rgba(0,0,0,.25)' }}>
+          <div style={{ border: '1px solid rgba(255,255,255,.12)', borderRadius: 14, padding: 16, background: 'linear-gradient(160deg, rgba(30,20,45,.55), rgba(15,10,25,.7))' }}>
             <div style={{ fontSize: 12, color: 'var(--text-dim)', marginBottom: 8 }}>QUESTION BANK · {used.length}/{bank.length} used</div>
             {bank.length === 0 && <p style={{ fontSize: 13, color: 'var(--text-dim)' }}>This session has no question set. Start a Team Battle from a question bank.</p>}
             <div style={{ display: 'grid', gap: 6 }}>
@@ -118,7 +118,7 @@ export function TeamHostClient({ sessionId, joinCode, questions }: { sessionId: 
         </div>
 
         {/* Player assignment sidebar */}
-        <aside style={{ border: '1px solid rgba(255,255,255,.12)', borderRadius: 14, padding: 14, background: 'rgba(0,0,0,.25)' }}>
+        <aside style={{ border: '1px solid rgba(255,255,255,.12)', borderRadius: 14, padding: 14, background: 'linear-gradient(160deg, rgba(30,20,45,.55), rgba(15,10,25,.7))' }}>
           <div style={{ fontSize: 12, color: 'var(--text-dim)', marginBottom: 8 }}>TEAMS & PLAYERS</div>
           <div style={{ display: 'grid', gap: 6, marginBottom: 10 }}>
             <input value={n0} onChange={(e) => setN0(e.target.value)} placeholder={teams[0].name} style={{ padding: 8, borderRadius: 8, border: `1px solid ${TEAM_COLOR[0]}`, background: '#0c1018', color: '#fff', fontSize: 13 }} />
