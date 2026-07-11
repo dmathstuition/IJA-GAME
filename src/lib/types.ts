@@ -75,8 +75,9 @@ export interface OralGroup {
 }
 export interface OralModeState {
   bank: Question[];
-  groups: [OralGroup, OralGroup];
+  groups: OralGroup[]; // 2–6 groups compete quiz-bowl style (no devices)
   used: number[];
+  passCount?: number;
   lastResult: unknown;
 }
 
