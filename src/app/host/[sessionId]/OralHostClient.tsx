@@ -112,8 +112,8 @@ export function OralHostClient({ sessionId, joinCode, questions }: { sessionId: 
           <div style={{ marginBottom: 10 }}>
             <div style={{ fontSize: 12, color: 'var(--text-dim)', marginBottom: 6 }}>DID {groups[active]?.name?.toUpperCase() ?? 'THE GROUP'} ANSWER CORRECTLY?</div>
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 }}>
-              <button style={{ ...btn('var(--correct)'), padding: '14px 8px', fontSize: 16 }} disabled={pending} onClick={() => start(() => { markOralTheory(sessionId, true); })}>✓ Correct</button>
-              <button style={{ ...btn('var(--wrong)'), padding: '14px 8px', fontSize: 16 }} disabled={pending} onClick={() => start(() => { markOralTheory(sessionId, false); })}>✗ Wrong</button>
+              <button style={{ ...btn('var(--correct)'), padding: '14px 8px', fontSize: 16 }} disabled={pending} onClick={() => start(async () => { await markOralTheory(sessionId, true); })}>✓ Correct</button>
+              <button style={{ ...btn('var(--wrong)'), padding: '14px 8px', fontSize: 16 }} disabled={pending} onClick={() => start(async () => { await markOralTheory(sessionId, false); })}>✗ Wrong</button>
             </div>
           </div>
         )}
@@ -122,15 +122,15 @@ export function OralHostClient({ sessionId, joinCode, questions }: { sessionId: 
             <div style={{ fontSize: 12, color: 'var(--text-dim)', marginBottom: 6 }}>TAP THE ANSWER {groups[active]?.name?.toUpperCase() ?? 'THE GROUP'} GAVE</div>
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr 1fr', gap: 6 }}>
               {CHOICES.map((c) => (
-                <button key={c} style={{ ...btn(ANS_COLOR[c]), padding: '14px 8px', fontSize: 16 }} disabled={pending} onClick={() => start(() => { markOral(sessionId, c); })}>{c}. {cq.options[c]}</button>
+                <button key={c} style={{ ...btn(ANS_COLOR[c]), padding: '14px 8px', fontSize: 16 }} disabled={pending} onClick={() => start(async () => { await markOral(sessionId, c); })}>{c}. {cq.options[c]}</button>
               ))}
             </div>
           </div>
         )}
         <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
-          <button style={btn('#f97316')} disabled={pending || !cq} onClick={() => start(() => { skipOral(sessionId); })}><SkipForward size={14} style={{ verticalAlign: '-2px', marginRight: 5 }} />Skip</button>
-          <button style={btn('#7c3aed')} disabled={pending} onClick={() => start(() => { setState(sessionId, 'leaderboard'); })}><Trophy size={14} style={{ verticalAlign: '-2px', marginRight: 5 }} />Scores</button>
-          <button style={btn('var(--wrong)')} disabled={pending} onClick={() => start(() => { setState(sessionId, 'ended'); })}>End</button>
+          <button style={btn('#f97316')} disabled={pending || !cq} onClick={() => start(async () => { await skipOral(sessionId); })}><SkipForward size={14} style={{ verticalAlign: '-2px', marginRight: 5 }} />Skip</button>
+          <button style={btn('#7c3aed')} disabled={pending} onClick={() => start(async () => { await setState(sessionId, 'leaderboard'); })}><Trophy size={14} style={{ verticalAlign: '-2px', marginRight: 5 }} />Scores</button>
+          <button style={btn('var(--wrong)')} disabled={pending} onClick={() => start(async () => { await setState(sessionId, 'ended'); })}>End</button>
         </div>
       </div>
 
@@ -143,7 +143,7 @@ export function OralHostClient({ sessionId, joinCode, questions }: { sessionId: 
             {bank.map((q, i) => (
               <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 10, justifyContent: 'space-between', opacity: used.includes(i) ? 0.4 : 1 }}>
                 <span style={{ fontSize: 13 }}>{i + 1}. {q.text} {q.kind === 'theory' && <span style={{ fontSize: 10, fontWeight: 900, color: '#f59e0b' }}>THEORY</span>}</span>
-                <button style={btn('var(--correct)')} disabled={pending || live || used.includes(i)} onClick={() => start(() => { launchOralQuestion(sessionId, q, i); })}>{used.includes(i) ? 'Used' : `Read → ${groups[active]?.name ?? ''}`}</button>
+                <button style={btn('var(--correct)')} disabled={pending || live || used.includes(i)} onClick={() => start(async () => { await launchOralQuestion(sessionId, q, i); })}>{used.includes(i) ? 'Used' : `Read → ${groups[active]?.name ?? ''}`}</button>
               </div>
             ))}
           </div>
@@ -177,7 +177,7 @@ export function OralHostClient({ sessionId, joinCode, questions }: { sessionId: 
             {groups.map((g, i) => {
               const col = GROUP_COLOR[i % GROUP_COLOR.length];
               return (
-                <button key={i} style={{ ...btn(active === i ? col : 'transparent'), border: `1px solid ${col}`, padding: '8px 10px', fontSize: 13 }} disabled={pending || live} onClick={() => start(() => { setActiveGroup(sessionId, i); })}>{g.name}</button>
+                <button key={i} style={{ ...btn(active === i ? col : 'transparent'), border: `1px solid ${col}`, padding: '8px 10px', fontSize: 13 }} disabled={pending || live} onClick={() => start(async () => { await setActiveGroup(sessionId, i); })}>{g.name}</button>
               );
             })}
           </div>

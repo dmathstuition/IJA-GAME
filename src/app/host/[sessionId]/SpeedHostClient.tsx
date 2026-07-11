@@ -57,9 +57,9 @@ export function SpeedHostClient({ sessionId, joinCode, questions }: { sessionId:
       </header>
 
       <div style={{ display: 'flex', gap: 8, margin: '16px 0', flexWrap: 'wrap' }}>
-        <button style={btn('#7c3aed')} disabled={pending} onClick={() => start(() => { setState(sessionId, 'leaderboard'); })}><Trophy size={14} style={{ verticalAlign: '-2px', marginRight: 5 }} />Results</button>
-        <button style={btn('#f97316')} disabled={pending || !runnerId} onClick={() => start(() => { stopSpeed(sessionId); })}><Square size={13} fill="currentColor" style={{ verticalAlign: '-1px', marginRight: 5 }} />Stop runner</button>
-        <button style={btn('var(--wrong)')} disabled={pending} onClick={() => start(() => { setState(sessionId, 'ended'); })}>End</button>
+        <button style={btn('#7c3aed')} disabled={pending} onClick={() => start(async () => { await setState(sessionId, 'leaderboard'); })}><Trophy size={14} style={{ verticalAlign: '-2px', marginRight: 5 }} />Results</button>
+        <button style={btn('#f97316')} disabled={pending || !runnerId} onClick={() => start(async () => { await stopSpeed(sessionId); })}><Square size={13} fill="currentColor" style={{ verticalAlign: '-1px', marginRight: 5 }} />Stop runner</button>
+        <button style={btn('var(--wrong)')} disabled={pending} onClick={() => start(async () => { await setState(sessionId, 'ended'); })}>End</button>
       </div>
 
       {/* Current runner */}
@@ -83,7 +83,7 @@ export function SpeedHostClient({ sessionId, joinCode, questions }: { sessionId:
             {players.map((p) => (
               <div key={p.id} style={{ display: 'flex', alignItems: 'center', gap: 8, justifyContent: 'space-between', padding: '6px 8px', borderRadius: 8, background: 'rgba(255,255,255,.05)' }}>
                 <span style={{ fontSize: 14 }}>{p.name} {p.sp_state === 'done' && <span style={{ fontSize: 11, color: 'var(--correct)' }}>done</span>}{p.sp_state === 'running' && <span style={{ fontSize: 11, color: '#f97316' }}>running…</span>}</span>
-                <button style={btn(bank.length ? '#f97316' : '#555')} disabled={pending || !!runnerId || !bank.length} onClick={() => start(() => { startRunner(sessionId, p.id, p.name, bank[0]); })}><Play size={13} fill="currentColor" /></button>
+                <button style={btn(bank.length ? '#f97316' : '#555')} disabled={pending || !!runnerId || !bank.length} onClick={() => start(async () => { await startRunner(sessionId, p.id, p.name, bank[0]); })}><Play size={13} fill="currentColor" /></button>
               </div>
             ))}
           </div>

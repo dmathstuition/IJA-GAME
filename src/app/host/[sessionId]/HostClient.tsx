@@ -46,11 +46,11 @@ export function HostClient({ sessionId, joinCode, questions }: { sessionId: stri
         <div style={{ display: 'grid', gap: 12 }}>
           {/* Global controls */}
           <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
-            <button style={btn('var(--accent)')} disabled={pending} onClick={() => start(() => { revealCurrent(sessionId); })}>Reveal answer</button>
-            <button style={btn('#7c3aed')} disabled={pending} onClick={() => start(() => { setState(sessionId, 'leaderboard'); })}>Leaderboard</button>
-            <button style={btn('#334155')} disabled={pending} onClick={() => start(() => { setState(sessionId, 'lobby'); })}>Lobby</button>
+            <button style={btn('var(--accent)')} disabled={pending} onClick={() => start(async () => { await revealCurrent(sessionId); })}>Reveal answer</button>
+            <button style={btn('#7c3aed')} disabled={pending} onClick={() => start(async () => { await setState(sessionId, 'leaderboard'); })}>Leaderboard</button>
+            <button style={btn('#334155')} disabled={pending} onClick={() => start(async () => { await setState(sessionId, 'lobby'); })}>Lobby</button>
             <button style={btn('#0ea5e9')} disabled={players.length === 0} onClick={() => exportLeaderboard(joinCode, players)}><Download size={14} style={{ verticalAlign: '-2px', marginRight: 5 }} />CSV</button>
-            <button style={btn('var(--wrong)')} disabled={pending} onClick={() => start(() => { setState(sessionId, 'ended'); })}>End</button>
+            <button style={btn('var(--wrong)')} disabled={pending} onClick={() => start(async () => { await setState(sessionId, 'ended'); })}>End</button>
           </div>
 
           {/* Current question + distribution */}
@@ -83,7 +83,7 @@ export function HostClient({ sessionId, joinCode, questions }: { sessionId: stri
               {bank.map((q, i) => (
                 <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 10, justifyContent: 'space-between' }}>
                   <span style={{ fontSize: 13, opacity: qIndex === i ? 1 : 0.8 }}>{i + 1}. {q.text}</span>
-                  <button style={btn('var(--correct)')} disabled={pending} onClick={() => start(() => { launchQuestion(sessionId, q, i); })}>
+                  <button style={btn('var(--correct)')} disabled={pending} onClick={() => start(async () => { await launchQuestion(sessionId, q, i); })}>
                     {qIndex === i ? 'Relaunch' : 'Launch'}
                   </button>
                 </div>

@@ -109,3 +109,7 @@
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: 0.001ms !important; animation-iteration-count: 1 !important; transition-duration: 0.001ms !important; }
 }
+
+/* Instant click feedback: any control that is busy dims and shows a wait cursor. */
+button:disabled { opacity: 0.55; cursor: wait; }
+button:not(:disabled):active { transform: scale(0.97); }

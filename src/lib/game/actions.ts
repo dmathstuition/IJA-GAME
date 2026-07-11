@@ -3,8 +3,7 @@
 import { createClient } from '@/lib/supabase/server';
 import type { Question, Choice } from '@/lib/types';
 
-const CORRECT_POINTS = 10;
-const SPEED_BONUS = 5;
+// Scoring constants live in the score_reveal() SQL function (10 + up to 5 speed).
 
 function code() {
   return Math.random().toString(36).slice(2, 8).toUpperCase();
@@ -37,22 +36,26 @@ export async function createSession(
 /** Launch a question live: everyone's timer starts from the same server anchor. */
 export async function launchQuestion(sessionId: string, question: Question, qIndex: number) {
   const supabase = await createClient();
-  const { error } = await supabase
-    .from('game_sessions')
-    .update({
-      state: 'question_active',
-      current_q_index: qIndex,
-      current_question: { ...question, qIndex, startTime: Date.now() } as unknown as never,
-    })
-    .eq('id', sessionId);
-  if (error) return { error: error.message };
-
-  // Reset answer flags for the new round.
-  await supabase.from('players').update({ answered: false, last_answer: null }).eq('session_id', sessionId);
-  return { ok: true };
+  // Both writes are independent — run them in one round of parallel queries.
+  const [{ error }] = await Promise.all([
+    supabase
+      .from('game_sessions')
+      .update({
+        state: 'question_active',
+        current_q_index: qIndex,
+        current_question: { ...question, qIndex, startTime: Date.now() } as unknown as never,
+      })
+      .eq('id', sessionId),
+    supabase.from('players').update({ answered: false, last_answer: null }).eq('session_id', sessionId),
+  ]);
+  return error ? { error: error.message } : { ok: true };
 }
 
-/** Score the current question and reveal the answer. */
+/**
+ * Score the current question and reveal the answer. All scoring runs inside
+ * one score_reveal() SQL call (10 base + up to 5 speed bonus per player) —
+ * the old app-side loop was 3 queries per player and lagged with a full class.
+ */
 export async function revealCurrent(sessionId: string) {
   const supabase = await createClient();
   const { data: session } = await supabase
@@ -63,40 +66,19 @@ export async function revealCurrent(sessionId: string) {
 
   const cq = session?.current_question as unknown as (Question & { qIndex: number; startTime?: number }) | null;
   const qIndex = session?.current_q_index ?? -1;
-  if (cq && qIndex >= 0) {
-    const answer = cq.answer as Choice;
-    const startTime = cq.startTime ?? 0;
-    const timeLimit = (cq.timeLimit ?? 30) * 1000;
-    const { data: answers } = await supabase
-      .from('round_answers')
-      .select('id, player_id, choice, answered_at')
-      .eq('session_id', sessionId)
-      .eq('q_index', qIndex);
-
-    for (const a of answers ?? []) {
-      const correct = a.choice === answer;
-      await supabase.from('round_answers').update({ is_correct: correct }).eq('id', a.id);
-      if (correct) {
-        // Time-based scoring (ported from the original): 10 base + up to 5 for speed.
-        let pts = CORRECT_POINTS;
-        if (startTime && a.answered_at && timeLimit > 0) {
-          const taken = new Date(a.answered_at).getTime() - startTime;
-          const frac = Math.min(Math.max(taken / timeLimit, 0), 1);
-          pts += Math.round((1 - frac) * SPEED_BONUS);
-        }
-        const { data: p } = await supabase.from('players').select('score').eq('id', a.player_id).single();
-        await supabase
-          .from('players')
-          .update({ score: (p?.score ?? 0) + pts, last_correct: true })
-          .eq('id', a.player_id);
-      } else {
-        await supabase.from('players').update({ last_correct: false }).eq('id', a.player_id);
-      }
-    }
+  if (!cq || qIndex < 0) {
+    await supabase.from('game_sessions').update({ state: 'reveal' }).eq('id', sessionId);
+    return { ok: true };
   }
 
-  await supabase.from('game_sessions').update({ state: 'reveal' }).eq('id', sessionId);
-  return { ok: true };
+  const { error } = await supabase.rpc('score_reveal', {
+    p_session: sessionId,
+    p_q_index: qIndex,
+    p_answer: cq.answer as Choice,
+    p_start_ms: cq.startTime ?? 0,
+    p_limit_ms: (cq.timeLimit ?? 30) * 1000,
+  });
+  return error ? { error: error.message } : { ok: true };
 }
 
 /** Permanently delete a session (players and answers cascade with it). */
