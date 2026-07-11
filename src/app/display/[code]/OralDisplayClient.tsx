@@ -52,23 +52,36 @@ export function OralDisplayClient({ sessionId, joinCode, schoolName, animation }
           <div className="qcard" style={{ width: '100%', marginBottom: 14, textAlign: 'center' }}><div style={{ fontSize: 'clamp(26px,4vw,44px)', fontWeight: 900 }}>{cq.text}</div></div>
           {state === 'reveal' && ms.lastResult && (
             <div className="pop-in" style={{ marginBottom: 14, fontSize: 'clamp(18px,2.4vw,26px)', fontWeight: 900, color: ms.lastResult.correct ? 'var(--correct)' : 'var(--wrong)' }}>
-              {ms.lastResult.groupName} answered <b>{ms.lastResult.chosen}</b> — {ms.lastResult.correct ? `Correct! +${ms.lastResult.points}` : ms.lastResult.outcome === 'passed' ? 'Wrong — passed to the other group' : `Wrong — the answer was ${ms.lastResult.answer}`}
+              {ms.lastResult.groupName} {ms.lastResult.chosen ? <>answered <b>{ms.lastResult.chosen}</b></> : 'answered'} — {ms.lastResult.correct ? `Correct! +${ms.lastResult.points}` : ms.lastResult.outcome === 'passed' ? 'Wrong — passed to the other group' : cq.kind === 'theory' ? 'Wrong' : `Wrong — the answer was ${ms.lastResult.answer}`}
             </div>
           )}
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12, width: '100%' }}>
-            {CHOICES.map((c) => {
-              const chosen = ms.lastResult?.chosen;
-              const isCorrect = cq.answer === c;
-              const isChosen = state === 'reveal' && chosen === c;
-              const tileState = state === 'reveal' ? (isCorrect ? 'reveal-correct' : isChosen ? 'idle' : 'reveal-wrong') : 'idle';
-              return (
-                <div key={c} style={{ position: 'relative', borderRadius: 18, outline: isChosen && !isCorrect ? '3px solid var(--wrong)' : 'none' }}>
-                  <AnswerTile choice={c} label={cq.options[c]} state={tileState} />
-                  {isChosen && <span style={{ position: 'absolute', top: 10, right: 14, background: isCorrect ? 'var(--correct)' : 'var(--wrong)', padding: '3px 12px', borderRadius: 999, fontSize: 13, fontWeight: 800 }}>Learner {isCorrect ? '✓' : '✗'}</span>}
+          {cq.kind === 'theory' ? (
+            <div style={{ width: '100%', textAlign: 'center' }}>
+              {state === 'question_active' ? (
+                <div style={{ fontSize: 'clamp(18px,2.6vw,28px)', color: 'var(--text-dim)', fontWeight: 700 }}>🎤 The learner answers aloud…</div>
+              ) : (
+                <div className="qcard pop-in" style={{ padding: '20px 24px', border: '2px solid var(--correct)' }}>
+                  <div style={{ fontSize: 13, letterSpacing: 2, color: 'var(--correct)', fontWeight: 900, marginBottom: 6 }}>MODEL ANSWER</div>
+                  <div style={{ fontSize: 'clamp(20px,3vw,32px)', fontWeight: 800 }}>{cq.solution || '—'}</div>
                 </div>
-              );
-            })}
-          </div>
+              )}
+            </div>
+          ) : (
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12, width: '100%' }}>
+              {CHOICES.map((c) => {
+                const chosen = ms.lastResult?.chosen;
+                const isCorrect = cq.answer === c;
+                const isChosen = state === 'reveal' && chosen === c;
+                const tileState = state === 'reveal' ? (isCorrect ? 'reveal-correct' : isChosen ? 'idle' : 'reveal-wrong') : 'idle';
+                return (
+                  <div key={c} style={{ position: 'relative', borderRadius: 18, outline: isChosen && !isCorrect ? '3px solid var(--wrong)' : 'none' }}>
+                    <AnswerTile choice={c} label={cq.options[c]} state={tileState} />
+                    {isChosen && <span style={{ position: 'absolute', top: 10, right: 14, background: isCorrect ? 'var(--correct)' : 'var(--wrong)', padding: '3px 12px', borderRadius: 999, fontSize: 13, fontWeight: 800 }}>Learner {isCorrect ? '✓' : '✗'}</span>}
+                  </div>
+                );
+              })}
+            </div>
+          )}
         </main>
       ) : state === 'leaderboard' || state === 'ended' ? (
         <main style={shell}>

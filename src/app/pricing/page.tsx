@@ -8,7 +8,7 @@ export default function PricingPage() {
       <div style={{ maxWidth: 900, margin: '0 auto', textAlign: 'center' }}>
         <p style={{ color: 'var(--accent)', letterSpacing: 3, fontWeight: 800, fontSize: 12 }}>PRICING</p>
         <h1 style={{ fontSize: 'clamp(30px,5vw,48px)', color: 'var(--accent)', margin: '8px 0 6px' }}>Plans for every school</h1>
-        <p style={{ color: 'var(--text-dim)', marginBottom: 40 }}>Every plan starts with a 14-day free trial. Cancel anytime.</p>
+        <p style={{ color: 'var(--text-dim)', marginBottom: 40 }}>Start with a 14-day free trial. Pay once with PayPal to keep hosting — no subscription, no card stored.</p>
 
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(240px,1fr))', gap: 16, textAlign: 'left' }}>
           {PLANS.map((plan) => (
@@ -20,10 +20,10 @@ export default function PricingPage() {
                   <li key={f} style={{ fontSize: 14, color: 'var(--text-dim)' }}>+ {f}</li>
                 ))}
               </ul>
-              <form action="/api/stripe/checkout" method="post">
+              <form action="/api/paypal/create-order" method="post">
                 <input type="hidden" name="plan" value={plan.id} />
                 <button style={{ width: '100%', padding: '12px', borderRadius: 10, border: 'none', background: plan.featured ? 'var(--accent)' : 'var(--primary)', color: plan.featured ? '#1a0006' : '#fff', fontWeight: 800, fontSize: 15, cursor: 'pointer' }}>
-                  Choose {plan.name}
+                  Pay with PayPal
                 </button>
               </form>
             </div>

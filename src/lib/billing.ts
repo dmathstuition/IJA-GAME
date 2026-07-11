@@ -1,41 +1,54 @@
-// Plan catalogue — the source of truth for pricing UI and checkout.
-// Price IDs come from Stripe (create the products/prices, then set the env vars).
+// Plan catalogue — the source of truth for pricing UI and PayPal checkout.
+// One-time activation model: a school pays once to unlock live hosting for a
+// period (durationDays), rather than a recurring subscription.
 export interface Plan {
-  id: 'starter' | 'school';
+  id: 'term' | 'annual';
   name: string;
-  price: string;
-  cadence: string;
-  priceEnv: string; // env var holding the Stripe price id
+  price: string; // display string
+  amount: string; // PayPal amount, e.g. "99.00"
+  currency: string;
+  cadence: string; // display, e.g. "per term"
+  durationDays: number; // how long the activation lasts
   features: string[];
   featured?: boolean;
 }
 
+export const CURRENCY = process.env.NEXT_PUBLIC_PAYPAL_CURRENCY ?? 'USD';
+
 export const PLANS: Plan[] = [
   {
-    id: 'starter',
-    name: 'Starter',
-    price: '$19',
-    cadence: '/month',
-    priceEnv: 'STRIPE_PRICE_STARTER',
-    features: ['Standard + Speed modes', 'Up to 60 players', '1 theme preset'],
+    id: 'term',
+    name: 'Term pass',
+    price: '$99',
+    amount: '99.00',
+    currency: CURRENCY,
+    cadence: 'one-time · 120 days',
+    durationDays: 120,
+    features: ['All 4 game modes', 'Up to 120 players', 'JSON import & exports'],
   },
   {
-    id: 'school',
-    name: 'School',
-    price: '$49',
-    cadence: '/month',
-    priceEnv: 'STRIPE_PRICE_SCHOOL',
-    features: ['All 4 game modes', 'Up to 200 players', 'Custom branding', 'CSV + PDF exports'],
+    id: 'annual',
+    name: 'Annual',
+    price: '$249',
+    amount: '249.00',
+    currency: CURRENCY,
+    cadence: 'one-time · 365 days',
+    durationDays: 365,
+    features: ['All 4 game modes', 'Up to 250 players', 'Custom branding', 'Priority email support'],
     featured: true,
   },
 ];
 
-export function priceIdFor(planId: string): string | undefined {
-  const plan = PLANS.find((p) => p.id === planId);
-  return plan ? process.env[plan.priceEnv] : undefined;
+export function planById(planId: string): Plan | undefined {
+  return PLANS.find((p) => p.id === planId);
 }
 
-/** A school can host a live game only while trialing or paid-up. */
-export function canHostLive(status: string | null | undefined): boolean {
-  return status === 'trialing' || status === 'active';
+/** A school can host a live game while trialing or paid-up (not expired). */
+export function canHostLive(status: string | null | undefined, paidUntil?: string | null): boolean {
+  if (status === 'trialing') return true;
+  if (status === 'active') {
+    if (!paidUntil) return true;
+    return new Date(paidUntil).getTime() > Date.now();
+  }
+  return false;
 }

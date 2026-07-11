@@ -5,7 +5,8 @@ import { useState, useTransition } from 'react';
 import { useRealtimeSession } from '@/lib/game/useRealtimeSession';
 import { useCountdown } from '@/components/game/useCountdown';
 import { setState } from '@/lib/game/actions';
-import { setGroupNames, setActiveGroup, launchOralQuestion, markOral, skipOral } from '@/lib/game/oral';
+import { setGroupNames, setActiveGroup, launchOralQuestion, markOral, markOralTheory, skipOral } from '@/lib/game/oral';
+import { HostTools } from '@/components/game/HostTools';
 import type { Question, Choice } from '@/lib/types';
 
 const CHOICES: Choice[] = ['A', 'B', 'C', 'D'];
@@ -60,8 +61,16 @@ export function OralHostClient({ sessionId, joinCode, questions }: { sessionId: 
           <div style={{ fontSize: 12, color: 'var(--text-dim)' }}>{cq ? `Q${qIndex + 1} · read to ${groups[active].name}${bonus ? ' (bonus)' : ''}` : 'No question live'}</div>
           {live && <div style={{ fontFamily: 'ui-monospace,monospace', fontWeight: 900, fontSize: 22, color: remaining <= 10 ? 'var(--wrong)' : 'var(--accent)' }}>{Math.ceil(remaining)}s</div>}
         </div>
-        <div style={{ fontSize: 18, fontWeight: 800, marginBottom: 8 }}>{cq?.text ?? 'Launch a question for the active group below →'}</div>
-        {cq && (
+        <div style={{ fontSize: 18, fontWeight: 800, marginBottom: 8 }}>
+          {cq?.kind === 'theory' && <span style={{ fontSize: 11, fontWeight: 900, color: '#f59e0b', border: '1px solid #f59e0b', borderRadius: 6, padding: '2px 6px', marginRight: 8, verticalAlign: 'middle' }}>THEORY</span>}
+          {cq?.text ?? 'Launch a question for the active group below →'}
+        </div>
+        {cq && cq.kind === 'theory' && (
+          <div style={{ padding: '8px 12px', borderRadius: 8, fontSize: 13, marginBottom: 10, border: '1px solid var(--correct)', background: 'rgba(34,197,94,.1)' }}>
+            <span style={{ color: 'var(--correct)', fontWeight: 800, fontSize: 11 }}>MODEL ANSWER (host only) </span>{cq.solution || '—'}
+          </div>
+        )}
+        {cq && cq.kind !== 'theory' && (
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 6, marginBottom: 10 }}>
             {CHOICES.map((c) => (
               <div key={c} style={{ padding: '7px 10px', borderRadius: 8, fontSize: 13, border: `1px solid ${cq.answer === c ? 'var(--correct)' : 'rgba(255,255,255,.1)'}`, background: cq.answer === c ? 'rgba(34,197,94,.12)' : 'rgba(0,0,0,.2)' }}>
@@ -72,13 +81,22 @@ export function OralHostClient({ sessionId, joinCode, questions }: { sessionId: 
         )}
         {ms.lastResult && state === 'reveal' && (
           <div style={{ fontSize: 13, fontWeight: 700, marginBottom: 8, color: ms.lastResult.correct ? 'var(--correct)' : 'var(--wrong)' }}>
-            {ms.lastResult.groupName} picked <b>{ms.lastResult.chosen}</b> —{' '}
+            {ms.lastResult.groupName} {ms.lastResult.chosen ? <>picked <b>{ms.lastResult.chosen}</b></> : 'answered'} —{' '}
             {ms.lastResult.outcome === 'correct' && `✓ Correct! +${ms.lastResult.points}`}
             {ms.lastResult.outcome === 'passed' && `✗ wrong, passed to the other group`}
-            {ms.lastResult.outcome === 'both_missed' && `✗ wrong — answer was ${ms.lastResult.answer}`}
+            {ms.lastResult.outcome === 'both_missed' && (ms.lastResult.kind === 'theory' ? `✗ wrong` : `✗ wrong — answer was ${ms.lastResult.answer}`)}
           </div>
         )}
-        {live && (
+        {live && cq?.kind === 'theory' && (
+          <div style={{ marginBottom: 10 }}>
+            <div style={{ fontSize: 12, color: 'var(--text-dim)', marginBottom: 6 }}>DID THE LEARNER ANSWER CORRECTLY?</div>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 }}>
+              <button style={{ ...btn('var(--correct)'), padding: '14px 8px', fontSize: 16 }} disabled={pending} onClick={() => start(() => { markOralTheory(sessionId, true); })}>✓ Correct</button>
+              <button style={{ ...btn('var(--wrong)'), padding: '14px 8px', fontSize: 16 }} disabled={pending} onClick={() => start(() => { markOralTheory(sessionId, false); })}>✗ Wrong</button>
+            </div>
+          </div>
+        )}
+        {live && cq?.kind !== 'theory' && (
           <div style={{ marginBottom: 10 }}>
             <div style={{ fontSize: 12, color: 'var(--text-dim)', marginBottom: 6 }}>TAP THE ANSWER THE LEARNER GAVE</div>
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr 1fr', gap: 6 }}>
@@ -103,7 +121,7 @@ export function OralHostClient({ sessionId, joinCode, questions }: { sessionId: 
           <div style={{ display: 'grid', gap: 6 }}>
             {bank.map((q, i) => (
               <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 10, justifyContent: 'space-between', opacity: used.includes(i) ? 0.4 : 1 }}>
-                <span style={{ fontSize: 13 }}>{i + 1}. {q.text}</span>
+                <span style={{ fontSize: 13 }}>{i + 1}. {q.text} {q.kind === 'theory' && <span style={{ fontSize: 10, fontWeight: 900, color: '#f59e0b' }}>THEORY</span>}</span>
                 <button style={btn('var(--correct)')} disabled={pending || live || used.includes(i)} onClick={() => start(() => { launchOralQuestion(sessionId, q, i); })}>{used.includes(i) ? 'Used' : `Read → ${groups[active].name}`}</button>
               </div>
             ))}
@@ -124,6 +142,7 @@ export function OralHostClient({ sessionId, joinCode, questions }: { sessionId: 
         </aside>
       </div>
       <p style={{ marginTop: 12, fontSize: 12, color: 'var(--text-dim)' }}>Projector: <code>/display/{joinCode}</code> — the audience sees the question; you judge each group&apos;s spoken answer.</p>
+      <HostTools sessionId={sessionId} joinCode={joinCode} questions={questions ?? []} />
     </main>
   );
 }

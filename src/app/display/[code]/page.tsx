@@ -5,6 +5,7 @@ import { DisplayClient } from './DisplayClient';
 import { TeamDisplayClient } from './TeamDisplayClient';
 import { SpeedDisplayClient } from './SpeedDisplayClient';
 import { OralDisplayClient } from './OralDisplayClient';
+import { BroadcastBanner } from '@/components/game/BroadcastBanner';
 
 export default async function DisplayPage({ params }: { params: Promise<{ code: string }> }) {
   const { code } = await params;
@@ -24,6 +25,7 @@ export default async function DisplayPage({ params }: { params: Promise<{ code: 
 
   return (
     <div style={{ ...(themeToCssVars(theme) as React.CSSProperties), minHeight: '100vh', background: 'linear-gradient(160deg,var(--bg-from),var(--bg-to))' }}>
+      <BroadcastBanner sessionId={session.id} />
       {session.mode === 'team' ? <TeamDisplayClient {...shared} /> : session.mode === 'speed' ? <SpeedDisplayClient {...shared} /> : session.mode === 'oral' ? <OralDisplayClient {...shared} /> : <DisplayClient {...shared} />}
     </div>
   );

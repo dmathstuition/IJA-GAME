@@ -22,6 +22,11 @@ export interface Question {
   options: Record<Choice, string>;
   answer: Choice;
   timeLimit: number; // seconds
+  // Oral "theory" questions have no A–D options: the learner answers aloud and
+  // the host judges it. `kind` defaults to 'mcq' when omitted; `solution` holds
+  // the model answer shown on reveal.
+  kind?: 'mcq' | 'theory';
+  solution?: string;
 }
 
 /** A question as it sits live on the session (with server clock anchor). */
