@@ -5,6 +5,7 @@ import { PlayClient } from './PlayClient';
 import { TeamPlayClient } from './TeamPlayClient';
 import { SpeedPlayClient } from './SpeedPlayClient';
 import { OralPlayClient } from './OralPlayClient';
+import { BroadcastBanner } from '@/components/game/BroadcastBanner';
 
 export default async function PlayPage({ params }: { params: Promise<{ code: string }> }) {
   const { code } = await params;
@@ -23,6 +24,7 @@ export default async function PlayPage({ params }: { params: Promise<{ code: str
 
   return (
     <div style={{ ...(themeToCssVars(theme) as React.CSSProperties), minHeight: '100vh', background: 'linear-gradient(160deg,var(--bg-from),var(--bg-to))' }}>
+      <BroadcastBanner sessionId={session.id} />
       {session.mode === 'team' ? (
         <TeamPlayClient sessionId={session.id} orgId={session.org_id} schoolName={org?.name ?? 'Quiz'} animation={theme.animation} />
       ) : session.mode === 'speed' ? (

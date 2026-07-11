@@ -6,6 +6,7 @@ import { useRealtimeSession } from '@/lib/game/useRealtimeSession';
 import { useCountdown } from '@/components/game/useCountdown';
 import { setState } from '@/lib/game/actions';
 import { setGroupNames, setActiveGroup, launchOralQuestion, markOral, skipOral } from '@/lib/game/oral';
+import { HostTools } from '@/components/game/HostTools';
 import type { Question, Choice } from '@/lib/types';
 
 const CHOICES: Choice[] = ['A', 'B', 'C', 'D'];
@@ -124,6 +125,7 @@ export function OralHostClient({ sessionId, joinCode, questions }: { sessionId: 
         </aside>
       </div>
       <p style={{ marginTop: 12, fontSize: 12, color: 'var(--text-dim)' }}>Projector: <code>/display/{joinCode}</code> — the audience sees the question; you judge each group&apos;s spoken answer.</p>
+      <HostTools sessionId={sessionId} joinCode={joinCode} questions={questions ?? []} />
     </main>
   );
 }

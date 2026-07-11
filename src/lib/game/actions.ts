@@ -4,6 +4,7 @@ import { createClient } from '@/lib/supabase/server';
 import type { Question, Choice } from '@/lib/types';
 
 const CORRECT_POINTS = 10;
+const SPEED_BONUS = 5;
 
 function code() {
   return Math.random().toString(36).slice(2, 8).toUpperCase();
@@ -60,13 +61,15 @@ export async function revealCurrent(sessionId: string) {
     .eq('id', sessionId)
     .single();
 
-  const cq = session?.current_question as unknown as (Question & { qIndex: number }) | null;
+  const cq = session?.current_question as unknown as (Question & { qIndex: number; startTime?: number }) | null;
   const qIndex = session?.current_q_index ?? -1;
   if (cq && qIndex >= 0) {
     const answer = cq.answer as Choice;
+    const startTime = cq.startTime ?? 0;
+    const timeLimit = (cq.timeLimit ?? 30) * 1000;
     const { data: answers } = await supabase
       .from('round_answers')
-      .select('id, player_id, choice')
+      .select('id, player_id, choice, answered_at')
       .eq('session_id', sessionId)
       .eq('q_index', qIndex);
 
@@ -74,10 +77,17 @@ export async function revealCurrent(sessionId: string) {
       const correct = a.choice === answer;
       await supabase.from('round_answers').update({ is_correct: correct }).eq('id', a.id);
       if (correct) {
+        // Time-based scoring (ported from the original): 10 base + up to 5 for speed.
+        let pts = CORRECT_POINTS;
+        if (startTime && a.answered_at && timeLimit > 0) {
+          const taken = new Date(a.answered_at).getTime() - startTime;
+          const frac = Math.min(Math.max(taken / timeLimit, 0), 1);
+          pts += Math.round((1 - frac) * SPEED_BONUS);
+        }
         const { data: p } = await supabase.from('players').select('score').eq('id', a.player_id).single();
         await supabase
           .from('players')
-          .update({ score: (p?.score ?? 0) + CORRECT_POINTS, last_correct: true })
+          .update({ score: (p?.score ?? 0) + pts, last_correct: true })
           .eq('id', a.player_id);
       } else {
         await supabase.from('players').update({ last_correct: false }).eq('id', a.player_id);

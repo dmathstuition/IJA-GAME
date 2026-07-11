@@ -5,6 +5,7 @@ import { useState, useTransition } from 'react';
 import { useRealtimeSession } from '@/lib/game/useRealtimeSession';
 import { setState } from '@/lib/game/actions';
 import { setTeamNames, assignPlayer, autoAssignTeams, setActiveTeam, launchTeamQuestion, revealTeam, skipTeamQuestion } from '@/lib/game/team';
+import { HostTools } from '@/components/game/HostTools';
 import type { Question, Choice } from '@/lib/types';
 
 const CHOICES: Choice[] = ['A', 'B', 'C', 'D'];
@@ -144,6 +145,7 @@ export function TeamHostClient({ sessionId, joinCode, questions }: { sessionId: 
       </div>
 
       <p style={{ marginTop: 14, fontSize: 12, color: 'var(--text-dim)' }}>Projector: <code>/display/{joinCode}</code> · Players: <code>/play/{joinCode}</code></p>
+      <HostTools sessionId={sessionId} joinCode={joinCode} questions={questions ?? []} />
     </main>
   );
 }

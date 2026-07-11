@@ -4,6 +4,7 @@ import { useTransition } from 'react';
 import { useRealtimeSession } from '@/lib/game/useRealtimeSession';
 import { launchQuestion, revealCurrent, setState } from '@/lib/game/actions';
 import { exportLeaderboard } from '@/lib/game/exportCsv';
+import { HostTools } from '@/components/game/HostTools';
 import { SAMPLE_QUESTIONS } from '@/lib/game/sample';
 import type { Choice, Question } from '@/lib/types';
 
@@ -107,6 +108,7 @@ export function HostClient({ sessionId, joinCode, questions }: { sessionId: stri
       <p style={{ marginTop: 16, fontSize: 12, color: 'var(--text-dim)' }}>
         Projector: <code>/display/{joinCode}</code> · Players: <code>/play/{joinCode}</code>
       </p>
+      <HostTools sessionId={sessionId} joinCode={joinCode} questions={questions ?? []} />
     </main>
   );
 }

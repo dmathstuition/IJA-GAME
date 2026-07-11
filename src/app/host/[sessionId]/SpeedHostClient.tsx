@@ -5,6 +5,7 @@ import { useEffect, useRef, useTransition } from 'react';
 import { useRealtimeSession } from '@/lib/game/useRealtimeSession';
 import { setState } from '@/lib/game/actions';
 import { startRunner, advanceSpeed, stopSpeed } from '@/lib/game/speed';
+import { HostTools } from '@/components/game/HostTools';
 import type { Question } from '@/lib/types';
 
 const SPEED_SECS = 15;
@@ -104,6 +105,7 @@ export function SpeedHostClient({ sessionId, joinCode, questions }: { sessionId:
 
       {bank.length === 0 && <p style={{ marginTop: 12, fontSize: 13, color: 'var(--wrong)' }}>This session has no question set. Start Speed from a question bank.</p>}
       <p style={{ marginTop: 12, fontSize: 12, color: 'var(--text-dim)' }}>Projector: <code>/display/{joinCode}</code> · Players: <code>/play/{joinCode}</code></p>
+      <HostTools sessionId={sessionId} joinCode={joinCode} questions={questions ?? []} />
     </main>
   );
 }
