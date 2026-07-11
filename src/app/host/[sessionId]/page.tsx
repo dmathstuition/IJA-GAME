@@ -6,6 +6,7 @@ import { HostClient } from './HostClient';
 import { TeamHostClient } from './TeamHostClient';
 import { SpeedHostClient } from './SpeedHostClient';
 import { OralHostClient } from './OralHostClient';
+import { HostShell } from '@/components/HostShell';
 
 export default async function HostPage({ params }: { params: Promise<{ sessionId: string }> }) {
   const { sessionId } = await params;
@@ -29,16 +30,18 @@ export default async function HostPage({ params }: { params: Promise<{ sessionId
   }
 
   return (
-    <div style={{ ...(themeToCssVars(theme) as React.CSSProperties), minHeight: '100vh', background: 'linear-gradient(160deg,var(--bg-from),var(--bg-to))' }}>
-      {session.mode === 'team' ? (
-        <TeamHostClient sessionId={session.id} joinCode={session.join_code} questions={questions} />
-      ) : session.mode === 'speed' ? (
-        <SpeedHostClient sessionId={session.id} joinCode={session.join_code} questions={questions} />
-      ) : session.mode === 'oral' ? (
-        <OralHostClient sessionId={session.id} joinCode={session.join_code} questions={questions} />
-      ) : (
-        <HostClient sessionId={session.id} joinCode={session.join_code} questions={questions} />
-      )}
+    <div style={{ ...(themeToCssVars(theme) as React.CSSProperties) }}>
+      <HostShell>
+        {session.mode === 'team' ? (
+          <TeamHostClient sessionId={session.id} joinCode={session.join_code} questions={questions} />
+        ) : session.mode === 'speed' ? (
+          <SpeedHostClient sessionId={session.id} joinCode={session.join_code} questions={questions} />
+        ) : session.mode === 'oral' ? (
+          <OralHostClient sessionId={session.id} joinCode={session.join_code} questions={questions} />
+        ) : (
+          <HostClient sessionId={session.id} joinCode={session.join_code} questions={questions} />
+        )}
+      </HostShell>
     </div>
   );
 }
