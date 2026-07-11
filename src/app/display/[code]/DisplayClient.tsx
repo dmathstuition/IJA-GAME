@@ -7,7 +7,8 @@ import { AnimatedBackground } from '@/components/game/AnimatedBackground';
 import { AnswerTile } from '@/components/game/AnswerTile';
 import { TimerRing } from '@/components/game/TimerRing';
 import { Confetti } from '@/components/game/Confetti';
-import { Trophy, Star } from '@/components/game/Shapes';
+import { Star } from '@/components/game/Shapes';
+import { ChampionSpotlight } from '@/components/game/ChampionSpotlight';
 import type { AnimationStyle } from '@/lib/themes';
 import type { Choice } from '@/lib/types';
 
@@ -54,8 +55,11 @@ export function DisplayClient({ sessionId, joinCode, schoolName, animation }: { 
       ) : state === 'leaderboard' || state === 'ended' ? (
         <main style={{ ...shell, justifyContent: 'flex-start', paddingTop: 46 }}>
           {state === 'ended' && <Confetti continuous />}
-          {state === 'ended' && <div className="float-y" style={{ display: 'inline-block' }}><Trophy size={80} /></div>}
-          <h1 style={{ fontFamily: '"Fredoka One",sans-serif', fontSize: 'clamp(30px,5vw,56px)', color: 'var(--accent)', margin: '4px 0 24px', textShadow: '0 6px 30px rgba(0,0,0,.4)' }}>{state === 'ended' ? 'Champions!' : 'Leaderboard'}</h1>
+          {state === 'ended' && ranked[0] ? (
+            <ChampionSpotlight name={ranked[0].name} subtitle={`${ranked[0].score} pts`} />
+          ) : (
+            <h1 style={{ fontFamily: '"Fredoka One",sans-serif', fontSize: 'clamp(30px,5vw,56px)', color: 'var(--accent)', margin: '4px 0 24px', textShadow: '0 6px 30px rgba(0,0,0,.4)' }}>Leaderboard</h1>
+          )}
 
           {state === 'ended' && ranked.length >= 3 && (
             <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'center', gap: 14, marginBottom: 26, zIndex: 2 }}>

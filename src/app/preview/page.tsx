@@ -8,6 +8,7 @@ import { AnswerTile } from '@/components/game/AnswerTile';
 import { TimerRing } from '@/components/game/TimerRing';
 import { Confetti } from '@/components/game/Confetti';
 import { Trophy, Star, Bolt } from '@/components/game/Shapes';
+import { ChampionSpotlight } from '@/components/game/ChampionSpotlight';
 import type { Choice } from '@/lib/types';
 
 const OPTS: Record<Choice, string> = { A: '96', B: '84', C: '108', D: '88' };
@@ -191,6 +192,14 @@ export default function Preview() {
                 <AnswerTile key={c} choice={c} label={{ A: '25', B: '30', C: '35', D: '40' }[c]} />
               ))}
             </div>
+          </div>
+        </Frame>
+
+        {/* CHAMPION SPOTLIGHT */}
+        <Frame label="Projector · Champion spotlight (game over)">
+          <Confetti inline continuous />
+          <div style={{ position: 'relative', zIndex: 2, padding: '30px 24px 40px' }}>
+            <ChampionSpotlight name="Amara" subtitle="980 pts" />
           </div>
         </Frame>
 

@@ -3,6 +3,7 @@
 import { useTransition } from 'react';
 import { useRealtimeSession } from '@/lib/game/useRealtimeSession';
 import { launchQuestion, revealCurrent, setState } from '@/lib/game/actions';
+import { exportLeaderboard } from '@/lib/game/exportCsv';
 import { SAMPLE_QUESTIONS } from '@/lib/game/sample';
 import type { Choice, Question } from '@/lib/types';
 
@@ -46,6 +47,7 @@ export function HostClient({ sessionId, joinCode, questions }: { sessionId: stri
             <button style={btn('var(--accent)')} disabled={pending} onClick={() => start(() => { revealCurrent(sessionId); })}>Reveal answer</button>
             <button style={btn('#7c3aed')} disabled={pending} onClick={() => start(() => { setState(sessionId, 'leaderboard'); })}>Leaderboard</button>
             <button style={btn('#334155')} disabled={pending} onClick={() => start(() => { setState(sessionId, 'lobby'); })}>Lobby</button>
+            <button style={btn('#0ea5e9')} disabled={players.length === 0} onClick={() => exportLeaderboard(joinCode, players)}>⬇ CSV</button>
             <button style={btn('var(--wrong)')} disabled={pending} onClick={() => start(() => { setState(sessionId, 'ended'); })}>End</button>
           </div>
 
