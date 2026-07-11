@@ -2,6 +2,7 @@
 
 import { Zap, Trophy, School, Play, ShieldCheck, Users, Gamepad2, Flame, Crown, TrendingUp, Mic, Upload, Palette, Timer, MonitorPlay, Check, ArrowRight } from 'lucide-react';
 import { useEffect, useState } from 'react';
+import { BrandLogo } from '@/components/BrandLogo';
 
 const ORANGE = '#ff7a1a';
 const RED = '#ff2d55';
@@ -125,13 +126,7 @@ export default function Landing() {
       <div style={{ position: 'relative', zIndex: 10, maxWidth: 1440, margin: '0 auto', padding: '0 32px' }}>
         {/* NAV */}
         <nav style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '22px 0' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-            <div style={{ width: 44, height: 44, borderRadius: 12, background: `linear-gradient(140deg, ${ORANGE}, ${RED})`, display: 'grid', placeItems: 'center', fontWeight: 900, fontSize: 26, boxShadow: `0 8px 20px ${RED}66` }}>Q</div>
-            <div style={{ lineHeight: 1 }}>
-              <div style={{ fontWeight: 900, fontSize: 22, letterSpacing: -0.5 }}>QUIZ<span style={{ color: ORANGE }}>ARENA</span></div>
-              <div style={{ fontSize: 9, letterSpacing: 3, color: '#8b8296', marginTop: 3 }}>LIVE. COMPETE. WIN.</div>
-            </div>
-          </div>
+          <BrandLogo height={44} tone="dark" tagline />
           <div className="navlinks" style={{ display: 'flex', gap: 30 }}>
             {NAV.map((n) => <a key={n.label} href={n.href} className="navlink" style={{ textDecoration: 'none' }}>{n.label}</a>)}
           </div>
@@ -395,12 +390,9 @@ export default function Landing() {
 
         {/* FOOTER */}
         <footer style={{ borderTop: '1px solid rgba(255,255,255,.08)', padding: '34px 0 40px', display: 'flex', flexWrap: 'wrap', gap: 20, alignItems: 'center', justifyContent: 'space-between' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-            <div style={{ width: 38, height: 38, borderRadius: 10, background: `linear-gradient(140deg, ${ORANGE}, ${RED})`, display: 'grid', placeItems: 'center', fontWeight: 900, fontSize: 22 }}>Q</div>
-            <div>
-              <div style={{ fontWeight: 900, fontSize: 17 }}>QUIZ<span style={{ color: ORANGE }}>ARENA</span></div>
-              <div style={{ fontSize: 12, color: '#8b8296' }}>© {new Date().getFullYear()} QuizArena. Live. Compete. Win.</div>
-            </div>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+            <BrandLogo height={34} tone="dark" />
+            <div style={{ fontSize: 12, color: '#8b8296' }}>© {new Date().getFullYear()} QuizArena. Learn. Practice. Win.</div>
           </div>
           <div style={{ display: 'flex', gap: 24, flexWrap: 'wrap' }}>
             <a href="#features" className="navlink" style={{ textDecoration: 'none' }}>Features</a>

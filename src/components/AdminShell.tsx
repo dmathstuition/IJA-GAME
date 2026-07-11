@@ -1,4 +1,5 @@
 import type { CSSProperties, ReactNode } from 'react';
+import { BrandLogo } from '@/components/BrandLogo';
 
 const ORANGE = '#ff7a1a';
 const RED = '#ff2d55';
@@ -44,9 +45,8 @@ export function AdminShell({ active, title, subtitle, children }: { active?: str
       {/* top bar */}
       <header style={{ position: 'relative', zIndex: 10, borderBottom: '1px solid rgba(255,255,255,.07)', backdropFilter: 'blur(10px)' }}>
         <div style={{ maxWidth: 1040, margin: '0 auto', padding: '14px 24px', display: 'flex', alignItems: 'center', gap: 24 }}>
-          <a href="/dashboard" style={{ display: 'flex', alignItems: 'center', gap: 10, textDecoration: 'none' }}>
-            <div style={{ width: 36, height: 36, borderRadius: 10, background: `linear-gradient(140deg, ${ORANGE}, ${RED})`, display: 'grid', placeItems: 'center', fontWeight: 900, fontSize: 21, color: '#fff' }}>Q</div>
-            <span style={{ fontWeight: 900, fontSize: 17, letterSpacing: -0.5, color: '#fff' }}>QUIZ<span style={{ color: ORANGE }}>ARENA</span></span>
+          <a href="/dashboard" style={{ textDecoration: 'none' }}>
+            <BrandLogo height={34} tone="dark" />
           </a>
           <nav style={{ display: 'flex', gap: 6, marginLeft: 8 }}>
             {NAV.map(([label, href]) => {
