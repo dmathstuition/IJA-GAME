@@ -51,7 +51,7 @@ export default function SignupPage() {
         <button style={primaryBtn} disabled={busy}>{busy ? 'Creating…' : 'Create account'}</button>
       </form>
       <p style={{ marginTop: 16, fontSize: 13, color: 'var(--text-dim)' }}>
-        Already have an account? <a href="/login" style={{ color: 'var(--accent)' }}>Sign in</a>
+        Already have an account? <a href="/login" style={{ color: 'var(--accent)' }}>Sign in</a> · <a href="/" style={{ color: 'var(--accent)' }}>Back to home</a>
       </p>
     </AuthShell>
   );

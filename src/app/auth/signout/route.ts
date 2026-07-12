@@ -9,7 +9,8 @@ export const dynamic = 'force-dynamic';
 async function signOut(req: NextRequest) {
   const supabase = await createClient();
   await supabase.auth.signOut();
-  return NextResponse.redirect(new URL('/login', req.url), { status: 303 });
+  // Land on the public landing page after signing out.
+  return NextResponse.redirect(new URL('/', req.url), { status: 303 });
 }
 
 export async function POST(req: NextRequest) {

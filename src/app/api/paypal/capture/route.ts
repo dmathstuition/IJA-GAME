@@ -2,6 +2,7 @@ import { NextResponse, type NextRequest } from 'next/server';
 import { planById } from '@/lib/billing';
 import { captureOrder } from '@/lib/paypal';
 import { createClient } from '@/lib/supabase/server';
+import { notify } from '@/lib/notify';
 
 export const dynamic = 'force-dynamic';
 
@@ -22,7 +23,7 @@ export async function GET(req: NextRequest) {
   } = await supabase.auth.getUser();
   if (!user) return NextResponse.redirect(new URL('/login?next=/dashboard/billing', req.url), { status: 303 });
 
-  const { data: org } = await supabase.from('organizations').select('id').maybeSingle();
+  const { data: org } = await supabase.from('organizations').select('id, name').maybeSingle();
   if (!org) return NextResponse.redirect(new URL('/onboarding', req.url), { status: 303 });
 
   try {
@@ -42,6 +43,19 @@ export async function GET(req: NextRequest) {
         paypal_order_id: orderId,
       })
       .eq('id', org.id);
+
+    // Email a receipt (best-effort; no-op if the mailer isn't configured).
+    if (user.email) {
+      await notify('receipt', {
+        to: user.email,
+        school: org.name ?? undefined,
+        amount: plan.amount,
+        currency: plan.currency,
+        plan: plan.name,
+        orderId,
+        paidUntil,
+      });
+    }
 
     return NextResponse.redirect(new URL('/dashboard/billing?success=1', req.url), { status: 303 });
   } catch (e) {
