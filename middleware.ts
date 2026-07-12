@@ -5,8 +5,19 @@ import { canHostLive } from '@/lib/billing';
 // Two jobs on every request:
 //  1. Resolve the tenant (school) from the subdomain → `x-tenant-slug`.
 //  2. Refresh the Supabase auth session cookies so server components see the user.
+// Authenticated areas that must never be cached or restored from history.
+const PROTECTED = ['/dashboard', '/host', '/onboarding'];
+
 export async function middleware(req: NextRequest) {
   const res = NextResponse.next({ request: { headers: req.headers } });
+
+  // Stop the browser (and any proxy) from caching or bfcache-restoring
+  // authenticated pages, so the Back button after logout can't reveal them.
+  if (PROTECTED.some((p) => req.nextUrl.pathname.startsWith(p))) {
+    res.headers.set('Cache-Control', 'no-store, no-cache, must-revalidate, max-age=0');
+    res.headers.set('Pragma', 'no-cache');
+    res.headers.set('Expires', '0');
+  }
 
   // ── 1. Tenant ──────────────────────────────────────────────────────────────
   const host = (req.headers.get('host') ?? '').split(':')[0];

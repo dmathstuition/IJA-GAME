@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react';
+import { BackCacheGuard } from '@/components/BackCacheGuard';
 import { BrandLogo } from '@/components/BrandLogo';
 
 const ORANGE = '#ff7a1a';
@@ -9,6 +10,7 @@ const ORANGE = '#ff7a1a';
 export function HostShell({ children }: { children: ReactNode }) {
   return (
     <div style={{ minHeight: '100vh', background: '#080511', position: 'relative', overflow: 'hidden', fontFamily: 'system-ui, -apple-system, "Segoe UI", sans-serif' }}>
+      <BackCacheGuard />
       <div aria-hidden style={{ position: 'absolute', inset: 0, pointerEvents: 'none' }}>
         <div style={{ position: 'absolute', width: 700, height: 460, top: -200, right: -120, background: `radial-gradient(ellipse, ${ORANGE}12, transparent 65%)`, filter: 'blur(50px)' }} />
         <div style={{ position: 'absolute', width: 600, height: 420, bottom: -160, left: -140, background: 'radial-gradient(ellipse, #8b5cf618, transparent 65%)', filter: 'blur(50px)' }} />
