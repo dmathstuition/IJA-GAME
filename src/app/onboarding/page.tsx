@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { createClient } from '@/lib/supabase/client';
+import { sendWelcomeEmail } from '@/lib/notifyActions';
 import { AuthShell, field, primaryBtn } from '@/components/AuthShell';
 
 const slugify = (s: string) =>
@@ -38,6 +39,8 @@ export default function OnboardingPage() {
     });
     setBusy(false);
     if (error) return setErr(error.message);
+    // Fire the welcome / login-affirmation email (best-effort).
+    sendWelcomeEmail().catch(() => {});
     router.push('/dashboard');
     router.refresh();
   }
