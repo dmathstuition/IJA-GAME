@@ -2,7 +2,7 @@ import type { CSSProperties, ReactNode } from 'react';
 import { BackCacheGuard } from '@/components/BackCacheGuard';
 import { BrandLogo } from '@/components/BrandLogo';
 
-const ORANGE = '#ff7a1a';
+const ORANGE = '#FF6A00';
 const RED = '#ff2d55';
 
 export const adminCard: CSSProperties = {
@@ -37,7 +37,7 @@ const NAV = [
 
 export function AdminShell({ active, title, subtitle, children }: { active?: string; title?: string; subtitle?: string; children: ReactNode }) {
   return (
-    <div style={{ minHeight: '100vh', background: '#080511', color: '#fff', fontFamily: 'system-ui, -apple-system, "Segoe UI", sans-serif', position: 'relative', overflow: 'hidden' }}>
+    <div style={{ minHeight: '100vh', background: '#080511', color: '#fff', fontFamily: 'var(--font-poppins), system-ui, -apple-system, sans-serif', position: 'relative', overflow: 'hidden' }}>
       <BackCacheGuard />
       <div aria-hidden style={{ position: 'absolute', inset: 0, pointerEvents: 'none' }}>
         <div style={{ position: 'absolute', width: 700, height: 460, top: -200, right: -120, background: `radial-gradient(ellipse, ${ORANGE}18, transparent 65%)`, filter: 'blur(50px)' }} />

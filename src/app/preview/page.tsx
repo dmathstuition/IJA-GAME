@@ -44,7 +44,7 @@ export default function Preview() {
       <AnimatedBackground style={theme.animation} />
       <div style={{ position: 'relative', zIndex: 10, maxWidth: 1080, margin: '0 auto', padding: '32px 20px 80px', display: 'grid', gap: 34 }}>
         <header style={{ textAlign: 'center' }}>
-          <div style={{ fontWeight: 900, letterSpacing: 4, color: 'var(--accent)', fontSize: 13 }}>★ QUIZZARD · UI PREVIEW ★</div>
+          <div style={{ fontWeight: 900, letterSpacing: 4, color: 'var(--accent)', fontSize: 13 }}>★ QIZORA · UI PREVIEW ★</div>
           <h1 style={{ fontFamily: '"Fredoka One", Nunito, sans-serif', fontSize: 'clamp(32px,6vw,58px)', color: 'var(--accent)', margin: '6px 0 14px', textShadow: '0 6px 30px rgba(0,0,0,.35)' }}>Game screens</h1>
           <div style={{ display: 'inline-flex', gap: 6, flexWrap: 'wrap', justifyContent: 'center', background: 'rgba(0,0,0,.25)', padding: 6, borderRadius: 999 }}>
             {Object.values(THEME_PRESETS).map((t) => (

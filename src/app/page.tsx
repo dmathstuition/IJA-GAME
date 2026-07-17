@@ -4,11 +4,11 @@ import { Zap, Trophy, School, Play, ShieldCheck, Users, Gamepad2, Flame, Crown, 
 import { useEffect, useState } from 'react';
 import { BrandLogo } from '@/components/BrandLogo';
 
-const ORANGE = '#ff7a1a';
+const ORANGE = '#FF6A00';
 const RED = '#ff2d55';
-const PURPLE = '#8b5cf6';
+const PURPLE = '#6C5CE7';
 const PINK = '#ec4899';
-const GREEN = '#25d366';
+const GREEN = '#00C853';
 const GOLD = '#f5b301';
 
 type View = 'home' | 'features' | 'how' | 'schools' | 'pricing' | 'resources';
@@ -88,7 +88,7 @@ export default function Landing() {
   }, []);
 
   return (
-    <div style={{ height: '100vh', display: 'flex', flexDirection: 'column', background: '#080511', color: '#fff', fontFamily: 'system-ui, -apple-system, "Segoe UI", sans-serif', overflow: 'hidden', position: 'relative' }}>
+    <div style={{ height: '100vh', display: 'flex', flexDirection: 'column', background: '#080511', color: '#fff', fontFamily: 'var(--font-poppins), system-ui, -apple-system, sans-serif', overflow: 'hidden', position: 'relative' }}>
       <style>{`
         .tile3d>div{width:100%;height:100%;border-radius:20px;display:grid;place-items:center;font-size:2rem;font-weight:900;color:#fff}
         .tile3d{animation:floaty var(--d,6s) ease-in-out infinite alternate}
@@ -308,7 +308,7 @@ export default function Landing() {
 
       {/* FOOTER — always visible, legal + founder */}
       <footer style={{ position: 'relative', zIndex: 10, borderTop: '1px solid rgba(255,255,255,.06)', padding: '12px 32px', display: 'flex', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'space-between', gap: 10, fontSize: 13 }}>
-        <div style={{ color: '#8b8296' }}>© {new Date().getFullYear()} Quizzard · Founded by <b style={{ color: '#c9c2d6' }}>DMaths Academy</b></div>
+        <div style={{ color: '#8b8296' }}>© {new Date().getFullYear()} Qizora · Founded by <b style={{ color: '#c9c2d6' }}>DMaths Academy</b></div>
         <div style={{ display: 'flex', gap: 20, flexWrap: 'wrap' }}>
           <a href="/privacy" style={{ color: '#c9c2d6', textDecoration: 'none' }}>Privacy</a>
           <a href="/terms" style={{ color: '#c9c2d6', textDecoration: 'none' }}>Terms &amp; Conditions</a>

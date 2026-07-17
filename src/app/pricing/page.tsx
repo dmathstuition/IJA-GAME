@@ -37,7 +37,7 @@ export default function PricingPage() {
               <li style={{ fontSize: 14, color: 'var(--text-dim)' }}>+ Unlimited players</li>
               <li style={{ fontSize: 14, color: 'var(--text-dim)' }}>+ Priority support</li>
             </ul>
-            <a href="mailto:hello@quizzard.app" style={{ display: 'block', textAlign: 'center', padding: '12px', borderRadius: 10, background: 'transparent', border: '1px solid rgba(255,255,255,.2)', color: 'var(--text)', fontWeight: 800, fontSize: 15, textDecoration: 'none' }}>Contact us</a>
+            <a href="mailto:hello@qizora.com" style={{ display: 'block', textAlign: 'center', padding: '12px', borderRadius: 10, background: 'transparent', border: '1px solid rgba(255,255,255,.2)', color: 'var(--text)', fontWeight: 800, fontSize: 15, textDecoration: 'none' }}>Contact us</a>
           </div>
         </div>
       </div>

@@ -35,7 +35,7 @@ export function BroadcastBanner({ sessionId }: { sessionId: string }) {
   if (!msg?.text) return null;
 
   return (
-    <div style={{ position: 'fixed', top: 0, left: 0, right: 0, zIndex: 80, padding: '14px 20px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10, color: '#fff', fontWeight: 800, fontSize: 'clamp(15px, 2.4vw, 22px)', background: 'linear-gradient(90deg,#ff7a1a,#ff2d55)', boxShadow: '0 6px 24px rgba(255,45,85,.4)', animation: 'qaBcast .4s ease-out' }}>
+    <div style={{ position: 'fixed', top: 0, left: 0, right: 0, zIndex: 80, padding: '14px 20px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10, color: '#fff', fontWeight: 800, fontSize: 'clamp(15px, 2.4vw, 22px)', background: 'linear-gradient(90deg,#FF6A00,#ff2d55)', boxShadow: '0 6px 24px rgba(255,45,85,.4)', animation: 'qaBcast .4s ease-out' }}>
       <Megaphone size={20} /> <span>{msg.text}</span>
       <style>{`@keyframes qaBcast{from{transform:translateY(-100%);opacity:0}to{transform:translateY(0);opacity:1}}`}</style>
     </div>

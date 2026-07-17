@@ -1,17 +1,17 @@
 import { LegalLayout, LegalSection } from '@/components/LegalLayout';
 
-export const metadata = { title: 'Terms & Conditions · Quizzard' };
+export const metadata = { title: 'Terms & Conditions · Qizora' };
 
 export default function TermsPage() {
   return (
     <LegalLayout title="Terms &amp; Conditions" updated="July 2026">
       <p style={{ marginTop: 0 }}>
-        These Terms govern your use of Quizzard, a live quiz platform founded and operated by DMaths Academy.
+        These Terms govern your use of Qizora, a live quiz platform founded and operated by DMaths Academy.
         By creating an account or using the service you agree to these Terms.
       </p>
 
       <LegalSection heading="1. The service">
-        <p>Quizzard lets schools build question banks and run live quiz competitions (Standard, Team, Speed and Quiz Bowl modes) on their own screens and devices. We may add, change or remove features to improve the product.</p>
+        <p>Qizora lets schools build question banks and run live quiz competitions (Standard, Team, Speed and Quiz Bowl modes) on their own screens and devices. We may add, change or remove features to improve the product.</p>
       </LegalSection>
 
       <LegalSection heading="2. Accounts">
@@ -39,7 +39,7 @@ export default function TermsPage() {
       </LegalSection>
 
       <LegalSection heading="8. Termination">
-        <p>You may stop using Quizzard at any time. We may suspend or terminate accounts that breach these Terms. On termination your right to use the service ends; you may request export or deletion of your data.</p>
+        <p>You may stop using Qizora at any time. We may suspend or terminate accounts that breach these Terms. On termination your right to use the service ends; you may request export or deletion of your data.</p>
       </LegalSection>
 
       <LegalSection heading="9. Contact">
