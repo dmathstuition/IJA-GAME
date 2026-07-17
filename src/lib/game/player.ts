@@ -8,7 +8,7 @@ import type { Choice } from '@/lib/types';
  * enabled in Supabase Auth settings — the write policies key off auth.uid().
  * Returns the new player's id (also cached in localStorage per session).
  */
-export async function joinSession(sessionId: string, orgId: string, name: string) {
+export async function joinSession(sessionId: string, orgId: string, name: string, avatar?: string) {
   const supabase = createClient();
   const {
     data: { user },
@@ -23,7 +23,7 @@ export async function joinSession(sessionId: string, orgId: string, name: string
 
   const { data, error } = await supabase
     .from('players')
-    .insert({ session_id: sessionId, org_id: orgId, name, auth_uid: anon!.id })
+    .insert({ session_id: sessionId, org_id: orgId, name, avatar: avatar ?? null, auth_uid: anon!.id })
     .select('id')
     .single();
   if (error) return { error: error.message };

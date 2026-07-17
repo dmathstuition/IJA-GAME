@@ -21,7 +21,12 @@ export interface PlayerRow {
   last_correct: boolean | null;
   team?: number;
   sp_state?: string;
+  avatar?: string | null;
 }
+
+// Every column the app reads for a player — used by both the seed and the
+// realtime-update refetch so nothing gets dropped on an update.
+const PLAYER_COLS = 'id,name,score,answered,last_answer,last_correct,team,sp_state,avatar';
 export interface AnswerRow {
   player_id: string;
   q_index: number;
@@ -46,7 +51,7 @@ export function useRealtimeSession(sessionId: string) {
     async function seed() {
       const [{ data: s }, { data: p }, { data: a }] = await Promise.all([
         supabase.from('game_sessions').select('*').eq('id', sessionId).maybeSingle(),
-        supabase.from('players').select('id,name,score,answered,last_answer,last_correct,team,sp_state').eq('session_id', sessionId),
+        supabase.from('players').select(PLAYER_COLS).eq('session_id', sessionId),
         supabase.from('round_answers').select('player_id,q_index,choice,answered_at').eq('session_id', sessionId),
       ]);
       if (!active) return;
@@ -65,7 +70,7 @@ export function useRealtimeSession(sessionId: string) {
         (payload) => setSession(payload.new as SessionRow))
       .on('postgres_changes', { event: '*', schema: 'public', table: 'players', filter: `session_id=eq.${sessionId}` },
         () => {
-          supabase.from('players').select('id,name,score,answered,last_answer,last_correct')
+          supabase.from('players').select(PLAYER_COLS)
             .eq('session_id', sessionId).then(({ data }) => data && setPlayers(data as PlayerRow[]));
         })
       .on('postgres_changes', { event: '*', schema: 'public', table: 'round_answers', filter: `session_id=eq.${sessionId}` },
