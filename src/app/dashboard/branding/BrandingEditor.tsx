@@ -48,11 +48,11 @@ export function BrandingEditor({ initialPreset, initialAnimation }: { initialPre
               const on = preset === t.id;
               return (
                 <button key={t.id} onClick={() => { setPreset(t.id); setAnimation(t.animation); }}
-                  style={{ textAlign: 'left', cursor: 'pointer', border: `2px solid ${on ? '#ff7a1a' : 'rgba(255,255,255,.1)'}`, borderRadius: 14, overflow: 'hidden', background: 'rgba(0,0,0,.2)', padding: 0 }}>
+                  style={{ textAlign: 'left', cursor: 'pointer', border: `2px solid ${on ? '#FF6A00' : 'rgba(255,255,255,.1)'}`, borderRadius: 14, overflow: 'hidden', background: 'rgba(0,0,0,.2)', padding: 0 }}>
                   <div style={{ height: 46, background: `linear-gradient(120deg, ${t.palette.bgGradientFrom}, ${t.palette.bgGradientTo})`, display: 'flex', alignItems: 'flex-end', gap: 5, padding: 8 }}>
                     {[t.palette.primary, t.palette.accent, t.palette.correct].map((c, i) => <span key={i} style={{ width: 18, height: 18, borderRadius: 5, background: c, border: '1px solid rgba(255,255,255,.2)' }} />)}
                   </div>
-                  <div style={{ padding: '8px 10px', fontSize: 13, fontWeight: 800, color: '#fff', display: 'flex', justifyContent: 'space-between' }}>{t.name}{on && <span style={{ color: '#ff7a1a' }}>✓</span>}</div>
+                  <div style={{ padding: '8px 10px', fontSize: 13, fontWeight: 800, color: '#fff', display: 'flex', justifyContent: 'space-between' }}>{t.name}{on && <span style={{ color: '#FF6A00' }}>✓</span>}</div>
                 </button>
               );
             })}
@@ -66,14 +66,14 @@ export function BrandingEditor({ initialPreset, initialAnimation }: { initialPre
               const on = animation === a.id;
               return (
                 <button key={a.id} onClick={() => setAnimation(a.id)}
-                  style={{ padding: '9px 16px', borderRadius: 999, cursor: 'pointer', fontWeight: 700, fontSize: 13.5, border: `1px solid ${on ? '#ff7a1a' : 'rgba(255,255,255,.15)'}`, background: on ? 'rgba(255,122,26,.15)' : 'transparent', color: on ? '#fff' : '#a49db3' }}>{a.label}</button>
+                  style={{ padding: '9px 16px', borderRadius: 999, cursor: 'pointer', fontWeight: 700, fontSize: 13.5, border: `1px solid ${on ? '#FF6A00' : 'rgba(255,255,255,.15)'}`, background: on ? 'rgba(255,122,26,.15)' : 'transparent', color: on ? '#fff' : '#a49db3' }}>{a.label}</button>
               );
             })}
           </div>
         </div>
 
         <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
-          <button onClick={save} disabled={saving} style={{ padding: '13px 28px', borderRadius: 12, border: 'none', background: 'linear-gradient(135deg, #ff7a1a, #ff2d55)', color: '#fff', fontWeight: 800, fontSize: 15, cursor: 'pointer', boxShadow: '0 10px 26px rgba(255,45,85,.4)' }}>{saving ? 'Saving…' : 'Save branding'}</button>
+          <button onClick={save} disabled={saving} style={{ padding: '13px 28px', borderRadius: 12, border: 'none', background: 'linear-gradient(135deg, #FF6A00, #ff2d55)', color: '#fff', fontWeight: 800, fontSize: 15, cursor: 'pointer', boxShadow: '0 10px 26px rgba(255,45,85,.4)' }}>{saving ? 'Saving…' : 'Save branding'}</button>
           {flash && <span style={{ color: flash.includes('Saved') ? '#4ade80' : '#ff6b8a', fontSize: 14, fontWeight: 600 }}>{flash}</span>}
         </div>
       </div>

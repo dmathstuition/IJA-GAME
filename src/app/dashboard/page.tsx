@@ -33,7 +33,7 @@ export default async function Dashboard() {
     : { data: [] };
 
   return (
-    <AdminShell active="Sessions" title={org?.name ?? 'Dashboard'} subtitle={org ? `${org.slug}.quizzard.app · ${STATUS_LABEL[org.subscription_status] ?? org.subscription_status}` : 'Finish onboarding to continue.'}>
+    <AdminShell active="Sessions" title={org?.name ?? 'Dashboard'} subtitle={org ? `${org.slug}.qizora.com · ${STATUS_LABEL[org.subscription_status] ?? org.subscription_status}` : 'Finish onboarding to continue.'}>
       {!live && (
         <a href="/dashboard/billing" style={{ ...adminCard, display: 'flex', alignItems: 'center', gap: 10, textDecoration: 'none', color: 'inherit', marginBottom: 16, borderColor: 'rgba(255,214,0,.35)', background: 'rgba(255,214,0,.07)' }}>
           <Lock size={18} color="#fbbf24" />
@@ -61,7 +61,7 @@ export default async function Dashboard() {
           const inner = (
             <>
               <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 8 }}>
-                <span style={{ width: 26, height: 26, borderRadius: 999, background: 'linear-gradient(135deg,#ff7a1a,#ff2d55)', color: '#fff', fontWeight: 900, fontSize: 14, display: 'grid', placeItems: 'center' }}>{n as string}</span>
+                <span style={{ width: 26, height: 26, borderRadius: 999, background: 'linear-gradient(135deg,#FF6A00,#ff2d55)', color: '#fff', fontWeight: 900, fontSize: 14, display: 'grid', placeItems: 'center' }}>{n as string}</span>
                 {icon}
               </div>
               <div style={{ fontWeight: 800, fontSize: 15.5 }}>{title as string}</div>

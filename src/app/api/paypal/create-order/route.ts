@@ -28,9 +28,9 @@ export async function POST(req: NextRequest) {
     const { approveUrl } = await createOrder({
       amount: plan.amount,
       currency: plan.currency,
-      description: `Quizzard ${plan.name} — ${org.name}`,
+      description: `Qizora ${plan.name} — ${org.name}`,
       referenceId: org.id,
-      brandName: 'Quizzard',
+      brandName: 'Qizora',
       returnUrl: `${origin}/api/paypal/capture?plan=${plan.id}`,
       cancelUrl: `${origin}/dashboard/billing?cancelled=1`,
     });

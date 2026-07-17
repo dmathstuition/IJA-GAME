@@ -84,7 +84,7 @@ function LoginForm() {
               {!searching && results.length === 0 && <p style={{ fontSize: 13, color: 'var(--text-dim)' }}>No school found for “{query.trim()}”.</p>}
               {results.map((s) => (
                 <button key={s.id} onClick={() => setSchool(s)} style={{ display: 'flex', alignItems: 'center', gap: 10, textAlign: 'left', padding: '10px 12px', borderRadius: 10, border: '1px solid rgba(255,255,255,.12)', background: 'rgba(255,255,255,.04)', color: 'var(--text)', cursor: 'pointer' }}>
-                  <span style={{ width: 30, height: 30, borderRadius: 8, background: 'linear-gradient(135deg,#ff7a1a,#ff2d55)', display: 'grid', placeItems: 'center', fontWeight: 900, fontSize: 14, flexShrink: 0 }}>{s.name[0]}</span>
+                  <span style={{ width: 30, height: 30, borderRadius: 8, background: 'linear-gradient(135deg,#FF6A00,#ff2d55)', display: 'grid', placeItems: 'center', fontWeight: 900, fontSize: 14, flexShrink: 0 }}>{s.name[0]}</span>
                   <span><span style={{ fontWeight: 700, fontSize: 14, display: 'block' }}>{s.name}</span><span style={{ fontSize: 12, color: 'var(--text-dim)' }}>{s.slug}</span></span>
                 </button>
               ))}
@@ -98,7 +98,7 @@ function LoginForm() {
         <form onSubmit={submit} style={{ display: 'grid', gap: 10 }}>
           {school && (
             <div style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '9px 12px', borderRadius: 10, border: '1px solid rgba(255,255,255,.12)', background: 'rgba(255,255,255,.04)' }}>
-              <span style={{ width: 28, height: 28, borderRadius: 7, background: 'linear-gradient(135deg,#ff7a1a,#ff2d55)', display: 'grid', placeItems: 'center', fontWeight: 900, fontSize: 13 }}>{school.name[0]}</span>
+              <span style={{ width: 28, height: 28, borderRadius: 7, background: 'linear-gradient(135deg,#FF6A00,#ff2d55)', display: 'grid', placeItems: 'center', fontWeight: 900, fontSize: 13 }}>{school.name[0]}</span>
               <span style={{ flex: 1, fontWeight: 700, fontSize: 14 }}>{school.name}</span>
               <button type="button" onClick={() => { setSchool(null); setErr(''); }} title="Change school" style={{ background: 'none', border: 'none', color: 'var(--text-dim)', cursor: 'pointer', display: 'grid' }}><X size={16} /></button>
             </div>

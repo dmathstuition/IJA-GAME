@@ -1,7 +1,7 @@
 import type { CSSProperties, ReactNode } from 'react';
 import { BrandLogo } from '@/components/BrandLogo';
 
-const ORANGE = '#ff7a1a';
+const ORANGE = '#FF6A00';
 const RED = '#ff2d55';
 const PURPLE = '#8b5cf6';
 
@@ -42,7 +42,7 @@ export function AuthShell({ title, sub, children }: { title: string; sub: string
         background: '#080511',
         position: 'relative',
         overflow: 'hidden',
-        fontFamily: 'system-ui, -apple-system, "Segoe UI", sans-serif',
+        fontFamily: 'var(--font-poppins), system-ui, -apple-system, sans-serif',
       }}
     >
       <div aria-hidden style={{ position: 'absolute', inset: 0, pointerEvents: 'none' }}>

@@ -77,7 +77,7 @@ export function HostTools({ sessionId, joinCode, questions }: { sessionId: strin
     const blob = new Blob([JSON.stringify(questions, null, 2)], { type: 'application/json' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
-    a.href = url; a.download = `quizzard-${joinCode}-questions.json`; a.click();
+    a.href = url; a.download = `qizora-${joinCode}-questions.json`; a.click();
     URL.revokeObjectURL(url);
   };
 
@@ -92,7 +92,7 @@ export function HostTools({ sessionId, joinCode, questions }: { sessionId: strin
   return (
     <>
       {/* Floating launcher */}
-      <button onClick={() => setOpen((o) => !o)} style={{ position: 'fixed', right: 20, bottom: 20, zIndex: 60, ...btn('linear-gradient(140deg,#ff7a1a,#ff2d55)'), padding: '12px 18px', fontSize: 14, boxShadow: '0 10px 30px rgba(255,45,85,.35)' }}>
+      <button onClick={() => setOpen((o) => !o)} style={{ position: 'fixed', right: 20, bottom: 20, zIndex: 60, ...btn('linear-gradient(140deg,#FF6A00,#ff2d55)'), padding: '12px 18px', fontSize: 14, boxShadow: '0 10px 30px rgba(255,45,85,.35)' }}>
         <Wrench size={16} /> Organiser Tools
       </button>
 
@@ -104,7 +104,7 @@ export function HostTools({ sessionId, joinCode, questions }: { sessionId: strin
               <button onClick={() => setOpen(false)} style={ghost}><X size={14} /> Close</button>
             </div>
 
-            {msg && <div style={{ ...card, padding: 10, marginBottom: 12, background: 'rgba(255,122,26,.15)', borderColor: '#ff7a1a', fontSize: 13, fontWeight: 700 }}>{msg}</div>}
+            {msg && <div style={{ ...card, padding: 10, marginBottom: 12, background: 'rgba(255,122,26,.15)', borderColor: '#FF6A00', fontSize: 13, fontWeight: 700 }}>{msg}</div>}
 
             {/* Tabs */}
             <div style={{ display: 'flex', gap: 6, marginBottom: 14 }}>

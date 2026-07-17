@@ -2,14 +2,14 @@ import type { ReactNode } from 'react';
 import { BackCacheGuard } from '@/components/BackCacheGuard';
 import { BrandLogo } from '@/components/BrandLogo';
 
-const ORANGE = '#ff7a1a';
+const ORANGE = '#FF6A00';
 
-// Wraps an organiser control panel in the Quizzard admin look: dark ground,
+// Wraps an organiser control panel in the Qizora admin look: dark ground,
 // ambient glows, and a branded top bar with a link back to the dashboard.
 // The school's theme variables still cascade in, so per-school accents remain.
 export function HostShell({ children }: { children: ReactNode }) {
   return (
-    <div style={{ minHeight: '100vh', background: '#080511', position: 'relative', overflow: 'hidden', fontFamily: 'system-ui, -apple-system, "Segoe UI", sans-serif' }}>
+    <div style={{ minHeight: '100vh', background: '#080511', position: 'relative', overflow: 'hidden', fontFamily: 'var(--font-poppins), system-ui, -apple-system, sans-serif' }}>
       <BackCacheGuard />
       <div aria-hidden style={{ position: 'absolute', inset: 0, pointerEvents: 'none' }}>
         <div style={{ position: 'absolute', width: 700, height: 460, top: -200, right: -120, background: `radial-gradient(ellipse, ${ORANGE}12, transparent 65%)`, filter: 'blur(50px)' }} />
