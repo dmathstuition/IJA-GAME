@@ -1,6 +1,6 @@
 'use client';
 
-import { Zap, Trophy, School, Play, ShieldCheck, Users, Gamepad2, Flame, Crown, TrendingUp, Mic, Upload, Palette, Timer, MonitorPlay, Check, ArrowRight } from 'lucide-react';
+import { Zap, Trophy, School, Play, ShieldCheck, Users, Gamepad2, Flame, Crown, TrendingUp, Mic, Upload, Palette, Timer, MonitorPlay, Check, ArrowRight, Menu, X } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 import { BrandLogo } from '@/components/BrandLogo';
 
@@ -76,7 +76,9 @@ function Ring({ secs }: { secs: string }) {
 
 export default function Landing() {
   const [view, setView] = useState<View>('home');
+  const [menuOpen, setMenuOpen] = useState(false);
   const [t, setT] = useState({ h: '01', m: '24', s: '59' });
+  const go = (v: View) => { setView(v); setMenuOpen(false); };
   const rootRef = useRef<HTMLDivElement>(null);
   const mockRef = useRef<HTMLDivElement>(null);
 
@@ -129,7 +131,7 @@ export default function Landing() {
   const tiltLeave = (e: React.MouseEvent<HTMLDivElement>) => { e.currentTarget.style.transform = ''; };
 
   return (
-    <div ref={rootRef} style={{ height: '100vh', display: 'flex', flexDirection: 'column', background: '#080511', color: '#fff', fontFamily: 'var(--font-poppins), system-ui, -apple-system, sans-serif', overflow: 'hidden', position: 'relative' }}>
+    <div ref={rootRef} className="landing-root" style={{ height: '100vh', display: 'flex', flexDirection: 'column', background: '#080511', color: '#fff', fontFamily: 'var(--font-poppins), system-ui, -apple-system, sans-serif', overflow: 'hidden', position: 'relative' }}>
       <style>{`
         .tile3d>div{width:100%;height:100%;border-radius:20px;display:grid;place-items:center;font-size:2rem;font-weight:900;color:#fff}
         .tile3d{animation:floaty var(--d,6s) ease-in-out infinite alternate}
@@ -165,11 +167,26 @@ export default function Landing() {
         .tilt-card:hover::before{opacity:1}
         @media(prefers-reduced-motion:reduce){.tilt-card{transform:none!important}.tilt-card::before{display:none}}
         @media(prefers-reduced-motion:reduce){.shimmer{animation:none}.mock3d{transform:none!important}.spotlight{display:none}.rise{animation:none}}
-        @media(max-width:960px){.hide-sm{display:none!important}.home-grid{grid-template-columns:1fr!important}.home-mock{display:none!important}}
+        .show-sm{display:none}
+        .hamburger{display:none;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.14);border-radius:10px;padding:8px;color:#fff;cursor:pointer}
+        .mobile-menu{position:absolute;top:100%;left:0;right:0;z-index:30;background:#0c0918;border-bottom:1px solid rgba(255,255,255,.08);box-shadow:0 20px 40px rgba(0,0,0,.5);padding:8px 18px 16px;display:grid;gap:2px;animation:vf .2s ease}
+        .mobile-menu .navtab{font-size:16px;text-align:left;padding:13px 6px;border-bottom:1px solid rgba(255,255,255,.05);width:100%}
+        /* mobile: let the page scroll normally instead of the single-screen desktop lock */
+        @media(max-width:900px){
+          .hide-sm{display:none!important}
+          .home-mock{display:none!important}
+          .home-grid{grid-template-columns:1fr!important;gap:24px!important}
+          .hamburger{display:inline-flex!important}
+          .landing-root{height:auto!important;min-height:100dvh;overflow-y:visible!important;overflow-x:clip!important}
+          .contentArea{overflow-y:visible!important;overflow-x:clip!important}
+          .landing-content{justify-content:flex-start!important;padding:20px 18px 40px!important}
+          .landing-nav{padding:12px 18px!important}
+          .hero-h1{letter-spacing:-.5px!important;font-size:clamp(36px,12.5vw,58px)!important}
+        }
       `}</style>
 
       {/* ambient glows */}
-      <div style={{ position: 'absolute', inset: 0, zIndex: 0, pointerEvents: 'none' }}>
+      <div style={{ position: 'absolute', inset: 0, zIndex: 0, pointerEvents: 'none', overflow: 'hidden' }}>
         <div className="qz-drift" style={{ position: 'absolute', width: 700, height: 500, top: -160, left: -120, background: `radial-gradient(ellipse, ${ORANGE}22, transparent 65%)`, filter: 'blur(40px)' }} />
         <div className="qz-drift" style={{ position: 'absolute', width: 800, height: 700, top: 40, right: -200, background: `radial-gradient(ellipse, ${PURPLE}22, transparent 65%)`, filter: 'blur(40px)', animationDelay: '-8s' }} />
         <div className="qz-drift" style={{ position: 'absolute', width: 520, height: 520, bottom: -160, left: '38%', background: `radial-gradient(ellipse, ${RED}18, transparent 62%)`, filter: 'blur(46px)', animationDelay: '-14s' }} />
@@ -178,20 +195,31 @@ export default function Landing() {
       <div className="grain" aria-hidden />
 
       {/* NAV */}
-      <nav style={{ position: 'relative', zIndex: 10, display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 16, padding: '16px 32px', borderBottom: '1px solid rgba(255,255,255,.06)' }}>
-        <button onClick={() => setView('home')} style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}><BrandLogo height={40} tone="dark" tagline /></button>
+      <nav className="landing-nav" style={{ position: 'relative', zIndex: 20, display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 16, padding: '16px 32px', borderBottom: '1px solid rgba(255,255,255,.06)' }}>
+        <button onClick={() => go('home')} style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}><BrandLogo height={38} tone="dark" tagline /></button>
         <div className="hide-sm" style={{ display: 'flex', gap: 26 }}>
           {NAV.map((n) => <button key={n.view} className={`navtab${view === n.view ? ' on' : ''}`} onClick={() => setView(n.view)}>{n.label}</button>)}
         </div>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-          <a href="/login" style={{ color: '#fff', fontWeight: 700, textDecoration: 'none', border: '1px solid rgba(255,255,255,.15)', padding: '9px 18px', borderRadius: 10, fontSize: 14 }}>Login</a>
-          <a href="/signup" className="primaryCta" style={{ ...pill(`linear-gradient(135deg, ${ORANGE}, ${RED})`), padding: '10px 18px', fontSize: 14 }}><Zap size={15} /> Start Free Trial</a>
+        <div className="hide-sm" style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+          <a href="/login" style={{ color: '#fff', fontWeight: 700, textDecoration: 'none', border: '1px solid rgba(255,255,255,.15)', padding: '9px 18px', borderRadius: 10, fontSize: 14, whiteSpace: 'nowrap' }}>Login</a>
+          <a href="/signup" className="primaryCta" style={{ ...pill(`linear-gradient(135deg, ${ORANGE}, ${RED})`), padding: '10px 18px', fontSize: 14, whiteSpace: 'nowrap' }}><Zap size={15} /> Start Free Trial</a>
         </div>
+        <button className="hamburger" aria-label="Menu" onClick={() => setMenuOpen((o) => !o)}>{menuOpen ? <X size={22} /> : <Menu size={22} />}</button>
+
+        {menuOpen && (
+          <div className="mobile-menu">
+            {NAV.map((n) => <button key={n.view} className={`navtab${view === n.view ? ' on' : ''}`} onClick={() => go(n.view)}>{n.label}</button>)}
+            <div style={{ display: 'grid', gap: 8, marginTop: 10 }}>
+              <a href="/login" style={{ textAlign: 'center', color: '#fff', fontWeight: 700, textDecoration: 'none', border: '1px solid rgba(255,255,255,.15)', padding: '12px', borderRadius: 12, fontSize: 15 }}>Login</a>
+              <a href="/signup" style={{ ...pill(`linear-gradient(135deg, ${ORANGE}, ${RED})`), padding: '12px', fontSize: 15, justifyContent: 'center' }}><Zap size={16} /> Start Free Trial</a>
+            </div>
+          </div>
+        )}
       </nav>
 
       {/* CONTENT — swaps on click, no page scroll */}
       <div className="contentArea" style={{ position: 'relative', zIndex: 10 }}>
-        <div key={view} className="vfade" style={{ maxWidth: 1200, margin: '0 auto', padding: '26px 32px', minHeight: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+        <div key={view} className="vfade landing-content" style={{ maxWidth: 1200, margin: '0 auto', padding: '26px 32px', minHeight: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
 
           {view === 'home' && (
             <div className="home-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1.05fr', gap: 40, alignItems: 'center' }}>
@@ -199,7 +227,7 @@ export default function Landing() {
                 <div className="rise rise-1" style={{ display: 'inline-flex', alignItems: 'center', gap: 10, background: 'rgba(255,255,255,.05)', border: '1px solid rgba(255,255,255,.1)', borderRadius: 999, padding: '8px 16px', fontWeight: 800, fontSize: 12.5 }}>
                   <Flame size={14} color={ORANGE} />LIVE QUIZZES RUNNING NOW <span style={{ width: 9, height: 9, borderRadius: '50%', background: GREEN, animation: 'liveDot 1.5s infinite', boxShadow: `0 0 8px ${GREEN}` }} />
                 </div>
-                <h1 className="rise rise-2" style={{ fontSize: 'clamp(40px, 5.4vw, 76px)', fontWeight: 900, lineHeight: 0.98, letterSpacing: -2, margin: '18px 0 0' }}>
+                <h1 className="rise rise-2 hero-h1" style={{ fontSize: 'clamp(40px, 5.4vw, 76px)', fontWeight: 900, lineHeight: 0.98, letterSpacing: -2, margin: '18px 0 0' }}>
                   <span className="shimmer">Live Quiz</span><br />
                   Competitions<br /><span style={{ fontSize: '0.62em' }}>for Every School<span style={{ color: ORANGE }}>.</span></span>
                 </h1>

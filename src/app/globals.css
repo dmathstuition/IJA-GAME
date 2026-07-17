@@ -22,6 +22,9 @@ body {
   background: var(--bg);
   color: var(--text);
   font-family: var(--font-poppins), Nunito, system-ui, -apple-system, sans-serif;
+  /* Never scroll sideways — decorative glows/blurs must not create horizontal overflow on any device. */
+  overflow-x: hidden;
+  max-width: 100%;
 }
 
 * {
