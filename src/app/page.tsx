@@ -114,6 +114,20 @@ export default function Landing() {
     return () => { window.removeEventListener('pointermove', onMove); if (raf) cancelAnimationFrame(raf); };
   }, []);
 
+  // Per-card 3D tilt + glare that follows the cursor within each card.
+  const reduced = () => typeof window !== 'undefined' && window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
+  const tiltMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (reduced()) return;
+    const el = e.currentTarget;
+    const r = el.getBoundingClientRect();
+    const px = (e.clientX - r.left) / r.width;
+    const py = (e.clientY - r.top) / r.height;
+    el.style.transform = `perspective(800px) rotateX(${((0.5 - py) * 6).toFixed(2)}deg) rotateY(${((px - 0.5) * 8).toFixed(2)}deg) translateY(-4px)`;
+    el.style.setProperty('--gx', `${(px * 100).toFixed(1)}%`);
+    el.style.setProperty('--gy', `${(py * 100).toFixed(1)}%`);
+  };
+  const tiltLeave = (e: React.MouseEvent<HTMLDivElement>) => { e.currentTarget.style.transform = ''; };
+
   return (
     <div ref={rootRef} style={{ height: '100vh', display: 'flex', flexDirection: 'column', background: '#080511', color: '#fff', fontFamily: 'var(--font-poppins), system-ui, -apple-system, sans-serif', overflow: 'hidden', position: 'relative' }}>
       <style>{`
@@ -144,6 +158,12 @@ export default function Landing() {
         .rise{animation:rise .7s cubic-bezier(.22,1,.36,1) both}
         @keyframes rise{from{opacity:0;transform:translateY(22px);filter:blur(6px)}to{opacity:1;transform:none;filter:blur(0)}}
         .rise-1{animation-delay:.05s}.rise-2{animation-delay:.14s}.rise-3{animation-delay:.23s}.rise-4{animation-delay:.32s}.rise-5{animation-delay:.41s}
+        /* pointer-reactive 3D tilt + glare for content cards */
+        .tilt-card{position:relative;transition:transform .2s cubic-bezier(.22,1,.36,1),box-shadow .2s;transform-style:preserve-3d;will-change:transform}
+        .tilt-card:hover{box-shadow:0 24px 60px -18px rgba(0,0,0,.6)}
+        .tilt-card::before{content:'';position:absolute;inset:0;border-radius:inherit;background:radial-gradient(220px 220px at var(--gx,50%) var(--gy,50%),rgba(255,255,255,.10),transparent 60%);opacity:0;transition:opacity .25s;pointer-events:none}
+        .tilt-card:hover::before{opacity:1}
+        @media(prefers-reduced-motion:reduce){.tilt-card{transform:none!important}.tilt-card::before{display:none}}
         @media(prefers-reduced-motion:reduce){.shimmer{animation:none}.mock3d{transform:none!important}.spotlight{display:none}.rise{animation:none}}
         @media(max-width:960px){.hide-sm{display:none!important}.home-grid{grid-template-columns:1fr!important}.home-mock{display:none!important}}
       `}</style>
@@ -259,7 +279,7 @@ export default function Landing() {
               </div>
               <div className="qz-stagger" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(280px,1fr))', gap: 14 }}>
                 {FEATURES.map((f) => (
-                  <div key={f.t} className="qz-lift" style={{ ...card, padding: 20 }}>
+                  <div key={f.t} className="tilt-card" onMouseMove={tiltMove} onMouseLeave={tiltLeave} style={{ ...card, padding: 20 }}>
                     <span style={{ width: 46, height: 46, borderRadius: 12, background: `${f.c}1f`, color: f.c, display: 'grid', placeItems: 'center', marginBottom: 12 }}>{f.i}</span>
                     <div style={{ fontWeight: 800, fontSize: 16.5, marginBottom: 5 }}>{f.t}</div>
                     <div style={{ color: '#a49db3', fontSize: 13.5, lineHeight: 1.5 }}>{f.d}</div>
@@ -277,7 +297,7 @@ export default function Landing() {
               </div>
               <div className="qz-stagger" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(260px,1fr))', gap: 14 }}>
                 {STEPS.map(([n, ti, d]) => (
-                  <div key={n} className="qz-lift" style={{ ...card, padding: 22 }}>
+                  <div key={n} className="tilt-card" onMouseMove={tiltMove} onMouseLeave={tiltLeave} style={{ ...card, padding: 22 }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 10 }}>
                       <span style={{ width: 40, height: 40, borderRadius: 999, background: `linear-gradient(135deg,${ORANGE},${RED})`, display: 'grid', placeItems: 'center', fontWeight: 900, fontSize: 18, boxShadow: `0 6px 16px ${RED}44` }}>{n}</span>
                       <div style={{ fontWeight: 800, fontSize: 16.5 }}>{ti}</div>
@@ -304,7 +324,7 @@ export default function Landing() {
               <div style={{ display: 'grid', gap: 10 }}>
                 <div style={{ textAlign: 'center', letterSpacing: 3, fontSize: 11, fontWeight: 800, color: '#8b8296', marginBottom: 2 }}>TRUSTED BY SCHOOLS</div>
                 {[['Infant Jesus Academy', 'Runs inter-house championships for the whole hall on one screen.', ORANGE, 'I'], ['DMaths Academy', 'Weekly quiz bowls — zero devices, every group engaged.', PURPLE, 'D']].map(([name, quote, col, ltr]) => (
-                  <div key={name} style={{ background: 'rgba(0,0,0,.25)', border: '1px solid rgba(255,255,255,.08)', borderRadius: 14, padding: 15, display: 'flex', gap: 13, alignItems: 'flex-start' }}>
+                  <div key={name} className="tilt-card" onMouseMove={tiltMove} onMouseLeave={tiltLeave} style={{ background: 'rgba(0,0,0,.25)', border: '1px solid rgba(255,255,255,.08)', borderRadius: 14, padding: 15, display: 'flex', gap: 13, alignItems: 'flex-start' }}>
                     <span style={{ width: 42, height: 42, borderRadius: 11, background: `linear-gradient(135deg, ${col}, #222)`, display: 'grid', placeItems: 'center', fontWeight: 900, flexShrink: 0 }}>{ltr}</span>
                     <div><div style={{ fontWeight: 800, fontSize: 14.5 }}>{name}</div><div style={{ color: '#a49db3', fontSize: 13, lineHeight: 1.5, marginTop: 2 }}>{quote}</div></div>
                   </div>
@@ -320,7 +340,7 @@ export default function Landing() {
               <p style={{ color: '#a49db3', fontSize: 15.5, maxWidth: 540, margin: '0 auto 24px' }}>Start free, then pay once with PayPal to unlock live hosting for the term or the year. No subscription.</p>
               <div style={{ display: 'flex', gap: 16, flexWrap: 'wrap', justifyContent: 'center', marginBottom: 24 }}>
                 {PRICE.map(([n, p, dur, feat]) => (
-                  <div key={n} className="qz-lift" style={{ ...card, padding: '26px 34px', minWidth: 220, border: feat ? `1px solid ${ORANGE}66` : card.border, boxShadow: feat ? `0 0 34px ${ORANGE}22` : 'none' }}>
+                  <div key={n} className="tilt-card" onMouseMove={tiltMove} onMouseLeave={tiltLeave} style={{ ...card, padding: '26px 34px', minWidth: 220, border: feat ? `1px solid ${ORANGE}66` : card.border, boxShadow: feat ? `0 0 34px ${ORANGE}22` : 'none' }}>
                     {feat && <div style={{ fontSize: 10.5, fontWeight: 900, letterSpacing: 1, color: ORANGE, marginBottom: 6 }}>BEST VALUE</div>}
                     <div style={{ fontWeight: 800, fontSize: 15, color: '#a49db3' }}>{n}</div>
                     <div style={{ fontWeight: 900, fontSize: 44, letterSpacing: -1, margin: '4px 0' }}>{p}</div>
@@ -341,7 +361,7 @@ export default function Landing() {
               </div>
               <div className="qz-stagger" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(300px,1fr))', gap: 12, maxWidth: 960, margin: '0 auto' }}>
                 {FAQ.map(([q, a]) => (
-                  <div key={q} className="qz-lift" style={{ ...card, padding: 18 }}>
+                  <div key={q} className="tilt-card" onMouseMove={tiltMove} onMouseLeave={tiltLeave} style={{ ...card, padding: 18 }}>
                     <div style={{ fontWeight: 800, fontSize: 15, marginBottom: 7 }}>{q}</div>
                     <div style={{ color: '#a49db3', fontSize: 13.5, lineHeight: 1.55 }}>{a}</div>
                   </div>
