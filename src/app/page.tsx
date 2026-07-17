@@ -1,7 +1,7 @@
 'use client';
 
 import { Zap, Trophy, School, Play, ShieldCheck, Users, Gamepad2, Flame, Crown, TrendingUp, Mic, Upload, Palette, Timer, MonitorPlay, Check, ArrowRight } from 'lucide-react';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { BrandLogo } from '@/components/BrandLogo';
 
 const ORANGE = '#FF6A00';
@@ -77,6 +77,9 @@ function Ring({ secs }: { secs: string }) {
 export default function Landing() {
   const [view, setView] = useState<View>('home');
   const [t, setT] = useState({ h: '01', m: '24', s: '59' });
+  const rootRef = useRef<HTMLDivElement>(null);
+  const mockRef = useRef<HTMLDivElement>(null);
+
   useEffect(() => {
     let total = 1 * 3600 + 24 * 60 + 59;
     const id = setInterval(() => {
@@ -87,8 +90,32 @@ export default function Landing() {
     return () => clearInterval(id);
   }, []);
 
+  // Premium pointer engine: cursor spotlight + subtle 3D tilt on the live mock,
+  // rAF-throttled and disabled under reduced motion.
+  useEffect(() => {
+    if (window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) return;
+    let raf = 0;
+    const onMove = (e: PointerEvent) => {
+      if (raf) return;
+      raf = requestAnimationFrame(() => {
+        raf = 0;
+        const nx = e.clientX / window.innerWidth;
+        const ny = e.clientY / window.innerHeight;
+        rootRef.current?.style.setProperty('--mx', `${e.clientX}px`);
+        rootRef.current?.style.setProperty('--my', `${e.clientY}px`);
+        if (mockRef.current) {
+          const rx = (0.5 - ny) * 9;
+          const ry = (nx - 0.5) * 12;
+          mockRef.current.style.transform = `perspective(1100px) rotateX(${rx.toFixed(2)}deg) rotateY(${ry.toFixed(2)}deg)`;
+        }
+      });
+    };
+    window.addEventListener('pointermove', onMove, { passive: true });
+    return () => { window.removeEventListener('pointermove', onMove); if (raf) cancelAnimationFrame(raf); };
+  }, []);
+
   return (
-    <div style={{ height: '100vh', display: 'flex', flexDirection: 'column', background: '#080511', color: '#fff', fontFamily: 'var(--font-poppins), system-ui, -apple-system, sans-serif', overflow: 'hidden', position: 'relative' }}>
+    <div ref={rootRef} style={{ height: '100vh', display: 'flex', flexDirection: 'column', background: '#080511', color: '#fff', fontFamily: 'var(--font-poppins), system-ui, -apple-system, sans-serif', overflow: 'hidden', position: 'relative' }}>
       <style>{`
         .tile3d>div{width:100%;height:100%;border-radius:20px;display:grid;place-items:center;font-size:2rem;font-weight:900;color:#fff}
         .tile3d{animation:floaty var(--d,6s) ease-in-out infinite alternate}
@@ -98,11 +125,26 @@ export default function Landing() {
         .navtab:hover{color:#fff}
         .navtab.on{color:#fff}
         .navtab.on::after{content:'';display:block;height:2px;border-radius:2px;margin-top:4px;background:linear-gradient(90deg,${ORANGE},${RED})}
-        .primaryCta{transition:all .15s}
-        .primaryCta:hover{filter:brightness(1.08);transform:translateY(-2px)}
-        .vfade{animation:vf .25s ease}
-        @keyframes vf{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+        .primaryCta{position:relative;overflow:hidden;transition:transform .18s cubic-bezier(.22,1,.36,1),filter .18s,box-shadow .18s}
+        .primaryCta:hover{filter:brightness(1.06);transform:translateY(-2px)}
+        .primaryCta::after{content:'';position:absolute;top:0;left:-140%;width:60%;height:100%;background:linear-gradient(115deg,transparent,rgba(255,255,255,.5),transparent);transform:skewX(-18deg);transition:left .6s cubic-bezier(.22,1,.36,1)}
+        .primaryCta:hover::after{left:160%}
+        .vfade{animation:vf .35s cubic-bezier(.22,1,.36,1)}
+        @keyframes vf{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
         .contentArea{flex:1;min-height:0;overflow:auto}
+        /* animated gradient shimmer on the hero headline */
+        .shimmer{background:linear-gradient(100deg,${ORANGE},${RED},#ff9d5c,${ORANGE});background-size:250% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;animation:shimmerMove 6s linear infinite}
+        @keyframes shimmerMove{to{background-position:250% 0}}
+        /* cursor spotlight follows the pointer for depth */
+        .spotlight{position:absolute;inset:0;z-index:1;pointer-events:none;background:radial-gradient(360px 360px at var(--mx,50%) var(--my,30%),rgba(255,106,0,.14),transparent 70%);transition:background .1s linear}
+        /* fine grain for a premium matte surface */
+        .grain{position:absolute;inset:0;z-index:1;pointer-events:none;opacity:.05;mix-blend-mode:overlay;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+        /* 3D parallax stage for the live-competition mock */
+        .mock3d{position:absolute;inset:0;transform-style:preserve-3d;transition:transform .18s cubic-bezier(.22,1,.36,1)}
+        .rise{animation:rise .7s cubic-bezier(.22,1,.36,1) both}
+        @keyframes rise{from{opacity:0;transform:translateY(22px);filter:blur(6px)}to{opacity:1;transform:none;filter:blur(0)}}
+        .rise-1{animation-delay:.05s}.rise-2{animation-delay:.14s}.rise-3{animation-delay:.23s}.rise-4{animation-delay:.32s}.rise-5{animation-delay:.41s}
+        @media(prefers-reduced-motion:reduce){.shimmer{animation:none}.mock3d{transform:none!important}.spotlight{display:none}.rise{animation:none}}
         @media(max-width:960px){.hide-sm{display:none!important}.home-grid{grid-template-columns:1fr!important}.home-mock{display:none!important}}
       `}</style>
 
@@ -110,7 +152,10 @@ export default function Landing() {
       <div style={{ position: 'absolute', inset: 0, zIndex: 0, pointerEvents: 'none' }}>
         <div className="qz-drift" style={{ position: 'absolute', width: 700, height: 500, top: -160, left: -120, background: `radial-gradient(ellipse, ${ORANGE}22, transparent 65%)`, filter: 'blur(40px)' }} />
         <div className="qz-drift" style={{ position: 'absolute', width: 800, height: 700, top: 40, right: -200, background: `radial-gradient(ellipse, ${PURPLE}22, transparent 65%)`, filter: 'blur(40px)', animationDelay: '-8s' }} />
+        <div className="qz-drift" style={{ position: 'absolute', width: 520, height: 520, bottom: -160, left: '38%', background: `radial-gradient(ellipse, ${RED}18, transparent 62%)`, filter: 'blur(46px)', animationDelay: '-14s' }} />
       </div>
+      <div className="spotlight" aria-hidden />
+      <div className="grain" aria-hidden />
 
       {/* NAV */}
       <nav style={{ position: 'relative', zIndex: 10, display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 16, padding: '16px 32px', borderBottom: '1px solid rgba(255,255,255,.06)' }}>
@@ -131,34 +176,35 @@ export default function Landing() {
           {view === 'home' && (
             <div className="home-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1.05fr', gap: 40, alignItems: 'center' }}>
               <div>
-                <div style={{ display: 'inline-flex', alignItems: 'center', gap: 10, background: 'rgba(255,255,255,.05)', border: '1px solid rgba(255,255,255,.1)', borderRadius: 999, padding: '8px 16px', fontWeight: 800, fontSize: 12.5 }}>
+                <div className="rise rise-1" style={{ display: 'inline-flex', alignItems: 'center', gap: 10, background: 'rgba(255,255,255,.05)', border: '1px solid rgba(255,255,255,.1)', borderRadius: 999, padding: '8px 16px', fontWeight: 800, fontSize: 12.5 }}>
                   <Flame size={14} color={ORANGE} />LIVE QUIZZES RUNNING NOW <span style={{ width: 9, height: 9, borderRadius: '50%', background: GREEN, animation: 'liveDot 1.5s infinite', boxShadow: `0 0 8px ${GREEN}` }} />
                 </div>
-                <h1 style={{ fontSize: 'clamp(40px, 5.4vw, 76px)', fontWeight: 900, lineHeight: 0.98, letterSpacing: -2, margin: '18px 0 0' }}>
-                  <span style={{ background: `linear-gradient(100deg, ${ORANGE}, ${RED})`, WebkitBackgroundClip: 'text', backgroundClip: 'text', color: 'transparent' }}>Live Quiz</span><br />
+                <h1 className="rise rise-2" style={{ fontSize: 'clamp(40px, 5.4vw, 76px)', fontWeight: 900, lineHeight: 0.98, letterSpacing: -2, margin: '18px 0 0' }}>
+                  <span className="shimmer">Live Quiz</span><br />
                   Competitions<br /><span style={{ fontSize: '0.62em' }}>for Every School<span style={{ color: ORANGE }}>.</span></span>
                 </h1>
-                <p style={{ color: '#a49db3', fontSize: 17, lineHeight: 1.5, margin: '18px 0 22px', maxWidth: 440 }}>Team battles, speed rounds and on-stage quiz bowls on the big screen — branded in your school&apos;s colours.</p>
-                <div style={{ display: 'flex', flexWrap: 'wrap', gap: 10, marginBottom: 24 }}>
+                <p className="rise rise-3" style={{ color: '#a49db3', fontSize: 17, lineHeight: 1.5, margin: '18px 0 22px', maxWidth: 440 }}>Team battles, speed rounds and on-stage quiz bowls on the big screen — branded in your school&apos;s colours.</p>
+                <div className="rise rise-4" style={{ display: 'flex', flexWrap: 'wrap', gap: 10, marginBottom: 24 }}>
                   {CHIPS.map((c) => (
-                    <div key={c.t} style={{ display: 'flex', alignItems: 'center', gap: 9, background: 'rgba(255,255,255,.04)', border: '1px solid rgba(255,255,255,.08)', borderRadius: 12, padding: '9px 13px' }}>
+                    <div key={c.t} className="qz-lift" style={{ display: 'flex', alignItems: 'center', gap: 9, background: 'rgba(255,255,255,.04)', border: '1px solid rgba(255,255,255,.08)', borderRadius: 12, padding: '9px 13px' }}>
                       <span style={{ width: 28, height: 28, borderRadius: 8, background: `${c.c}22`, color: c.c, display: 'grid', placeItems: 'center' }}>{c.i}</span>
                       <div style={{ lineHeight: 1.2 }}><div style={{ fontWeight: 800, fontSize: 13 }}>{c.t}</div><div style={{ fontSize: 11, color: '#8b8296' }}>{c.s}</div></div>
                     </div>
                   ))}
                 </div>
-                <div style={{ display: 'flex', flexWrap: 'wrap', gap: 14, alignItems: 'center' }}>
+                <div className="rise rise-5" style={{ display: 'flex', flexWrap: 'wrap', gap: 14, alignItems: 'center' }}>
                   <a href="/signup" className="primaryCta" style={{ ...pill(`linear-gradient(135deg, ${ORANGE}, ${RED})`), padding: '15px 30px', fontSize: 16, boxShadow: `0 12px 30px ${RED}55` }}><Flame size={17} />Start Hosting Quiz <ArrowRight size={17} /></a>
                   <button onClick={() => setView('how')} style={{ ...pill('rgba(255,255,255,.05)'), padding: '15px 26px', fontSize: 16, border: '1px solid rgba(255,255,255,.15)' }}><Play size={16} fill="currentColor" />How it works</button>
                 </div>
               </div>
 
-              {/* dashboard mock */}
-              <div className="home-mock" style={{ position: 'relative', minHeight: 440 }}>
-                <Tile letter="A" from={PURPLE} to="#6d28d9" pos={{ top: 8, left: 60, width: 66, height: 66, ['--d' as string]: '5.5s' }} />
-                <Tile letter="B" from={PINK} to="#be185d" pos={{ top: 16, right: 14, width: 72, height: 72, ['--d' as string]: '6.5s' }} />
-                <Tile letter="C" from={ORANGE} to="#c2410c" pos={{ top: 320, left: -22, width: 62, height: 62, ['--d' as string]: '5s' }} />
-                <div style={{ ...card, position: 'absolute', top: 0, right: 56, padding: '12px 18px', zIndex: 3, border: `1px solid ${RED}44` }}>
+              {/* dashboard mock — 3D parallax stage */}
+              <div className="home-mock rise rise-3" style={{ position: 'relative', minHeight: 440, perspective: 1100 }}>
+               <div ref={mockRef} className="mock3d">
+                <Tile letter="A" from={PURPLE} to="#6d28d9" pos={{ top: 8, left: 60, width: 66, height: 66, transform: 'translateZ(70px)', ['--d' as string]: '5.5s' }} />
+                <Tile letter="B" from={PINK} to="#be185d" pos={{ top: 16, right: 14, width: 72, height: 72, transform: 'translateZ(90px)', ['--d' as string]: '6.5s' }} />
+                <Tile letter="C" from={ORANGE} to="#c2410c" pos={{ top: 320, left: -22, width: 62, height: 62, transform: 'translateZ(55px)', ['--d' as string]: '5s' }} />
+                <div style={{ ...card, position: 'absolute', top: 0, right: 56, padding: '12px 18px', zIndex: 3, border: `1px solid ${RED}44`, transform: 'translateZ(55px)' }}>
                   <div style={{ textAlign: 'center', fontSize: 9.5, fontWeight: 800, letterSpacing: 2, color: RED, marginBottom: 5 }}>NEXT LIVE QUIZ</div>
                   <div style={{ display: 'flex', gap: 5, alignItems: 'flex-start' }}>
                     {[['HR', t.h], ['MIN', t.m], ['SEC', t.s]].map(([l, v], i) => (
@@ -172,7 +218,7 @@ export default function Landing() {
                     ))}
                   </div>
                 </div>
-                <div style={{ ...card, position: 'absolute', top: 100, left: 14, right: 6, padding: 18, zIndex: 2, boxShadow: `0 30px 70px rgba(0,0,0,.5), 0 0 40px ${PURPLE}22` }}>
+                <div style={{ ...card, position: 'absolute', top: 100, left: 14, right: 6, padding: 18, zIndex: 2, boxShadow: `0 30px 70px rgba(0,0,0,.5), 0 0 40px ${PURPLE}22`, transform: 'translateZ(24px)' }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 14 }}>
                     <span style={{ fontWeight: 800, letterSpacing: 1, fontSize: 12.5 }}>LIVE COMPETITION</span>
                     <span style={{ background: RED, fontSize: 8.5, fontWeight: 900, padding: '3px 8px', borderRadius: 5, letterSpacing: 1 }}>● LIVE</span>
@@ -200,6 +246,7 @@ export default function Landing() {
                     </div>
                   </div>
                 </div>
+               </div>
               </div>
             </div>
           )}
