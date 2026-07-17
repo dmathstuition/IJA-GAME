@@ -1,4 +1,4 @@
-# Quizarena
+# Quizzard
 
 Multi-school SaaS for running live quiz competitions — the migration of the
 Infant Jesus Academy STEAM game into a product any school can sign up for,
@@ -16,7 +16,7 @@ Realtime) · Stripe · Tailwind · Vercel.
 ## Where things are
 
 ```
-middleware.ts                  Tenant resolution from {slug}.quizarena.app
+middleware.ts                  Tenant resolution from {slug}.quizzard.app
 supabase/
   migrations/0001_init.sql     Schema + Row-Level Security (the isolation model)
   seed.sql                     Demo school for local dev

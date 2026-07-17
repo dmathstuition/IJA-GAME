@@ -4,7 +4,7 @@ import { BrandLogo } from '@/components/BrandLogo';
 
 const ORANGE = '#ff7a1a';
 
-// Wraps an organiser control panel in the QuizArena admin look: dark ground,
+// Wraps an organiser control panel in the Quizzard admin look: dark ground,
 // ambient glows, and a branded top bar with a link back to the dashboard.
 // The school's theme variables still cascade in, so per-school accents remain.
 export function HostShell({ children }: { children: ReactNode }) {
@@ -25,7 +25,7 @@ export function HostShell({ children }: { children: ReactNode }) {
         </div>
       </header>
 
-      <div style={{ position: 'relative', zIndex: 10 }}>{children}</div>
+      <div className="qz-in" style={{ position: 'relative', zIndex: 10 }}>{children}</div>
     </div>
   );
 }

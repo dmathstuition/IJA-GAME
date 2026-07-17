@@ -1,4 +1,4 @@
-# QuizArena mailer (Google Apps Script)
+# Quizzard mailer (Google Apps Script)
 
 Sends transactional emails from your own Gmail — no email provider or API key needed.
 

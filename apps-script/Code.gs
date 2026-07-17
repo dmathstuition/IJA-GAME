@@ -1,7 +1,7 @@
 /**
- * QuizArena mailer — Google Apps Script web app.
+ * Quizzard mailer — Google Apps Script web app.
  *
- * Receives JSON POSTs from the QuizArena app and sends emails from your Gmail:
+ * Receives JSON POSTs from the Quizzard app and sends emails from your Gmail:
  *   • type "welcome"  → login/sign-up affirmation to a new school
  *   • type "receipt"  → payment receipt after a PayPal activation
  *
@@ -18,7 +18,7 @@
  * 5. Run doPost once from the editor to grant the Gmail send permission.
  */
 
-var FROM_NAME = 'QuizArena';
+var FROM_NAME = 'Quizzard';
 
 function doPost(e) {
   try {
@@ -41,9 +41,9 @@ function doPost(e) {
 
 function sendWelcome_(b) {
   var school = b.school || 'your school';
-  var subject = 'Welcome to QuizArena 🎉';
+  var subject = 'Welcome to Quizzard 🎉';
   var html = wrap_(
-    'Welcome to QuizArena!',
+    'Welcome to Quizzard!',
     '<p>Your account for <b>' + esc_(school) + '</b> is ready.</p>' +
       '<p>You can now build question banks and run live quiz competitions — Standard, Team Battle, Speed and on-stage Quiz Bowl.</p>' +
       '<p><a class="btn" href="https://ija-game.vercel.app/dashboard">Open your dashboard</a></p>' +
@@ -54,7 +54,7 @@ function sendWelcome_(b) {
 
 function sendReceipt_(b) {
   var amount = (b.currency || 'USD') + ' ' + (b.amount || '');
-  var subject = 'Your QuizArena receipt — ' + (b.plan || 'activation');
+  var subject = 'Your Quizzard receipt — ' + (b.plan || 'activation');
   var rows =
     row_('School', b.school || '—') +
     row_('Plan', b.plan || '—') +
@@ -81,12 +81,12 @@ function row_(k, v) {
 function wrap_(heading, inner) {
   return (
     '<div style="font-family:system-ui,Arial,sans-serif;max-width:560px;margin:0 auto;padding:24px;color:#1a1428">' +
-    '<div style="font-weight:900;font-size:20px;margin-bottom:4px">QUIZ<span style="color:#ff7a1a">ARENA</span></div>' +
+    '<div style="font-weight:900;font-size:20px;margin-bottom:4px">QUIZ<span style="color:#ff7a1a">ZARD</span></div>' +
     '<div style="font-size:11px;letter-spacing:2px;color:#8b8296;margin-bottom:20px">LEARN. PRACTICE. WIN.</div>' +
     '<h1 style="font-size:22px;margin:0 0 12px">' + esc_(heading) + '</h1>' +
     inner +
     '<style>.btn{display:inline-block;background:linear-gradient(135deg,#ff7a1a,#ff2d55);color:#fff;text-decoration:none;font-weight:800;padding:11px 20px;border-radius:10px;margin:8px 0}</style>' +
-    '<div style="margin-top:24px;padding-top:14px;border-top:1px solid #eee;font-size:12px;color:#8b8296">QuizArena · Founded by DMaths Academy · dmathstuition@gmail.com</div>' +
+    '<div style="margin-top:24px;padding-top:14px;border-top:1px solid #eee;font-size:12px;color:#8b8296">Quizzard · Founded by DMaths Academy · dmathstuition@gmail.com</div>' +
     '</div>'
   );
 }

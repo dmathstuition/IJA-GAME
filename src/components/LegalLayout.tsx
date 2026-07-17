@@ -21,7 +21,7 @@ export function LegalLayout({ title, updated, children }: { title: string; updat
         <div style={{ color: '#8b8296', fontSize: 13.5, marginBottom: 28 }}>Last updated: {updated}</div>
         <div style={{ color: '#c9c2d6', fontSize: 15.5, lineHeight: 1.75 }}>{children}</div>
         <div style={{ marginTop: 40, paddingTop: 20, borderTop: '1px solid rgba(255,255,255,.08)', fontSize: 13, color: '#8b8296' }}>
-          QuizArena is founded and operated by <b style={{ color: '#c9c2d6' }}>DMaths Academy</b>. Questions? Email <a href="mailto:dmathstuition@gmail.com" style={{ color: ORANGE, textDecoration: 'none' }}>dmathstuition@gmail.com</a>.
+          Quizzard is founded and operated by <b style={{ color: '#c9c2d6' }}>DMaths Academy</b>. Questions? Email <a href="mailto:dmathstuition@gmail.com" style={{ color: ORANGE, textDecoration: 'none' }}>dmathstuition@gmail.com</a>.
         </div>
       </div>
     </div>

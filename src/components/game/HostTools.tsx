@@ -77,7 +77,7 @@ export function HostTools({ sessionId, joinCode, questions }: { sessionId: strin
     const blob = new Blob([JSON.stringify(questions, null, 2)], { type: 'application/json' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
-    a.href = url; a.download = `quizarena-${joinCode}-questions.json`; a.click();
+    a.href = url; a.download = `quizzard-${joinCode}-questions.json`; a.click();
     URL.revokeObjectURL(url);
   };
 

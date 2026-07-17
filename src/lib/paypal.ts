@@ -60,7 +60,7 @@ export async function createOrder(a: CreateOrderArgs): Promise<{ id: string; app
         },
       ],
       application_context: {
-        brand_name: a.brandName ?? 'QuizArena',
+        brand_name: a.brandName ?? 'Quizzard',
         user_action: 'PAY_NOW',
         shipping_preference: 'NO_SHIPPING',
         return_url: a.returnUrl,

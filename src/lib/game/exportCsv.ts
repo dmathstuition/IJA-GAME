@@ -19,7 +19,7 @@ export function downloadCsv(filename: string, headers: string[], rows: (string |
 export function exportLeaderboard(joinCode: string, players: { name: string; score: number }[]) {
   const ranked = [...players].sort((a, b) => b.score - a.score);
   downloadCsv(
-    `quizarena-${joinCode}-results.csv`,
+    `quizzard-${joinCode}-results.csv`,
     ['Rank', 'Name', 'Score'],
     ranked.map((p, i) => [i + 1, p.name, p.score]),
   );
