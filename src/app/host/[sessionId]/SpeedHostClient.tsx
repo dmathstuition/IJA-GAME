@@ -74,7 +74,7 @@ export function SpeedHostClient({ sessionId, joinCode, questions }: { sessionId:
         {cq && runner && <div style={{ marginTop: 8, fontSize: 14 }}>{cq.text}</div>}
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
+      <div className="stack-mobile" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
         {/* Registered players */}
         <div style={{ border: '1px solid rgba(255,255,255,.12)', borderRadius: 14, padding: 14, background: 'linear-gradient(160deg, rgba(30,20,45,.55), rgba(15,10,25,.7))' }}>
           <div style={{ fontSize: 12, color: 'var(--text-dim)', marginBottom: 8 }}>PLAYERS — TAP TO LAUNCH</div>

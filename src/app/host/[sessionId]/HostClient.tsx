@@ -42,7 +42,7 @@ export function HostClient({ sessionId, joinCode, questions }: { sessionId: stri
         </div>
       </header>
 
-      <section style={{ display: 'grid', gridTemplateColumns: '1fr 300px', gap: 16, marginTop: 20 }}>
+      <section className="stack-mobile" style={{ display: 'grid', gridTemplateColumns: '1fr 300px', gap: 16, marginTop: 20 }}>
         <div style={{ display: 'grid', gap: 12 }}>
           {/* Global controls */}
           <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>

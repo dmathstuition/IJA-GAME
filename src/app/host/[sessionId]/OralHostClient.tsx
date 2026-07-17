@@ -134,7 +134,7 @@ export function OralHostClient({ sessionId, joinCode, questions }: { sessionId: 
         </div>
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 300px', gap: 12 }}>
+      <div className="stack-mobile" style={{ display: 'grid', gridTemplateColumns: '1fr 300px', gap: 12 }}>
         {/* bank */}
         <div style={{ border: '1px solid rgba(255,255,255,.12)', borderRadius: 14, padding: 16, background: 'linear-gradient(160deg, rgba(30,20,45,.55), rgba(15,10,25,.7))' }}>
           <div style={{ fontSize: 12, color: 'var(--text-dim)', marginBottom: 8 }}>QUESTION BANK · {used.length}/{bank.length} used</div>
