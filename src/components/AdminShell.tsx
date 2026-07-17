@@ -64,7 +64,7 @@ export function AdminShell({ active, title, subtitle, children }: { active?: str
         </div>
       </header>
 
-      <main style={{ position: 'relative', zIndex: 10, maxWidth: 1040, margin: '0 auto', padding: '32px 24px 60px' }}>
+      <main className="qz-in" style={{ position: 'relative', zIndex: 10, maxWidth: 1040, margin: '0 auto', padding: '32px 24px 60px' }}>
         {title && <h1 style={{ fontSize: 30, fontWeight: 900, letterSpacing: -0.8, marginBottom: subtitle ? 4 : 22 }}>{title}</h1>}
         {subtitle && <p style={{ color: '#a49db3', fontSize: 15, marginBottom: 24 }}>{subtitle}</p>}
         {children}

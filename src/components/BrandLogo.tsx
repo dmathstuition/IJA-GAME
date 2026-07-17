@@ -5,7 +5,7 @@ const RED = '#ff2d55';
 const NAVY = '#10233f';
 
 /**
- * QuizArena logo mark — the gradient "Q" droplet with the dissolving pixel
+ * Quizzard logo mark — the gradient "Q" droplet with the dissolving pixel
  * squares and a check inside a white lens. Vector, so it stays crisp at any
  * size. `id` keeps the gradient defs unique when several marks share a page.
  */
@@ -37,7 +37,7 @@ export function LogoMark({ size = 40, id = 'qa' }: { size?: number; id?: string 
 }
 
 /**
- * Full QuizArena lockup: mark + wordmark (+ optional tagline).
+ * Full Quizzard lockup: mark + wordmark (+ optional tagline).
  * `tone` picks the "QUIZ" colour so it reads on dark or light backgrounds;
  * "ARENA" is always the orange→red gradient.
  */
@@ -61,7 +61,7 @@ export function BrandLogo({
       <span style={{ lineHeight: 1 }}>
         <span style={{ fontWeight: 900, fontSize: word, letterSpacing: -0.5, display: 'block' }}>
           <span style={{ color: quizColor }}>QUIZ</span>
-          <span style={{ background: `linear-gradient(100deg, ${ORANGE}, ${RED})`, WebkitBackgroundClip: 'text', backgroundClip: 'text', color: 'transparent' }}>ARENA</span>
+          <span style={{ background: `linear-gradient(100deg, ${ORANGE}, ${RED})`, WebkitBackgroundClip: 'text', backgroundClip: 'text', color: 'transparent' }}>ZARD</span>
         </span>
         {tagline && (
           <span style={{ display: 'block', fontSize: Math.max(8, Math.round(height * 0.2)), letterSpacing: 2.5, color: tone === 'dark' ? '#8b8296' : '#64748b', fontWeight: 700, marginTop: height * 0.08 }}>

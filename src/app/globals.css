@@ -28,6 +28,49 @@ body {
   box-sizing: border-box;
 }
 
+/* ── Shared motion utilities (marketing / admin / auth surfaces) ──────────────
+   Game screens have their own richer motion in game.css. These keep the rest of
+   the app feeling smooth and alive, and are all disabled under reduced-motion. */
+:root {
+  --qz-ease: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@keyframes qzFadeUp { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+@keyframes qzFadeIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes qzScaleIn { from { opacity: 0; transform: scale(0.96); } to { opacity: 1; transform: scale(1); } }
+@keyframes qzFloat { 0%, 100% { transform: translate(0, 0); } 50% { transform: translate(0, -18px); } }
+@keyframes qzDrift { 0% { transform: translate(0,0) scale(1); } 50% { transform: translate(3%, 4%) scale(1.06); } 100% { transform: translate(0,0) scale(1); } }
+
+.qz-in { animation: qzFadeUp 0.5s var(--qz-ease) both; }
+.qz-fade { animation: qzFadeIn 0.5s ease both; }
+.qz-pop { animation: qzScaleIn 0.4s var(--qz-ease) both; }
+
+/* Stagger direct children (up to 12) so grids cascade in. */
+.qz-stagger > * { animation: qzFadeUp 0.5s var(--qz-ease) both; }
+.qz-stagger > *:nth-child(1) { animation-delay: 0.04s; }
+.qz-stagger > *:nth-child(2) { animation-delay: 0.09s; }
+.qz-stagger > *:nth-child(3) { animation-delay: 0.14s; }
+.qz-stagger > *:nth-child(4) { animation-delay: 0.19s; }
+.qz-stagger > *:nth-child(5) { animation-delay: 0.24s; }
+.qz-stagger > *:nth-child(6) { animation-delay: 0.29s; }
+.qz-stagger > *:nth-child(7) { animation-delay: 0.34s; }
+.qz-stagger > *:nth-child(8) { animation-delay: 0.39s; }
+.qz-stagger > *:nth-child(n+9) { animation-delay: 0.44s; }
+
+/* Hover lift for cards / tiles. */
+.qz-lift { transition: transform 0.2s var(--qz-ease), box-shadow 0.2s var(--qz-ease), border-color 0.2s ease; }
+.qz-lift:hover { transform: translateY(-4px); box-shadow: 0 16px 40px -14px rgba(0, 0, 0, 0.55); }
+
+/* Slow ambient drift for the decorative glow blobs. */
+.qz-drift { animation: qzDrift 22s ease-in-out infinite; }
+
+/* Consistent, snappy feedback on interactive elements outside the game canvas. */
+button, a, input, textarea, select {
+  transition: background-color 0.18s ease, border-color 0.18s ease, color 0.18s ease,
+    box-shadow 0.18s ease, transform 0.12s var(--qz-ease), filter 0.18s ease, opacity 0.18s ease;
+}
+button:not(:disabled):active { transform: translateY(1px) scale(0.98); }
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,

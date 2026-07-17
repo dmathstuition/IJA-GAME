@@ -79,7 +79,7 @@ function LoginForm() {
             <input autoFocus style={{ ...field, paddingLeft: 38 }} placeholder="Search for your school" value={query} onChange={(e) => setQuery(e.target.value)} />
           </div>
           {query.trim().length >= 2 && (
-            <div style={{ display: 'grid', gap: 6 }}>
+            <div className="qz-stagger" style={{ display: 'grid', gap: 6 }}>
               {searching && <p style={{ fontSize: 13, color: 'var(--text-dim)' }}>Searching…</p>}
               {!searching && results.length === 0 && <p style={{ fontSize: 13, color: 'var(--text-dim)' }}>No school found for “{query.trim()}”.</p>}
               {results.map((s) => (

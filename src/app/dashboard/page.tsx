@@ -33,7 +33,7 @@ export default async function Dashboard() {
     : { data: [] };
 
   return (
-    <AdminShell active="Sessions" title={org?.name ?? 'Dashboard'} subtitle={org ? `${org.slug}.quizarena.app · ${STATUS_LABEL[org.subscription_status] ?? org.subscription_status}` : 'Finish onboarding to continue.'}>
+    <AdminShell active="Sessions" title={org?.name ?? 'Dashboard'} subtitle={org ? `${org.slug}.quizzard.app · ${STATUS_LABEL[org.subscription_status] ?? org.subscription_status}` : 'Finish onboarding to continue.'}>
       {!live && (
         <a href="/dashboard/billing" style={{ ...adminCard, display: 'flex', alignItems: 'center', gap: 10, textDecoration: 'none', color: 'inherit', marginBottom: 16, borderColor: 'rgba(255,214,0,.35)', background: 'rgba(255,214,0,.07)' }}>
           <Lock size={18} color="#fbbf24" />
@@ -52,7 +52,7 @@ export default async function Dashboard() {
 
       {/* How it works — a clear 3-step path for new organisers */}
       <h2 style={{ fontSize: 14, color: '#8b8296', letterSpacing: 1, textTransform: 'uppercase', fontWeight: 800, margin: '0 0 12px' }}>How it works</h2>
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(210px,1fr))', gap: 12, marginBottom: 26 }}>
+      <div className="qz-stagger" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(210px,1fr))', gap: 12, marginBottom: 26 }}>
         {[
           ['1', <Library key="i" size={22} color="#60a5fa" />, 'Build your questions', 'Create a question bank, or import JSON straight into a live game from the Organiser Tools.', '/dashboard/questions'],
           ['2', <Play key="i" size={22} color="#4ade80" />, 'Start a game', 'Launch a mode (Standard, Team, Speed or Oral) and put the join code on the projector.', null],
@@ -69,7 +69,7 @@ export default async function Dashboard() {
             </>
           );
           return href ? (
-            <a key={n as string} href={href as string} style={{ ...adminCard, textDecoration: 'none', color: 'inherit' }}>{inner}</a>
+            <a key={n as string} href={href as string} className="qz-lift" style={{ ...adminCard, textDecoration: 'none', color: 'inherit' }}>{inner}</a>
           ) : (
             <div key={n as string} style={adminCard}>{inner}</div>
           );
@@ -82,7 +82,7 @@ export default async function Dashboard() {
       )}
       <div style={{ display: 'grid', gap: 10 }}>
         {sessions?.map((s) => (
-          <div key={s.id} style={{ ...adminCard, padding: '16px 20px', display: 'flex', alignItems: 'center', gap: 14, flexWrap: 'wrap' }}>
+          <div key={s.id} className="qz-lift" style={{ ...adminCard, padding: '16px 20px', display: 'flex', alignItems: 'center', gap: 14, flexWrap: 'wrap' }}>
             {MODE_ICON[s.mode] ?? MODE_ICON.standard}
             <div style={{ flex: 1, minWidth: 140 }}>
               <div style={{ fontFamily: 'ui-monospace,monospace', letterSpacing: 3, fontSize: 20, fontWeight: 800 }}>{s.join_code}</div>
@@ -94,13 +94,13 @@ export default async function Dashboard() {
       </div>
 
       <h2 style={{ fontSize: 14, color: '#8b8296', letterSpacing: 1, textTransform: 'uppercase', fontWeight: 800, margin: '30px 0 12px' }}>Manage</h2>
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(220px,1fr))', gap: 12 }}>
+      <div className="qz-stagger" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(220px,1fr))', gap: 12 }}>
         {[
           [<Library key="i" size={24} color="#60a5fa" />, 'Question banks', '/dashboard/questions', 'Build & import questions'],
           [<Palette key="i" size={24} color="#8b5cf6" />, 'Branding', '/dashboard/branding', 'Theme & animation'],
           [<CreditCard key="i" size={24} color="#4ade80" />, 'Billing', '/dashboard/billing', 'Plan & payment'],
         ].map(([icon, label, href, desc]) => (
-          <a key={href as string} href={href as string} style={{ ...adminCard, textDecoration: 'none', color: 'inherit', transition: 'border-color .15s' }}>
+          <a key={href as string} href={href as string} className="qz-lift" style={{ ...adminCard, textDecoration: 'none', color: 'inherit' }}>
             <div style={{ marginBottom: 8 }}>{icon}</div>
             <div style={{ fontWeight: 800, fontSize: 16 }}>{label as string}</div>
             <div style={{ color: '#8b8296', fontSize: 13, marginTop: 2 }}>{desc as string}</div>

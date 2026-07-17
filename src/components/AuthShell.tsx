@@ -55,6 +55,7 @@ export function AuthShell({ title, sub, children }: { title: string; sub: string
       </a>
 
       <div
+        className="qz-pop"
         style={{
           width: '100%',
           maxWidth: 400,

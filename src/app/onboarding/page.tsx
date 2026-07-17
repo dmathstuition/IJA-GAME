@@ -51,7 +51,7 @@ export default function OnboardingPage() {
         <input style={field} placeholder="School name (e.g. Infant Jesus Academy)" value={name} onChange={(e) => setName(e.target.value)} required />
         <input style={field} placeholder="URL slug" value={effectiveSlug} onChange={(e) => setSlug(slugify(e.target.value))} required />
         <p style={{ fontSize: 12, color: 'var(--text-dim)' }}>
-          {effectiveSlug || 'your-school'}.{process.env.NEXT_PUBLIC_ROOT_DOMAIN ?? 'quizarena.app'}
+          {effectiveSlug || 'your-school'}.{process.env.NEXT_PUBLIC_ROOT_DOMAIN ?? 'quizzard.app'}
         </p>
         {err && <p style={{ color: 'var(--wrong)', fontSize: 13 }}>{err}</p>}
         <button style={primaryBtn} disabled={busy || !name}>{busy ? 'Setting up…' : 'Create school →'}</button>

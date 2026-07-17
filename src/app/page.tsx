@@ -108,8 +108,8 @@ export default function Landing() {
 
       {/* ambient glows */}
       <div style={{ position: 'absolute', inset: 0, zIndex: 0, pointerEvents: 'none' }}>
-        <div style={{ position: 'absolute', width: 700, height: 500, top: -160, left: -120, background: `radial-gradient(ellipse, ${ORANGE}22, transparent 65%)`, filter: 'blur(40px)' }} />
-        <div style={{ position: 'absolute', width: 800, height: 700, top: 40, right: -200, background: `radial-gradient(ellipse, ${PURPLE}22, transparent 65%)`, filter: 'blur(40px)' }} />
+        <div className="qz-drift" style={{ position: 'absolute', width: 700, height: 500, top: -160, left: -120, background: `radial-gradient(ellipse, ${ORANGE}22, transparent 65%)`, filter: 'blur(40px)' }} />
+        <div className="qz-drift" style={{ position: 'absolute', width: 800, height: 700, top: 40, right: -200, background: `radial-gradient(ellipse, ${PURPLE}22, transparent 65%)`, filter: 'blur(40px)', animationDelay: '-8s' }} />
       </div>
 
       {/* NAV */}
@@ -210,9 +210,9 @@ export default function Landing() {
                 <div style={eyebrow(ORANGE)}>FEATURES</div>
                 <h2 style={h2}>Everything you need to run a live quiz</h2>
               </div>
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(280px,1fr))', gap: 14 }}>
+              <div className="qz-stagger" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(280px,1fr))', gap: 14 }}>
                 {FEATURES.map((f) => (
-                  <div key={f.t} style={{ ...card, padding: 20 }}>
+                  <div key={f.t} className="qz-lift" style={{ ...card, padding: 20 }}>
                     <span style={{ width: 46, height: 46, borderRadius: 12, background: `${f.c}1f`, color: f.c, display: 'grid', placeItems: 'center', marginBottom: 12 }}>{f.i}</span>
                     <div style={{ fontWeight: 800, fontSize: 16.5, marginBottom: 5 }}>{f.t}</div>
                     <div style={{ color: '#a49db3', fontSize: 13.5, lineHeight: 1.5 }}>{f.d}</div>
@@ -228,9 +228,9 @@ export default function Landing() {
                 <div style={eyebrow(PURPLE)}>HOW IT WORKS</div>
                 <h2 style={h2}>Live in three steps</h2>
               </div>
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(260px,1fr))', gap: 14 }}>
+              <div className="qz-stagger" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(260px,1fr))', gap: 14 }}>
                 {STEPS.map(([n, ti, d]) => (
-                  <div key={n} style={{ ...card, padding: 22 }}>
+                  <div key={n} className="qz-lift" style={{ ...card, padding: 22 }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 10 }}>
                       <span style={{ width: 40, height: 40, borderRadius: 999, background: `linear-gradient(135deg,${ORANGE},${RED})`, display: 'grid', placeItems: 'center', fontWeight: 900, fontSize: 18, boxShadow: `0 6px 16px ${RED}44` }}>{n}</span>
                       <div style={{ fontWeight: 800, fontSize: 16.5 }}>{ti}</div>
@@ -273,7 +273,7 @@ export default function Landing() {
               <p style={{ color: '#a49db3', fontSize: 15.5, maxWidth: 540, margin: '0 auto 24px' }}>Start free, then pay once with PayPal to unlock live hosting for the term or the year. No subscription.</p>
               <div style={{ display: 'flex', gap: 16, flexWrap: 'wrap', justifyContent: 'center', marginBottom: 24 }}>
                 {PRICE.map(([n, p, dur, feat]) => (
-                  <div key={n} style={{ ...card, padding: '26px 34px', minWidth: 220, border: feat ? `1px solid ${ORANGE}66` : card.border, boxShadow: feat ? `0 0 34px ${ORANGE}22` : 'none' }}>
+                  <div key={n} className="qz-lift" style={{ ...card, padding: '26px 34px', minWidth: 220, border: feat ? `1px solid ${ORANGE}66` : card.border, boxShadow: feat ? `0 0 34px ${ORANGE}22` : 'none' }}>
                     {feat && <div style={{ fontSize: 10.5, fontWeight: 900, letterSpacing: 1, color: ORANGE, marginBottom: 6 }}>BEST VALUE</div>}
                     <div style={{ fontWeight: 800, fontSize: 15, color: '#a49db3' }}>{n}</div>
                     <div style={{ fontWeight: 900, fontSize: 44, letterSpacing: -1, margin: '4px 0' }}>{p}</div>
@@ -292,9 +292,9 @@ export default function Landing() {
                 <div style={eyebrow(PINK)}>RESOURCES</div>
                 <h2 style={h2}>Frequently asked questions</h2>
               </div>
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(300px,1fr))', gap: 12, maxWidth: 960, margin: '0 auto' }}>
+              <div className="qz-stagger" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(300px,1fr))', gap: 12, maxWidth: 960, margin: '0 auto' }}>
                 {FAQ.map(([q, a]) => (
-                  <div key={q} style={{ ...card, padding: 18 }}>
+                  <div key={q} className="qz-lift" style={{ ...card, padding: 18 }}>
                     <div style={{ fontWeight: 800, fontSize: 15, marginBottom: 7 }}>{q}</div>
                     <div style={{ color: '#a49db3', fontSize: 13.5, lineHeight: 1.55 }}>{a}</div>
                   </div>
@@ -308,7 +308,7 @@ export default function Landing() {
 
       {/* FOOTER — always visible, legal + founder */}
       <footer style={{ position: 'relative', zIndex: 10, borderTop: '1px solid rgba(255,255,255,.06)', padding: '12px 32px', display: 'flex', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'space-between', gap: 10, fontSize: 13 }}>
-        <div style={{ color: '#8b8296' }}>© {new Date().getFullYear()} QuizArena · Founded by <b style={{ color: '#c9c2d6' }}>DMaths Academy</b></div>
+        <div style={{ color: '#8b8296' }}>© {new Date().getFullYear()} Quizzard · Founded by <b style={{ color: '#c9c2d6' }}>DMaths Academy</b></div>
         <div style={{ display: 'flex', gap: 20, flexWrap: 'wrap' }}>
           <a href="/privacy" style={{ color: '#c9c2d6', textDecoration: 'none' }}>Privacy</a>
           <a href="/terms" style={{ color: '#c9c2d6', textDecoration: 'none' }}>Terms &amp; Conditions</a>

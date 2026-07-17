@@ -1,12 +1,12 @@
 import { LegalLayout, LegalSection } from '@/components/LegalLayout';
 
-export const metadata = { title: 'Privacy Policy · QuizArena' };
+export const metadata = { title: 'Privacy Policy · Quizzard' };
 
 export default function PrivacyPage() {
   return (
     <LegalLayout title="Privacy Policy" updated="July 2026">
       <p style={{ marginTop: 0 }}>
-        This Privacy Policy explains how QuizArena (&ldquo;we&rdquo;, &ldquo;us&rdquo;), a product founded and operated by DMaths Academy,
+        This Privacy Policy explains how Quizzard (&ldquo;we&rdquo;, &ldquo;us&rdquo;), a product founded and operated by DMaths Academy,
         collects and uses information when a school uses our live quiz platform.
       </p>
 
@@ -37,7 +37,7 @@ export default function PrivacyPage() {
       </LegalSection>
 
       <LegalSection heading="6. Children&rsquo;s privacy">
-        <p>QuizArena is used in schools under the supervision of teachers. Students participate using only a display name chosen for the game. We do not knowingly collect personal contact information from children.</p>
+        <p>Quizzard is used in schools under the supervision of teachers. Students participate using only a display name chosen for the game. We do not knowingly collect personal contact information from children.</p>
       </LegalSection>
 
       <LegalSection heading="7. Your rights">
