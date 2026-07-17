@@ -68,7 +68,7 @@ export function DisplayClient({ sessionId, joinCode, schoolName, animation }: { 
                 const p = ranked[rank as number];
                 return (
                   <div key={rank as number} style={{ display: 'grid', gap: 8, placeItems: 'center' }}>
-                    <span className="avatar" style={{ width: 56, height: 56, fontSize: 22, background: col as string }}>{initial(p.name)}</span>
+                    <span className="avatar" style={{ width: 56, height: 56, fontSize: p.avatar ? 30 : 22, background: p.avatar ? 'rgba(255,255,255,.14)' : (col as string) }}>{p.avatar || initial(p.name)}</span>
                     <div style={{ fontWeight: 900, maxWidth: 130, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{p.name}</div>
                     <div style={{ fontFamily: 'ui-monospace,monospace', color: 'var(--accent)', fontWeight: 900 }}>{p.score}</div>
                     <div className="slide-up" style={{ width: 108, height: h as number, borderRadius: '16px 16px 0 0', background: `linear-gradient(180deg, ${col as string}, transparent)`, border: `2px solid ${col as string}`, display: 'grid', placeItems: 'start center', paddingTop: 10, fontFamily: '"Fredoka One",sans-serif', fontSize: 28 }}>
@@ -84,7 +84,7 @@ export function DisplayClient({ sessionId, joinCode, schoolName, animation }: { 
             {ranked.slice(0, 10).map((p, i) => (
               <div key={p.id} className={`lbrow ${i === 0 ? 'top1' : ''}`} style={{ animationDelay: `${i * 0.05}s`, fontSize: 22 }}>
                 <b style={{ width: 36, color: i === 0 ? 'var(--accent)' : 'rgba(255,255,255,.7)' }}>{i + 1}</b>
-                <span className="avatar" style={{ background: AV[i % AV.length] }}>{initial(p.name)}</span>
+                <span className="avatar" style={{ background: p.avatar ? 'rgba(255,255,255,.14)' : AV[i % AV.length], fontSize: p.avatar ? 22 : undefined }}>{p.avatar || initial(p.name)}</span>
                 <span style={{ flex: 1, textAlign: 'left', fontWeight: 800 }}>{p.name}</span>
                 <b style={{ fontFamily: 'ui-monospace,monospace', color: 'var(--accent)' }}>{p.score}</b>
               </div>
@@ -101,7 +101,7 @@ export function DisplayClient({ sessionId, joinCode, schoolName, animation }: { 
           <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', justifyContent: 'center', maxWidth: 900, marginTop: 20 }}>
             {ranked.map((p, i) => (
               <span key={p.id} className="pop-in" style={{ display: 'inline-flex', alignItems: 'center', gap: 8, background: 'rgba(255,255,255,.12)', padding: '7px 16px 7px 7px', borderRadius: 999, fontWeight: 800, fontSize: 18, animationDelay: `${Math.min(i * 0.06, 1.2)}s` }}>
-                <span className="avatar" style={{ width: 32, height: 32, fontSize: 14, background: AV[i % AV.length] }}>{initial(p.name)}</span>{p.name}
+                <span className="avatar" style={{ width: 32, height: 32, fontSize: p.avatar ? 18 : 14, background: p.avatar ? 'rgba(255,255,255,.14)' : AV[i % AV.length] }}>{p.avatar || initial(p.name)}</span>{p.name}
               </span>
             ))}
           </div>
