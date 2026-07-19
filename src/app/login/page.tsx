@@ -64,7 +64,9 @@ function LoginForm() {
       return setErr(`This account isn't part of ${school.name}. Pick the right school or sign in without one.`);
     }
     setBusy(false);
-    router.push(profile ? next : '/onboarding');
+    // No profile yet? New organisers set up a school; invited users go accept.
+    const dest = profile ? next : next.startsWith('/invite') ? next : '/onboarding';
+    router.push(dest);
     router.refresh();
   }
 

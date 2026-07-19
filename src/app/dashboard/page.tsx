@@ -2,7 +2,7 @@
 import { createClient } from '@/lib/supabase/server';
 import { AdminShell, adminCard } from '@/components/AdminShell';
 import { canHostLive } from '@/lib/billing';
-import { Lock, Library, Play, Smartphone, FileText, Swords, Zap, Mic, Palette, CreditCard, History } from 'lucide-react';
+import { Lock, Library, Play, Smartphone, FileText, Swords, Zap, Mic, Palette, CreditCard, History, Users2, Settings } from 'lucide-react';
 import { StartSessionButton } from './StartSessionButton';
 import { SessionActions } from './SessionActions';
 
@@ -99,8 +99,10 @@ export default async function Dashboard() {
         {[
           [<Library key="i" size={24} color="#60a5fa" />, 'Question banks', '/dashboard/questions', 'Build & import questions'],
           [<History key="i" size={24} color="#fbbf24" />, 'Past games', '/dashboard/history', 'Results & CSV export'],
+          [<Users2 key="i" size={24} color="#f472b6" />, 'Team', '/dashboard/team', 'Invite & manage colleagues'],
           [<Palette key="i" size={24} color="#8b5cf6" />, 'Branding', '/dashboard/branding', 'Theme & animation'],
           [<CreditCard key="i" size={24} color="#4ade80" />, 'Billing', '/dashboard/billing', 'Plan & payment'],
+          [<Settings key="i" size={24} color="#a49db3" />, 'Account & settings', '/dashboard/settings', 'Profile, password & school'],
         ].map(([icon, label, href, desc]) => (
           <a key={href as string} href={href as string} className="qz-lift" style={{ ...adminCard, textDecoration: 'none', color: 'inherit' }}>
             <div style={{ marginBottom: 8 }}>{icon}</div>
