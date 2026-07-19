@@ -31,6 +31,7 @@ export const adminPrimary: CSSProperties = {
 const NAV = [
   ['Sessions', '/dashboard'],
   ['Questions', '/dashboard/questions'],
+  ['History', '/dashboard/history'],
   ['Branding', '/dashboard/branding'],
   ['Billing', '/dashboard/billing'],
 ];
@@ -46,11 +47,11 @@ export function AdminShell({ active, title, subtitle, children }: { active?: str
 
       {/* top bar */}
       <header style={{ position: 'relative', zIndex: 10, borderBottom: '1px solid rgba(255,255,255,.07)', backdropFilter: 'blur(10px)' }}>
-        <div style={{ maxWidth: 1040, margin: '0 auto', padding: '14px 24px', display: 'flex', alignItems: 'center', gap: 24 }}>
+        <div style={{ maxWidth: 1040, margin: '0 auto', padding: '14px 24px', display: 'flex', alignItems: 'center', gap: 16, flexWrap: 'wrap' }}>
           <a href="/dashboard" style={{ textDecoration: 'none' }}>
             <BrandLogo height={34} tone="dark" />
           </a>
-          <nav style={{ display: 'flex', gap: 6, marginLeft: 8 }}>
+          <nav style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
             {NAV.map(([label, href]) => {
               const on = active === label;
               return (

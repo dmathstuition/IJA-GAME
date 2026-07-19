@@ -2,7 +2,7 @@
 import { createClient } from '@/lib/supabase/server';
 import { AdminShell, adminCard } from '@/components/AdminShell';
 import { canHostLive } from '@/lib/billing';
-import { Lock, Library, Play, Smartphone, FileText, Swords, Zap, Mic, Palette, CreditCard } from 'lucide-react';
+import { Lock, Library, Play, Smartphone, FileText, Swords, Zap, Mic, Palette, CreditCard, History } from 'lucide-react';
 import { StartSessionButton } from './StartSessionButton';
 import { SessionActions } from './SessionActions';
 
@@ -98,6 +98,7 @@ export default async function Dashboard() {
       <div className="qz-stagger" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(220px,1fr))', gap: 12 }}>
         {[
           [<Library key="i" size={24} color="#60a5fa" />, 'Question banks', '/dashboard/questions', 'Build & import questions'],
+          [<History key="i" size={24} color="#fbbf24" />, 'Past games', '/dashboard/history', 'Results & CSV export'],
           [<Palette key="i" size={24} color="#8b5cf6" />, 'Branding', '/dashboard/branding', 'Theme & animation'],
           [<CreditCard key="i" size={24} color="#4ade80" />, 'Billing', '/dashboard/billing', 'Plan & payment'],
         ].map(([icon, label, href, desc]) => (

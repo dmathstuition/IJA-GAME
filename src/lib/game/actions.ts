@@ -103,5 +103,58 @@ export async function setState(sessionId: string, state: 'lobby' | 'leaderboard'
   }
   if (state === 'ended') patch.ended_at = new Date().toISOString();
   const { error } = await supabase.from('game_sessions').update(patch).eq('id', sessionId);
-  return error ? { error: error.message } : { ok: true };
+  if (error) return { error: error.message };
+  // Snapshot the final standings into history (best-effort; never block ending).
+  if (state === 'ended') await recordGameResult(supabase, sessionId).catch(() => {});
+  return { ok: true };
+}
+
+/**
+ * Persist a durable snapshot of a finished game into `game_results`, so a
+ * school can review or export it long after the live session is gone.
+ * Upserts on session_id, so re-ending a game just refreshes the snapshot.
+ * Skips empty games (no players) to keep history clean.
+ */
+async function recordGameResult(supabase: Awaited<ReturnType<typeof createClient>>, sessionId: string) {
+  const { data: session } = await supabase
+    .from('game_sessions')
+    .select('id, org_id, join_code, mode, question_set_id, current_q_index')
+    .eq('id', sessionId)
+    .single();
+  if (!session) return;
+
+  const { data: players } = await supabase
+    .from('players')
+    .select('name, score, avatar')
+    .eq('session_id', sessionId)
+    .order('score', { ascending: false });
+  const standings = (players ?? []).map((p) => ({ name: p.name, score: p.score, avatar: p.avatar ?? null }));
+  if (standings.length === 0) return; // nothing worth recording
+
+  const { data: qset } = session.question_set_id
+    ? await supabase.from('question_sets').select('name').eq('id', session.question_set_id).maybeSingle()
+    : { data: null };
+
+  // Questions actually played = distinct q_index seen in the answers.
+  const { data: answers } = await supabase.from('round_answers').select('q_index').eq('session_id', sessionId);
+  const played = new Set((answers ?? []).map((a) => a.q_index)).size;
+  const questionCount = played || (session.current_q_index >= 0 ? session.current_q_index + 1 : 0);
+
+  const top = standings[0];
+  await supabase.from('game_results').upsert(
+    {
+      org_id: session.org_id,
+      session_id: session.id,
+      join_code: session.join_code,
+      mode: session.mode,
+      question_set_id: session.question_set_id,
+      question_set_name: (qset as { name?: string } | null)?.name ?? null,
+      player_count: standings.length,
+      question_count: questionCount,
+      standings: standings as unknown as never,
+      winner_name: top?.name ?? null,
+      winner_score: top?.score ?? null,
+    },
+    { onConflict: 'session_id' },
+  );
 }
