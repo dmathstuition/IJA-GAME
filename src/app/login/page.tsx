@@ -105,6 +105,7 @@ function LoginForm() {
           )}
           <input style={field} type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} required />
           <input style={field} type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} required />
+          <a href="/forgot" style={{ justifySelf: 'end', fontSize: 12.5, color: 'var(--text-dim)', textDecoration: 'underline' }}>Forgot password?</a>
           {err && <p style={{ color: 'var(--wrong)', fontSize: 13 }}>{err}</p>}
           <button style={primaryBtn} disabled={busy}>{busy ? 'Signing in…' : 'Sign in'}</button>
           {skipped && !school && (

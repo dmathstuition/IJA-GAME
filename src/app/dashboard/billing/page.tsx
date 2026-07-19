@@ -1,5 +1,5 @@
 import { createClient } from '@/lib/supabase/server';
-import { canHostLive } from '@/lib/billing';
+import { canHostLive, isTrialExpired } from '@/lib/billing';
 import { AdminShell, adminCard, adminPrimary } from '@/components/AdminShell';
 
 const LABEL: Record<string, string> = { trialing: 'Free trial', active: 'Active', past_due: 'Payment overdue', canceled: 'Canceled', incomplete: 'Not activated' };
@@ -10,7 +10,10 @@ export default async function BillingPage({ searchParams }: { searchParams: Prom
   const { data: org } = await supabase.from('organizations').select('name, plan, subscription_status, paid_until, trial_ends_at').maybeSingle();
   const status = org?.subscription_status ?? 'incomplete';
   const paidUntil = (org as { paid_until?: string | null } | null)?.paid_until ?? null;
-  const live = canHostLive(status, paidUntil);
+  const trialEndsAt = org?.trial_ends_at ?? null;
+  const live = canHostLive(status, paidUntil, trialEndsAt);
+  const trialExpired = isTrialExpired(status, trialEndsAt);
+  const statusLabel = trialExpired ? 'Trial ended' : (LABEL[status] ?? status);
   const fmt = (d?: string | null) => (d ? new Date(d).toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' }) : null);
 
   return (
@@ -29,9 +32,9 @@ export default async function BillingPage({ searchParams }: { searchParams: Prom
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 12 }}>
           <div>
             <div style={{ fontSize: 12, color: '#8b8296', textTransform: 'uppercase', letterSpacing: 1 }}>Current status</div>
-            <div style={{ fontSize: 24, fontWeight: 900, marginTop: 4 }}>{LABEL[status] ?? status}</div>
+            <div style={{ fontSize: 24, fontWeight: 900, marginTop: 4 }}>{statusLabel}</div>
             {status === 'active' && paidUntil && <div style={{ fontSize: 13, color: '#8b8296', marginTop: 2 }}>Active until {fmt(paidUntil)}</div>}
-            {status === 'trialing' && org?.trial_ends_at && <div style={{ fontSize: 13, color: '#8b8296', marginTop: 2 }}>Trial ends {fmt(org.trial_ends_at)}</div>}
+            {status === 'trialing' && trialEndsAt && <div style={{ fontSize: 13, color: trialExpired ? '#ff6b8a' : '#8b8296', marginTop: 2 }}>{trialExpired ? 'Trial ended' : 'Trial ends'} {fmt(trialEndsAt)}</div>}
           </div>
           <span style={{ padding: '6px 14px', borderRadius: 999, fontSize: 12.5, fontWeight: 800, background: live ? 'rgba(37,211,102,.15)' : 'rgba(255,45,85,.15)', color: live ? '#4ade80' : '#ff6b8a' }}>{live ? 'Live hosting enabled' : 'Hosting locked'}</span>
         </div>

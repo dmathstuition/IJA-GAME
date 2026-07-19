@@ -17,8 +17,9 @@ const MODE_ICON: Record<string, React.ReactNode> = {
 
 export default async function Dashboard() {
   const supabase = await createClient();
-  const { data: org } = await supabase.from('organizations').select('id, name, slug, subscription_status, paid_until').maybeSingle();
-  const live = canHostLive(org?.subscription_status, (org as { paid_until?: string | null } | null)?.paid_until);
+  const { data: org } = await supabase.from('organizations').select('id, name, slug, subscription_status, paid_until, trial_ends_at').maybeSingle();
+  const o = org as { paid_until?: string | null; trial_ends_at?: string | null } | null;
+  const live = canHostLive(org?.subscription_status, o?.paid_until, o?.trial_ends_at);
   // Scope explicitly to this school: the public-read policy (which lets
   // players join by code) would otherwise leak other orgs' live sessions
   // into this list — rows the organiser can see but never delete.
