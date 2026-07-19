@@ -43,12 +43,25 @@ export function planById(planId: string): Plan | undefined {
   return PLANS.find((p) => p.id === planId);
 }
 
-/** A school can host a live game while trialing or paid-up (not expired). */
-export function canHostLive(status: string | null | undefined, paidUntil?: string | null): boolean {
-  if (status === 'trialing') return true;
+/** A school can host a live game while paid-up or in an unexpired trial. */
+export function canHostLive(
+  status: string | null | undefined,
+  paidUntil?: string | null,
+  trialEndsAt?: string | null,
+): boolean {
+  if (status === 'trialing') {
+    // A trial only unlocks hosting until it ends. No end date → treat as open.
+    if (!trialEndsAt) return true;
+    return new Date(trialEndsAt).getTime() > Date.now();
+  }
   if (status === 'active') {
     if (!paidUntil) return true;
     return new Date(paidUntil).getTime() > Date.now();
   }
   return false;
+}
+
+/** True when the org is on a trial whose end date has already passed. */
+export function isTrialExpired(status: string | null | undefined, trialEndsAt?: string | null): boolean {
+  return status === 'trialing' && !!trialEndsAt && new Date(trialEndsAt).getTime() <= Date.now();
 }
