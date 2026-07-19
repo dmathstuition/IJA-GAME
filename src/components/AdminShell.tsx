@@ -32,6 +32,7 @@ const NAV = [
   ['Sessions', '/dashboard'],
   ['Questions', '/dashboard/questions'],
   ['History', '/dashboard/history'],
+  ['Team', '/dashboard/team'],
   ['Branding', '/dashboard/branding'],
   ['Billing', '/dashboard/billing'],
 ];
@@ -59,9 +60,12 @@ export function AdminShell({ active, title, subtitle, children }: { active?: str
               );
             })}
           </nav>
-          <form action="/auth/signout" method="post" style={{ marginLeft: 'auto' }}>
-            <button style={{ background: 'transparent', border: '1px solid rgba(255,255,255,.15)', color: '#c9c2d6', padding: '9px 16px', borderRadius: 10, cursor: 'pointer', fontWeight: 700, fontSize: 14 }}>Sign out</button>
-          </form>
+          <div style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: 8 }}>
+            <a href="/dashboard/settings" style={{ padding: '8px 14px', borderRadius: 9, fontSize: 14, fontWeight: 700, textDecoration: 'none', color: active === 'Account' ? '#fff' : '#a49db3', background: active === 'Account' ? 'rgba(255,255,255,.08)' : 'transparent' }}>Account</a>
+            <form action="/auth/signout" method="post">
+              <button style={{ background: 'transparent', border: '1px solid rgba(255,255,255,.15)', color: '#c9c2d6', padding: '9px 16px', borderRadius: 10, cursor: 'pointer', fontWeight: 700, fontSize: 14 }}>Sign out</button>
+            </form>
+          </div>
         </div>
       </header>
 
